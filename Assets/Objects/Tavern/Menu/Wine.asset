@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2990c1a1013a67439a1f3204c8b2661, type: 3}
+  m_Name: Wine
+  m_EditorClassIdentifier: 
+  itemName: Wine
+  itemDescription: Wijnen, wijnen, wijnen.
+  type: 1
+  cost: 10
+  tags: []
+  starrating: 2
+  preferredByAllSpecies: 0
+  preferredByAllClass: 0
+  preferredBySpecies: 01000000
+  preferredByClass: 0200000003000000
+  dislikedByAllSpecies: 0
+  dislikedByAllClass: 0
+  dislikedBySpecies: 
+  dislikedByClass: 
+  addToHunger: 0
+  addToThirst: 40
+  addToHappiness: 0
+  addToRowdyness: 0
+  alcoholPercent: 0
+  isFavorited: 0
+  gridTitle: Wine
+  icon: {fileID: 0}
+  knowRecipe: 0
+  recipeHints:
+  - hintText: Wine I haven't heard of this I don't know.
+    knowHint: 0
+  - hintText: I heard through the grapevine how to make this.
+    knowHint: 1
+  standardInMenu: 0
+  inMenu: 0
