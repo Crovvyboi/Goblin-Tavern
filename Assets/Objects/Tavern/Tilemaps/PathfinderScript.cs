@@ -100,4 +100,16 @@ public class PathfinderScript : MonoBehaviour
 
         return null;
     }
+
+    public Node FindThroughpoint(Vector3 goal, Vector3 currentPos)
+    {
+        // Find center
+        Vector3 center = Vector3.Lerp(goal, currentPos, 0.5f);
+        float distanceFromCenter = Vector3.Distance(center, goal) / 1.7f;
+
+        // Get points in ellipse
+        List<Node> foundPoints = FindObjectsOfType<Node>().Where(x => Vector3.Distance(center, x.transform.position) <= distanceFromCenter).ToList();
+
+        return foundPoints[Random.Range(0, foundPoints.Count - 1)];
+    }
 }

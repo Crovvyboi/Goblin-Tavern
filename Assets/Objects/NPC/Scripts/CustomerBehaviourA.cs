@@ -44,11 +44,6 @@ public class CustomerBehaviourA : CustomerBase
             DoTask();
         }
 
-        
-    }
-
-    private void Update()
-    {
         if (customerState == CustomerState.MovingToTable && this.transform.position != currentgoal ||
             customerState == CustomerState.MovingToExit && this.transform.position != currentgoal)
         {
@@ -126,7 +121,11 @@ public class CustomerBehaviourA : CustomerBase
 
                 if (this.transform.position != customerStats.assignedChair.transform.position)
                 {
-                    InjectNewGoalPosition(customerStats.assignedChair.transform.position);
+                    // InjectNewGoalPosition(customerStats.assignedChair.transform.position);
+                    List<Vector3> newQueue = new List<Vector3>();
+                    newQueue.Add(FindThroughpoint(customerStats.assignedChair.transform.position, this.transform.position).transform.position);
+                    newQueue.Add(customerStats.assignedChair.transform.position);
+                    InjectNewQueue(newQueue);
                 }
                 customerState = CustomerState.MovingToTable;
                 break;
@@ -136,7 +135,11 @@ public class CustomerBehaviourA : CustomerBase
 
                 if (this.transform.position != customerStats.assignedChair.transform.position)
                 {
-                    InjectNewGoalPosition(customerStats.assignedChair.transform.position);
+                    //InjectNewGoalPosition(customerStats.assignedChair.transform.position);
+                    List<Vector3> newQueue = new List<Vector3>();
+                    newQueue.Add(FindThroughpoint(customerStats.assignedChair.transform.position, this.transform.position).transform.position);
+                    newQueue.Add(customerStats.assignedChair.transform.position);
+                    InjectNewQueue(newQueue);
                 }
                 customerState = CustomerState.MovingToTable;
                 break;

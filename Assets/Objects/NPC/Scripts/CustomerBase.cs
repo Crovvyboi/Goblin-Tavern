@@ -23,8 +23,12 @@ public class CustomerBase : MonoBehaviour
     [Header("Movement")]
     public float moveSpeed;
     public Vector3 currentPos;
+
     public List<Node> path = new List<Node>();
+
+    public List<Vector3> goalQueue = new List<Vector3>();
     public Vector3? currentgoal;
+
     public bool canWander = false;
 
     #region Movement
@@ -53,10 +57,12 @@ public class CustomerBase : MonoBehaviour
     //    isMoving = false;
     //}
 
+    // Goal injections
     public void InjectNewGoalNode(Node newGoal)
     {
         if (newGoal.gameObject.transform.position != currentPos && newGoal.gameObject.transform.position != currentgoal)
         {
+            goalQueue.Clear();
             path.Clear();
             currentgoal = newGoal.gameObject.transform.position;
         }
@@ -65,6 +71,7 @@ public class CustomerBase : MonoBehaviour
     {
         if (newGoal.transform.position != currentPos && newGoal.transform.position != currentgoal)
         {
+            goalQueue.Clear();
             path.Clear();
             currentgoal = newGoal.gameObject.transform.position;
         }
@@ -73,10 +80,48 @@ public class CustomerBase : MonoBehaviour
     {
         if (newGoal != currentPos && newGoal != currentgoal)
         {
+            goalQueue.Clear();
             path.Clear();
             currentgoal = newGoal;
         }
     }
+
+    // Queue injections
+    public void InjectNewQueue(List<Node> newGoals)
+    {
+        goalQueue.Clear();
+        foreach (Node goal in newGoals)
+        {
+            AddToQueue(goal.transform.position);
+        }
+
+        currentgoal = goalQueue[0];
+        goalQueue.RemoveAt(0);
+    }
+    public void InjectNewQueue(List<Vector3> newGoals)
+    {
+        goalQueue.Clear();
+        foreach (Vector3 goal in newGoals)
+        {
+            AddToQueue(goal);
+        }
+
+        currentgoal = goalQueue[0];
+        goalQueue.RemoveAt(0);
+    }
+    public void AddToQueue(Vector3 newGoal)
+    {
+        goalQueue.Add(newGoal);
+    }
+
+    // Through point calculations
+    public Node FindThroughpoint(Vector3 goal, Vector3 currentPos)
+    {
+        return PathfinderScript.instance.FindThroughpoint(goal, currentPos);
+
+    }
+
+    // Path creation
     public void CreatePath()
     {
         if (path.Count > 0)
@@ -93,7 +138,16 @@ public class CustomerBase : MonoBehaviour
 
             if (path.Count == 0)
             {
-                currentgoal = null;
+                // Check if there's another goal in queue
+                if (goalQueue.Count > 0)
+                {
+                    currentgoal = goalQueue[0];
+                    goalQueue.RemoveAt(0);
+                }
+                else
+                {
+                    currentgoal = null;
+                }    
             }
         }
         else if (currentgoal != null)
