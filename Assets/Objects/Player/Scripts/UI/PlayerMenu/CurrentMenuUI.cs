@@ -235,8 +235,8 @@ public class CurrentMenuUI : MonoBehaviour
 
     public void LoadCurrentMenu()
     {
-        List<MenuItem> mealMenuItems = TavernManager.instance.tavernMenu.Where(x => x.type == MenuItemType.Meal && !x.standardInMenu).ToList();
-        List<MenuItem> drinkMenuItems = TavernManager.instance.tavernMenu.Where(x => x.type == MenuItemType.Drink && !x.standardInMenu).ToList();
+        List<MenuItem> mealMenuItems = TavernManager.instance.tavernMenu.Where(x => x.menuItemType == MenuItemType.Meal && !x.standardInMenu).ToList();
+        List<MenuItem> drinkMenuItems = TavernManager.instance.tavernMenu.Where(x => x.menuItemType == MenuItemType.Drink && !x.standardInMenu).ToList();
         List<MenuItem> alwaysOnMenu = TavernManager.instance.menuItems.Where(x => x.standardInMenu).ToList();
 
         // Add meal menu items
@@ -291,7 +291,7 @@ public class CurrentMenuUI : MonoBehaviour
         TavernManager.instance.AddToMenu(menuItem);
 
         GameObject parent;
-        switch (menuItem.type)
+        switch (menuItem.menuItemType)
         {
             case MenuItemType.Meal:
                 parent = mealsInMenuContainer;

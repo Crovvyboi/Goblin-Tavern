@@ -50,7 +50,7 @@ public class ServiceStats
                 menuitemsServed.Add(menuItem, 1);
             }
 
-            if (menuItem.type == MenuItemType.Meal)
+            if (menuItem.menuItemType == MenuItemType.Meal)
             {
                 mealsServed++;
             }
@@ -70,7 +70,7 @@ public class ServiceStats
     }
     public KeyValuePair<MenuItem, int> GetMostServedMeal()
     {
-        IEnumerable<KeyValuePair<MenuItem, int>> meals = menuitemsServed.Where(x => x.Key.type == MenuItemType.Meal);
+        IEnumerable<KeyValuePair<MenuItem, int>> meals = menuitemsServed.Where(x => x.Key.menuItemType == MenuItemType.Meal);
         KeyValuePair<MenuItem, int>? keyValuePair = null;
         foreach (KeyValuePair<MenuItem, int> item in meals)
         {
@@ -88,7 +88,7 @@ public class ServiceStats
     }
     public KeyValuePair<MenuItem, int> GetMostServedDrink()
     {
-        IEnumerable<KeyValuePair<MenuItem, int>> drinks = menuitemsServed.Where(x => x.Key.type == MenuItemType.Drink);
+        IEnumerable<KeyValuePair<MenuItem, int>> drinks = menuitemsServed.Where(x => x.Key.menuItemType == MenuItemType.Drink);
         KeyValuePair<MenuItem, int>? keyValuePair = null;
         foreach (KeyValuePair<MenuItem, int> item in drinks)
         {

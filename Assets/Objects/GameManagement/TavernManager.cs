@@ -63,16 +63,16 @@ public class TavernManager : MonoBehaviour
     }
     public bool CanAddItem(MenuItem item)
     {
-        switch (item.type)
+        switch (item.menuItemType)
         {
             case MenuItemType.Meal:
-                if (menuItems.Where(x => x.type == MenuItemType.Meal).Count() < maxMealOnMenu)
+                if (menuItems.Where(x => x.menuItemType == MenuItemType.Meal).Count() < maxMealOnMenu)
                 {
                     return true;
                 }
                 break;
             case MenuItemType.Drink:
-                if (menuItems.Where(x => x.type == MenuItemType.Drink).Count() < maxDrinkOnMenu)
+                if (menuItems.Where(x => x.menuItemType == MenuItemType.Drink).Count() < maxDrinkOnMenu)
                 {
                     return true;
                 }

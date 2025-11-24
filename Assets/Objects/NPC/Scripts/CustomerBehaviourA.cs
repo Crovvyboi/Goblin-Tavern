@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 
 public class CustomerBehaviourA : CustomerBase
 {
@@ -116,9 +117,12 @@ public class CustomerBehaviourA : CustomerBase
 
                 if (this.transform.position != customerStats.assignedChair.transform.position)
                 {
-                    // InjectNewGoalPosition(customerStats.assignedChair.transform.position);
                     List<Vector3> newQueue = new List<Vector3>();
-                    newQueue.Add(FindThroughpoint(customerStats.assignedChair.transform.position, this.transform.position).transform.position);
+                    Vector3 throughPoint = FindThroughpoint(customerStats.assignedChair.transform.position, this.transform.position).transform.position;
+                    if (throughPoint != null)
+                    {
+                        newQueue.Add(throughPoint);
+                    }
                     newQueue.Add(customerStats.assignedChair.transform.position);
                     InjectNewQueue(newQueue);
                 }
@@ -130,9 +134,12 @@ public class CustomerBehaviourA : CustomerBase
 
                 if (this.transform.position != customerStats.assignedChair.transform.position)
                 {
-                    //InjectNewGoalPosition(customerStats.assignedChair.transform.position);
                     List<Vector3> newQueue = new List<Vector3>();
-                    newQueue.Add(FindThroughpoint(customerStats.assignedChair.transform.position, this.transform.position).transform.position);
+                    Vector3 throughPoint = FindThroughpoint(customerStats.assignedChair.transform.position, this.transform.position).transform.position;
+                    if (throughPoint != null)
+                    {
+                        newQueue.Add(throughPoint);
+                    }
                     newQueue.Add(customerStats.assignedChair.transform.position);
                     InjectNewQueue(newQueue);
                 }
@@ -183,82 +190,11 @@ public class CustomerBehaviourA : CustomerBase
                 }
                 break;
             case CustomerState.Ordering:
-                toPay = 0;
-                claimedItems = new List<MenuItem>();
-                currentOrder = new List<MenuItem>();
-
-                // Decide order according to preferences & needs
-                List<MenuItem> order = new List<MenuItem>();
-                if (customerGoal == CustomerGoal.Hunger)
-                {
-                    order = DetermineMealOrder();
-
-                    int thirstDiff = 100 - customerStats.thirst;
-                    if (thirstDiff >= 50)
-                    {
-                        order.AddRange(DetermineDrinkOrder());
-                    }
-                }
-                else if (customerGoal == CustomerGoal.Thirst)
-                {
-                    order = DetermineDrinkOrder();
-
-                    int hungerDiff = 100 - customerStats.hunger;
-                    if (hungerDiff >= 50)
-                    {
-                        order.AddRange(DetermineMealOrder());
-                    }
-                }
-
-                // Add order to table for next order cycle
-                if (order.Count > 0)
-                {
-                    currentOrder = order;
-                    customerStats.assignedTable.GetComponent<Table>().nextOrder.AddRange(order);
-
-                    customerState = CustomerState.WaitingOnOrder;
-                }
-                else
-                {
-                    // Switch to waiting on order
-                    customerGoal = CustomerGoal.None;
-                    customerState = CustomerState.Idling;
-                }
+                DecideOrder();
 
                 break;
             case CustomerState.WaitingOnOrder:
-                claimedItems = new List<MenuItem>();
-                // Check if order has been delivered
-                foreach (MenuItem item in currentOrder)
-                {
-                    if (customerStats.assignedTable.GetComponent<Table>().deliveredItems.Contains(item))
-                    {
-                        // Remove order from delivered list
-                        customerStats.assignedTable.GetComponent<Table>().deliveredItems.Remove(item);
-                        claimedItems.Add(item);
-
-                        // Add toPay
-                        toPay += item.cost;
-                    }
-                }
-
-                // remove from currentorder list
-                foreach (MenuItem item in claimedItems)
-                {
-                    currentOrder.Remove(item);
-                }
-
-                if (currentOrder.Count == 0)
-                {
-                    // Pay
-                    Pay(toPay);
-
-                    // Update stats
-                    ServiceManager.instance.stats.AddToServedMenuItems(claimedItems);
-
-                    // Switch state to eating order
-                    customerState = CustomerState.EatingOrder;
-                }
+                WaitingOnOrder();
                 break;
             case CustomerState.EatingOrder:
                 // Wait for time, dependent on consumption time of menu item
@@ -283,7 +219,7 @@ public class CustomerBehaviourA : CustomerBase
             case CustomerState.MovingToExit:
                 if (this.transform.position == CustomerGenerator.instance.spawnLocation.transform.position)
                 {
-                    GameObject.Destroy(this);
+                    GameObject.Destroy(this.gameObject);
                 }
                 break;
             default:
@@ -291,5 +227,82 @@ public class CustomerBehaviourA : CustomerBase
         }
 
         isDoingTask = false;
+    }
+
+    public void DecideOrder()
+    {
+        toPay = 0;
+        claimedItems = new List<MenuItem>();
+        currentOrder = new List<MenuItem>();
+
+        // Decide order according to preferences & needs
+        List<MenuItem> order = new List<MenuItem>();
+        if (customerGoal == CustomerGoal.Hunger)
+        {
+            order = DetermineMealOrder();
+
+            int thirstDiff = 100 - customerStats.thirst;
+            if (thirstDiff >= 50)
+            {
+                order.AddRange(DetermineDrinkOrder());
+            }
+        }
+        else if (customerGoal == CustomerGoal.Thirst)
+        {
+            order = DetermineDrinkOrder();
+
+            int hungerDiff = 100 - customerStats.hunger;
+            if (hungerDiff >= 50)
+            {
+                order.AddRange(DetermineMealOrder());
+            }
+        }
+
+        // Add order to table for next order cycle
+        if (order.Count > 0)
+        {
+            currentOrder = order;
+            customerStats.assignedTable.GetComponent<Table>().nextOrder.AddRange(order);
+
+            customerState = CustomerState.WaitingOnOrder;
+        }
+        else
+        {
+            // Switch to waiting on order
+            customerGoal = CustomerGoal.None;
+            customerState = CustomerState.Idling;
+        }
+    }
+
+    public void WaitingOnOrder()
+    {
+        // Check if order has been delivered
+        List<MenuItem> currentOrderCopy = new List<MenuItem>();
+        currentOrderCopy.AddRange(currentOrder);
+        foreach (MenuItem item in currentOrderCopy)
+        {
+            if (customerStats.assignedTable.GetComponent<Table>().deliveredItems.Contains(item))
+            {
+                // Remove order from delivered list
+                customerStats.assignedTable.GetComponent<Table>().deliveredItems.Remove(item);
+                claimedItems.Add(item);
+                currentOrder.Remove(item);
+
+                // Add toPay
+                toPay += item.cost;
+            }
+        }
+
+        if (currentOrder.Count == 0)
+        {
+            // Pay
+            Pay(toPay);
+
+            // Update stats
+            ServiceManager.instance.stats.AddToServedMenuItems(claimedItems);
+
+            // Switch state to eating order
+            customerState = CustomerState.EatingOrder;
+        }
     }
 }

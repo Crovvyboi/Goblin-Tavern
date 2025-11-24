@@ -124,7 +124,10 @@ public class ServiceManager : MonoBehaviour
                 else
                 {
                     // Check if customer has placed order at bar
-                    customerBase.OnFinalCall();
+                    if (customer.GetComponent<CustomerBehaviourB>().currentOrder.Count == 0)
+                    {
+                        customerBase.OnFinalCall();
+                    }
                 }
             }
         }
@@ -133,7 +136,7 @@ public class ServiceManager : MonoBehaviour
     public void CheckIfFinalCallIsFinished()
     {
         // Check if any bar orders are open
-        if (PlayerServiceManager.instance.takenOrders.Count == 0)
+        if (PlayerServiceManager.instance.takenOrders.Count == 0 && Bar.instance.barOrders.Count == 0)
         {
             ShowOverview();
         }

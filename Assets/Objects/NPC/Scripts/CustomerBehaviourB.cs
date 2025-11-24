@@ -12,6 +12,11 @@ public class CustomerBehaviourB : CustomerBase
      * When an order is placed, the customer will wait at the bar. If someone is already waiting, wait in line.
     **/
 
+    public GameObject barWaitingSpot;
+    public bool hasOrdered;
+    List<MenuItem> claimedItems = new List<MenuItem>();
+    public int toPay = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -80,8 +85,8 @@ public class CustomerBehaviourB : CustomerBase
         {
             Dictionary<CustomerGoal, int> inRange = new Dictionary<CustomerGoal, int>();
 
-            //int thirstDiff = 100 - customerStats.thirst;
-            //inRange.Add(CustomerGoal.Thirst, thirstDiff);
+            int thirstDiff = 100 - customerStats.thirst;
+            inRange.Add(CustomerGoal.Thirst, thirstDiff);
 
             // inRange.Add(CustomerGoal.Meet, 15);
             inRange.Add(CustomerGoal.Idle, 15);
@@ -107,6 +112,26 @@ public class CustomerBehaviourB : CustomerBase
         switch (goingToDo)
         {
             case CustomerGoal.Thirst:
+                
+                if (Bar.instance.OccupySpot(this.gameObject, out GameObject freeSpot))
+                {
+                    barWaitingSpot = freeSpot;
+                    customerGoal = CustomerGoal.Thirst;
+                    if (this.transform.position != barWaitingSpot.transform.position)
+                    {
+                        List<Vector3> newQueue = new List<Vector3>();
+                        Vector3 throughPoint = FindThroughpoint(barWaitingSpot.transform.position, this.transform.position).transform.position;
+                        if (throughPoint != null)
+                        {
+                            newQueue.Add(throughPoint);
+                        }
+                        newQueue.Add(barWaitingSpot.transform.position);
+                        InjectNewQueue(newQueue);
+                    }
+                    hasOrdered = false;
+                    customerState = CustomerState.Moving;
+                }
+
                 break;
             case CustomerGoal.Meet:
                 break;
@@ -133,17 +158,60 @@ public class CustomerBehaviourB : CustomerBase
                 TargetedIdle();
                 break;
             case CustomerState.Moving:
+                switch (customerGoal)
+                {
+                    case CustomerGoal.Thirst:
+                        if (!hasOrdered)
+                        {
+                            // Moved to the bar to order items
+                            if (this.transform.position == barWaitingSpot.transform.position)
+                            {
+                                customerState = CustomerState.Ordering;
+                            }
+                        }
+                        else
+                        {
+                            // Has moved to standing spot to consume items
+                            if (this.transform.position == customerStats.standingSpot.transform.position)
+                            {
+                                customerState = CustomerState.EatingOrder;
+                            }
+                        }
+                        break;
+                    case CustomerGoal.Meet:
+                        break;
+                    default:
+                        break;
+                }
                 break;
             case CustomerState.Ordering:
+                DecideOrder();
                 break;
             case CustomerState.WaitingOnOrder:
+                WaitingOnOrder();
                 break;
             case CustomerState.EatingOrder:
+                if (claimedItems.Count > 0)
+                {
+                    StartCoroutine(ConsumeMenuItem(claimedItems));
+                    claimedItems = new List<MenuItem>();
+                }
+
+                if (TavernManager.state == TavernState.ServiceOverview || TavernManager.state == TavernState.ServiceFinalCall)
+                {
+                    OnFinalCall();
+                }
+                else
+                {
+                    // Switch to Idle and make new decision
+                    customerState = CustomerState.Idling;
+                    customerGoal = CustomerGoal.None;
+                }
                 break;
             case CustomerState.MovingToExit:
                 if (this.transform.position == CustomerGenerator.instance.spawnLocation.transform.position)
                 {
-                    GameObject.Destroy(this);
+                    GameObject.Destroy(this.gameObject);
                 }
                 break;
             default:
@@ -165,11 +233,80 @@ public class CustomerBehaviourB : CustomerBase
         {
             // Move to range
             List<Vector3> newQueue = new List<Vector3>();
-            newQueue.Add(FindThroughpoint(customerStats.standingSpot.transform.position, this.transform.position).transform.position);
+            Vector3 throughPoint = FindThroughpoint(customerStats.standingSpot.transform.position, this.transform.position).transform.position;
+            if (throughPoint != null)
+            {
+                newQueue.Add(throughPoint);
+            }
             newQueue.Add(customerStats.standingSpot.transform.position);
             InjectNewQueue(newQueue);
             customerState = CustomerState.Moving;
 
+        }
+    }
+
+    public void DecideOrder()
+    {
+        toPay = 0;
+        claimedItems = new List<MenuItem>();
+        currentOrder = new List<MenuItem>();
+
+        currentOrder = DetermineDrinkOrder();
+        Bar.instance.barOrders.AddRange(currentOrder);
+
+        customerState = CustomerState.WaitingOnOrder;
+    }
+
+    public void WaitingOnOrder()
+    {
+        // Check if order has been delivered
+        List<MenuItem> currentOrderCopy = new List<MenuItem>();
+        currentOrderCopy.AddRange(currentOrder);
+        foreach (MenuItem item in currentOrderCopy)
+        {
+            if (Bar.instance.madeOrders.Contains(item))
+            {
+                // Remove order from delivered list
+                Bar.instance.madeOrders.Remove(item);
+                claimedItems.Add(item);
+                currentOrder.Remove(item);
+
+                // Add toPay
+                toPay += item.cost;
+            }
+        }
+
+        if (currentOrder.Count == 0)
+        {
+            // Pay
+            Pay(toPay);
+
+            // Update stats
+            ServiceManager.instance.stats.AddToServedMenuItems(claimedItems);
+
+            // Move to standing spot
+            Bar.instance.LeaveSpot(this.gameObject);
+            if (TavernManager.state != TavernState.ServiceFinalCall || TavernManager.state != TavernState.ServiceOverview)
+            {
+                if (this.transform.position != customerStats.standingSpot.transform.position)
+                {
+                    List<Vector3> newQueue = new List<Vector3>();
+                    Vector3 throughPoint = FindThroughpoint(customerStats.standingSpot.transform.position, this.transform.position).transform.position;
+                    if (throughPoint != null)
+                    {
+                        newQueue.Add(throughPoint);
+                    }
+                    newQueue.Add(customerStats.standingSpot.transform.position);
+                    InjectNewQueue(newQueue);
+                }
+                hasOrdered = true;
+                customerState = CustomerState.Moving;
+            }
+            else
+            {
+                customerState = CustomerState.EatingOrder;
+            }
+            
         }
     }
 }

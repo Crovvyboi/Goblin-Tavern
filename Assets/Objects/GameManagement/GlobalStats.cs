@@ -144,7 +144,7 @@ public class GlobalStats : MonoBehaviour
                 menuitemsServed.Add(menuItems.Key, 1);
             }
 
-            if (menuItems.Key.type == MenuItemType.Meal)
+            if (menuItems.Key.menuItemType == MenuItemType.Meal)
             {
                 mealsServed++;
             }
@@ -157,7 +157,7 @@ public class GlobalStats : MonoBehaviour
 
     public KeyValuePair<MenuItem, int> GetMostServedMeal()
     {
-        IEnumerable<KeyValuePair<MenuItem, int>> meals = menuitemsServed.Where(x => x.Key.type == MenuItemType.Meal);
+        IEnumerable<KeyValuePair<MenuItem, int>> meals = menuitemsServed.Where(x => x.Key.menuItemType == MenuItemType.Meal);
         KeyValuePair<MenuItem, int>? keyValuePair = null;
         foreach (KeyValuePair<MenuItem, int> item in meals)
         {
@@ -175,7 +175,7 @@ public class GlobalStats : MonoBehaviour
     }
     public KeyValuePair<MenuItem, int> GetMostServedDrink()
     {
-        IEnumerable<KeyValuePair<MenuItem, int>> drinks = menuitemsServed.Where(x => x.Key.type == MenuItemType.Drink);
+        IEnumerable<KeyValuePair<MenuItem, int>> drinks = menuitemsServed.Where(x => x.Key.menuItemType == MenuItemType.Drink);
         KeyValuePair<MenuItem, int>? keyValuePair = null;
         foreach (KeyValuePair<MenuItem, int> item in drinks)
         {

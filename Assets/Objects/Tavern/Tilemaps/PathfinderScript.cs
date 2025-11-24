@@ -109,7 +109,6 @@ public class PathfinderScript : MonoBehaviour
 
         // Get points in ellipse
         List<Node> foundPoints = FindObjectsOfType<Node>().Where(x => Vector3.Distance(center, x.transform.position) <= distanceFromCenter).ToList();
-
-        return foundPoints[Random.Range(0, foundPoints.Count - 1)];
+        return foundPoints[Random.Range(0, foundPoints.Count)];
     }
 }

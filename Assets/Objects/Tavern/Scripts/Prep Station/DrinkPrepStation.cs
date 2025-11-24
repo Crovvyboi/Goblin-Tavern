@@ -40,7 +40,7 @@ public class DrinkPrepStation : PrepStation
 
             // Filter on meals
             List<MenuItem> drinkItems = new List<MenuItem>();
-            drinkItems = allMenuItems.Where(x => x.type == MenuItemType.Drink).ToList();
+            drinkItems = allMenuItems.Where(x => x.menuItemType == MenuItemType.Drink).ToList();
 
             StartItemPrep(selectedOrder.Key, drinkItems);
         }

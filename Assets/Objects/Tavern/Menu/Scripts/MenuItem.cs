@@ -9,7 +9,7 @@ public class MenuItem : ScriptableObject
     [Header("Typing")]
     public string itemName;
     public string itemDescription;
-    public MenuItemType type;
+    public MenuItemType menuItemType;
     public int cost;
     public List<string> tags = new List<string>();
     public int starrating;

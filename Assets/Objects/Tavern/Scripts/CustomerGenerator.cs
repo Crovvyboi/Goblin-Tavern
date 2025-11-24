@@ -132,7 +132,7 @@ public class CustomerGenerator : MonoBehaviour
 
         // Generate non VIP customers
         List<CustomerStats> group = new List<CustomerStats>();
-        for (int i = 0; i < Random.Range(2,4); i++)
+        for (int i = 0; i < Random.Range(2,5); i++)
         {
             CustomerStats newCustomer = GenerateCustomer(false);
             group.Add(newCustomer);

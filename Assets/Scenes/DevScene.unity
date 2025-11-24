@@ -497,6 +497,7 @@ GameObject:
   m_Component:
   - component: {fileID: 20883853}
   - component: {fileID: 20883854}
+  - component: {fileID: 20883855}
   m_Layer: 0
   m_Name: InteractionArea
   m_TagString: Untagged
@@ -564,6 +565,33 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 5.9329624, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &20883855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 20883852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88f73b5ab61cc50419039d9cc2e163aa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interaction:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 779513747}
+        m_TargetAssemblyTypeName: Bar, Assembly-CSharp
+        m_MethodName: MakeBarOrder
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &21147380
 GameObject:
   m_ObjectHideFlags: 0
@@ -695,6 +723,7 @@ GameObject:
   m_Component:
   - component: {fileID: 23370830}
   - component: {fileID: 23370831}
+  - component: {fileID: 23370832}
   m_Layer: 0
   m_Name: Waiting Pos
   m_TagString: Bar Standing Spot
@@ -711,7 +740,7 @@ Transform:
   m_GameObject: {fileID: 23370829}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.03, y: -1.56, z: 0}
+  m_LocalPosition: {x: -1.884058, y: -1.534975, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -769,6 +798,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &23370832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 23370829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0f436e1caf87f42bee2888a3f9a3e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  occupyingObject: {fileID: 0}
 --- !u!1 &36352596
 GameObject:
   m_ObjectHideFlags: 0
@@ -1920,6 +1962,7 @@ GameObject:
   m_Component:
   - component: {fileID: 110657154}
   - component: {fileID: 110657155}
+  - component: {fileID: 110657156}
   m_Layer: 0
   m_Name: Waiting Pos (4)
   m_TagString: Bar Standing Spot
@@ -1936,7 +1979,7 @@ Transform:
   m_GameObject: {fileID: 110657153}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.9700001, y: -1.56, z: 0}
+  m_LocalPosition: {x: 2.115942, y: -1.534975, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1994,6 +2037,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &110657156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 110657153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0f436e1caf87f42bee2888a3f9a3e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  occupyingObject: {fileID: 0}
 --- !u!1 &128688061
 GameObject:
   m_ObjectHideFlags: 0
@@ -4221,7 +4277,7 @@ GameObject:
   - component: {fileID: 297911879}
   - component: {fileID: 297911878}
   m_Layer: 0
-  m_Name: RawImage
+  m_Name: DrinkImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5078,6 +5134,7 @@ GameObject:
   m_Component:
   - component: {fileID: 326415704}
   - component: {fileID: 326415705}
+  - component: {fileID: 326415706}
   m_Layer: 0
   m_Name: Waiting Pos (5)
   m_TagString: Bar Standing Spot
@@ -5094,7 +5151,7 @@ Transform:
   m_GameObject: {fileID: 326415703}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.9900002, y: -1.56, z: 0}
+  m_LocalPosition: {x: 3.115942, y: -1.534975, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -5152,6 +5209,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &326415706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 326415703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0f436e1caf87f42bee2888a3f9a3e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  occupyingObject: {fileID: 0}
 --- !u!1 &327116131
 GameObject:
   m_ObjectHideFlags: 0
@@ -7068,7 +7138,7 @@ GameObject:
   - component: {fileID: 465612571}
   - component: {fileID: 465612570}
   m_Layer: 0
-  m_Name: RawImage
+  m_Name: MealImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12734,6 +12804,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   standingSpots: []
+  barOrders: []
+  madeOrders: []
 --- !u!1 &789278140
 GameObject:
   m_ObjectHideFlags: 0
@@ -14850,7 +14922,7 @@ GameObject:
   - component: {fileID: 863353546}
   - component: {fileID: 863353545}
   m_Layer: 0
-  m_Name: Text (TMP) (1)
+  m_Name: MealAmount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -21283,6 +21355,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1109429027}
   - component: {fileID: 1109429028}
+  - component: {fileID: 1109429029}
   m_Layer: 0
   m_Name: Waiting Pos (3)
   m_TagString: Bar Standing Spot
@@ -21299,7 +21372,7 @@ Transform:
   m_GameObject: {fileID: 1109429026}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.95000017, y: -1.56, z: 0}
+  m_LocalPosition: {x: 1.115942, y: -1.534975, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -21357,6 +21430,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1109429029
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1109429026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0f436e1caf87f42bee2888a3f9a3e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  occupyingObject: {fileID: 0}
 --- !u!1 &1110308601
 GameObject:
   m_ObjectHideFlags: 0
@@ -22076,6 +22162,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1154321956}
   - component: {fileID: 1154321957}
+  - component: {fileID: 1154321958}
   m_Layer: 0
   m_Name: Waiting Pos (1)
   m_TagString: Bar Standing Spot
@@ -22092,7 +22179,7 @@ Transform:
   m_GameObject: {fileID: 1154321955}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.0099999, y: -1.56, z: 0}
+  m_LocalPosition: {x: -0.884058, y: -1.534975, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -22150,6 +22237,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1154321958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1154321955}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0f436e1caf87f42bee2888a3f9a3e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  occupyingObject: {fileID: 0}
 --- !u!1 &1164317659
 GameObject:
   m_ObjectHideFlags: 0
@@ -22607,7 +22707,7 @@ GameObject:
   - component: {fileID: 1177303068}
   - component: {fileID: 1177303067}
   m_Layer: 0
-  m_Name: Text (TMP) (2)
+  m_Name: Mealtext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -38639,7 +38739,7 @@ GameObject:
   - component: {fileID: 1766687838}
   - component: {fileID: 1766687837}
   m_Layer: 0
-  m_Name: Text (TMP) (1)
+  m_Name: DrinkAmount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -41514,6 +41614,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1915048766}
   - component: {fileID: 1915048767}
+  - component: {fileID: 1915048768}
   m_Layer: 0
   m_Name: Waiting Pos (2)
   m_TagString: Bar Standing Spot
@@ -41530,7 +41631,7 @@ Transform:
   m_GameObject: {fileID: 1915048765}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.029999852, y: -1.56, z: 0}
+  m_LocalPosition: {x: 0.115942, y: -1.534975, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -41588,6 +41689,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &1915048768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1915048765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e0f436e1caf87f42bee2888a3f9a3e6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  occupyingObject: {fileID: 0}
 --- !u!1 &1916384713
 GameObject:
   m_ObjectHideFlags: 0
@@ -42444,7 +42558,7 @@ GameObject:
   - component: {fileID: 1959207433}
   - component: {fileID: 1959207432}
   m_Layer: 0
-  m_Name: Text (TMP) (2)
+  m_Name: Drinktext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

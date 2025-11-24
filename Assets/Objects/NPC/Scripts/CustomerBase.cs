@@ -179,8 +179,8 @@ public class CustomerBase : MonoBehaviour
 
         // Filter out preferred of both species & class items in budget
         preferredItems = ServiceManager.instance.definitiveMenu.FindAll(x => 
-            x.preferredBySpecies.Contains(customerStats.customerSpecies) && x.preferredByClass.Contains(customerStats.customerClass) && x.cost <= customerStats.budget && x.type == MenuItemType.Drink ||
-            x.preferredByAllSpecies && x.preferredByAllClass && x.cost <= customerStats.budget && x.type == MenuItemType.Drink
+            x.preferredBySpecies.Contains(customerStats.customerSpecies) && x.preferredByClass.Contains(customerStats.customerClass) && x.cost <= customerStats.budget && x.menuItemType == MenuItemType.Drink ||
+            x.preferredByAllSpecies && x.preferredByAllClass && x.cost <= customerStats.budget && x.menuItemType == MenuItemType.Drink
         );
         if (preferredItems.Count > 0)
         {
@@ -190,7 +190,7 @@ public class CustomerBase : MonoBehaviour
         {
             // if no preferred items, filter out preferred on 1
             preferredItems = ServiceManager.instance.definitiveMenu.FindAll(x =>
-                x.preferredBySpecies.Contains(customerStats.customerSpecies) && x.cost <= customerStats.budget || x.preferredByClass.Contains(customerStats.customerClass) && x.cost <= customerStats.budget && x.type == MenuItemType.Drink
+                x.preferredBySpecies.Contains(customerStats.customerSpecies) && x.cost <= customerStats.budget && x.menuItemType == MenuItemType.Drink || x.preferredByClass.Contains(customerStats.customerClass) && x.cost <= customerStats.budget && x.menuItemType == MenuItemType.Drink
             );
             if (preferredItems.Count > 0)
             {
@@ -201,7 +201,7 @@ public class CustomerBase : MonoBehaviour
                 // if no preferred items, filter out neutral items in budget
                 preferredItems = ServiceManager.instance.definitiveMenu.FindAll(x =>
                     !x.dislikedBySpecies.Contains(customerStats.customerSpecies) && !x.dislikedByClass.Contains(customerStats.customerClass) && x.cost <= customerStats.budget && 
-                    !x.dislikedByAllSpecies && !x.dislikedByAllClass && x.type == MenuItemType.Drink
+                    !x.dislikedByAllSpecies && !x.dislikedByAllClass && x.menuItemType == MenuItemType.Drink
                 );
                 if (preferredItems.Count > 0)
                 {
@@ -226,8 +226,8 @@ public class CustomerBase : MonoBehaviour
 
         // Filter out preferred of both species & class items in budget
         preferredItems = ServiceManager.instance.definitiveMenu.FindAll(x =>
-            x.preferredBySpecies.Contains(customerStats.customerSpecies) && x.preferredByClass.Contains(customerStats.customerClass) && x.cost <= customerStats.budget && x.type == MenuItemType.Meal ||
-            x.preferredByAllSpecies && x.preferredByAllClass && x.cost <= customerStats.budget && x.type == MenuItemType.Meal
+            x.preferredBySpecies.Contains(customerStats.customerSpecies) && x.preferredByClass.Contains(customerStats.customerClass) && x.cost <= customerStats.budget && x.menuItemType == MenuItemType.Meal ||
+            x.preferredByAllSpecies && x.preferredByAllClass && x.cost <= customerStats.budget && x.menuItemType == MenuItemType.Meal
         );
         if (preferredItems.Count > 0)
         {
@@ -237,7 +237,7 @@ public class CustomerBase : MonoBehaviour
         {
             // if no preferred items, filter out preferred on 1
             preferredItems = ServiceManager.instance.definitiveMenu.FindAll(x =>
-                x.preferredBySpecies.Contains(customerStats.customerSpecies) && x.cost <= customerStats.budget || x.preferredByClass.Contains(customerStats.customerClass) && x.cost <= customerStats.budget && x.type == MenuItemType.Meal
+                x.preferredBySpecies.Contains(customerStats.customerSpecies) && x.cost <= customerStats.budget && x.menuItemType == MenuItemType.Meal || x.preferredByClass.Contains(customerStats.customerClass) && x.cost <= customerStats.budget && x.menuItemType == MenuItemType.Meal
             );
             if (preferredItems.Count > 0)
             {
@@ -248,7 +248,7 @@ public class CustomerBase : MonoBehaviour
                 // if no preferred items, filter out neutral items in budget
                 preferredItems = ServiceManager.instance.definitiveMenu.FindAll(x =>
                     !x.dislikedBySpecies.Contains(customerStats.customerSpecies) && !x.dislikedByClass.Contains(customerStats.customerClass) && x.cost <= customerStats.budget && 
-                    !x.dislikedByAllSpecies && !x.dislikedByAllClass && x.type == MenuItemType.Meal
+                    !x.dislikedByAllSpecies && !x.dislikedByAllClass && x.menuItemType == MenuItemType.Meal
                 );
                 if (preferredItems.Count > 0)
                 {
