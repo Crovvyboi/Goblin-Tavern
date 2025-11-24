@@ -12,6 +12,7 @@ public class TavernTilemapManager : MonoBehaviour
 
     public List<Vector3> tilePostitionsWorld = new List<Vector3>();
     public List<Node> tavernFloorNodes = new List<Node>();
+    public List<Node> hangoutSpots = new List<Node>();
 
     [Header("Tilemaps")]
     public Tilemap tavernFloorMap;
@@ -46,6 +47,7 @@ public class TavernTilemapManager : MonoBehaviour
 
         GenerateFloorNodes();
         GenerateWallCollisions();
+        GenerateHangoutSpots();
     }
 
     public void GenerateFloorNodes()
@@ -190,5 +192,60 @@ public class TavernTilemapManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void GenerateHangoutSpots()
+    {
+        // A hangout spot is a spot in the tavern where a group of 4 can stand in a circle
+        hangoutSpots = new List<Node>();
+        foreach (Node node in tavernFloorNodes)
+        {
+            if (node.connections.Count == 4)
+            {
+                hangoutSpots.Add(node);
+            }
+        }
+
+    }
+
+    public Node AssignHangoutSpot(List<Node> occupiedHangouts)
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            Node hangout = hangoutSpots[Random.Range(0, hangoutSpots.Count - 1)];
+            if (hangout != null && !occupiedHangouts.Contains(hangout)) 
+            {
+                if (occupiedHangouts.Count == 0 || occupiedHangouts.Any(x => Vector3.Distance(x.transform.position, hangout.transform.position) > 2))
+                {
+                    foreach (Node connections in hangout.connections)
+                    {
+                        if (!occupiedHangouts.Contains(connections) && !occupiedHangouts.Any(x => x.connections.Contains(connections)))
+                        {
+                            return hangout;
+                        }
+                    }
+                }
+                
+            }
+        }
+
+        foreach (Node hangout in hangoutSpots)
+        {
+            if (!occupiedHangouts.Contains(hangout))
+            {
+                if (occupiedHangouts.Count == 0 || occupiedHangouts.Any(x => Vector3.Distance(x.transform.position, hangout.transform.position) > 2))
+                {
+                    foreach (Node connections in hangout.connections)
+                    {
+                        if (!occupiedHangouts.Contains(connections) && !occupiedHangouts.Any(x => x.connections.Contains(connections)))
+                        {
+                            return hangout;
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+        
     }
 }

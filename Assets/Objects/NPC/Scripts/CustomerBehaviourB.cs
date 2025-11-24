@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CustomerBehaviourB : CustomerBase
@@ -79,10 +80,10 @@ public class CustomerBehaviourB : CustomerBase
         {
             Dictionary<CustomerGoal, int> inRange = new Dictionary<CustomerGoal, int>();
 
-            int thirstDiff = 100 - customerStats.thirst;
-            inRange.Add(CustomerGoal.Thirst, thirstDiff);
+            //int thirstDiff = 100 - customerStats.thirst;
+            //inRange.Add(CustomerGoal.Thirst, thirstDiff);
 
-            inRange.Add(CustomerGoal.Meet, 15);
+            // inRange.Add(CustomerGoal.Meet, 15);
             inRange.Add(CustomerGoal.Idle, 15);
 
             // Determine highest priority
@@ -105,30 +106,70 @@ public class CustomerBehaviourB : CustomerBase
     {
         switch (goingToDo)
         {
-            case CustomerGoal.None:
-                break;
             case CustomerGoal.Thirst:
                 break;
             case CustomerGoal.Meet:
                 break;
             case CustomerGoal.Idle:
-                TargetedIdle();
+                customerState = CustomerState.Idling;
                 break;
             case CustomerGoal.Exit:
-                if (this.transform.position != customerStats.assignedChair.transform.position)
-                {
-                    InjectNewGoalPosition(CustomerGenerator.instance.spawnLocation.transform.position);
-                }
+                InjectNewGoalPosition(CustomerGenerator.instance.spawnLocation.transform.position);
                 customerState = CustomerState.MovingToExit;
                 break;
             default:
-                TargetedIdle();
+                customerState = CustomerState.Idling;
                 break;
         }
     }
 
     public void DoTask()
     {
+        isDoingTask = true;
 
+        switch (customerState)
+        {
+            case CustomerState.Idling:
+                TargetedIdle();
+                break;
+            case CustomerState.Moving:
+                break;
+            case CustomerState.Ordering:
+                break;
+            case CustomerState.WaitingOnOrder:
+                break;
+            case CustomerState.EatingOrder:
+                break;
+            case CustomerState.MovingToExit:
+                if (this.transform.position == CustomerGenerator.instance.spawnLocation.transform.position)
+                {
+                    GameObject.Destroy(this);
+                }
+                break;
+            default:
+                TargetedIdle();
+                break;
+        }
+
+        isDoingTask = false;
+    }
+
+    public void TargetedIdle()
+    {
+        // Idle at specific spot
+        customerGoal = CustomerGoal.None;
+        customerState = CustomerState.Idling;
+
+        // Go to meeting spot
+        if (customerStats.standingSpot  == null || this.currentPos != customerStats.standingSpot.transform.position)
+        {
+            // Move to range
+            List<Vector3> newQueue = new List<Vector3>();
+            newQueue.Add(FindThroughpoint(customerStats.standingSpot.transform.position, this.transform.position).transform.position);
+            newQueue.Add(customerStats.standingSpot.transform.position);
+            InjectNewQueue(newQueue);
+            customerState = CustomerState.Moving;
+
+        }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.NetworkInformation;
 using Unity.Mathematics;
 using UnityEngine;
@@ -288,26 +289,8 @@ public class CustomerBase : MonoBehaviour
         ServiceManager.instance.stats.AddGold(amount);
     }
 
-    public void TargetedIdle()
-    {
-        // When idle is allowed or chosen, idle for extended time
 
-        customerGoal = CustomerGoal.None;
-        customerState = CustomerState.Idling;
-
-        // Select empty tile within small range
-
-        // Wait a bit (prevent new decision)
-
-        // Move to range
-
-        // Wait a bit (prevent new decision)
-
-        // Make new decision
-
-    }
     #endregion
-
 
     private void OnDrawGizmos()
     {

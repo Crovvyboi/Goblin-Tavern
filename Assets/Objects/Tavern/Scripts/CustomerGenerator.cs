@@ -18,6 +18,8 @@ public class CustomerGenerator : MonoBehaviour
     public float spawnTimer = 0f;
     public float spawnInterval;
 
+    public List<Node> occupiedHangouts = new List<Node>();
+
     [Header("Reputation")]
     public Dictionary<Class, int> classReputations = new Dictionary<Class, int>();
     public Dictionary<Species, int> speciesReputations = new Dictionary<Species, int>();
@@ -49,6 +51,7 @@ public class CustomerGenerator : MonoBehaviour
         PrepareSpeciesReputations();
 
         List<List<CustomerStats>> customerGroups = new List<List<CustomerStats>>();
+        occupiedHangouts.Clear();
 
         // Generate passive customer groups
         List<GameObject> tablelist = GameObject.FindGameObjectsWithTag("Table").Where(x => x.GetComponent<Table>() != null).ToList();
@@ -70,11 +73,15 @@ public class CustomerGenerator : MonoBehaviour
             customerGroups.Add(customersAtTable);
         }
 
-        // Generate active customer groups based on 
-        int size = 3;
-        for (int i = 0; i < size; i++)
+        // Generate active customer groups based on tavern size
+        int amount = 5;
+        for (int i = 0; i < amount; i++)
         {
-            customerGroups.Add(GenerateCustomerGroup(1, false));
+            List<CustomerStats> group = GenerateCustomerGroup();
+            if (group != null)
+            {
+                customerGroups.Add(group);
+            }
         }
 
         return customerGroups;
@@ -117,6 +124,39 @@ public class CustomerGenerator : MonoBehaviour
         }
 
         return group;
+    }
+
+    public List<CustomerStats> GenerateCustomerGroup()
+    {
+        // Set group size based off of space available in tavern
+
+        // Generate non VIP customers
+        List<CustomerStats> group = new List<CustomerStats>();
+        for (int i = 0; i < Random.Range(2,4); i++)
+        {
+            CustomerStats newCustomer = GenerateCustomer(false);
+            group.Add(newCustomer);
+        }
+
+        // Determine hangout spot
+        Node hangoutSpot = TavernTilemapManager.instance.AssignHangoutSpot(occupiedHangouts);
+        if (hangoutSpot != null)
+        {
+            occupiedHangouts.Add(hangoutSpot);
+
+            // Assign group to each other
+            foreach (CustomerStats customer in group)
+            {
+                customer.knowsOthers = new List<CustomerStats>(group);
+                customer.knowsOthers.Remove(customer);
+                customer.meetingSpot = hangoutSpot;
+                customer.standingSpot = hangoutSpot.connections.First(x => !customer.knowsOthers.Any(y => y.standingSpot == x));
+
+            }
+
+            return group;
+        }
+        return null;
     }
 
     public void GenerateVIP()

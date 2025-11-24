@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
@@ -12,6 +13,12 @@ public class CustomerStats
     public bool isAtTable;
     public GameObject assignedTable;
     public GameObject assignedChair;
+
+    [Header("Group (Behaviour B")]
+    // For behaviour type B
+    public List<CustomerStats> knowsOthers = new List<CustomerStats>();
+    public Node meetingSpot;
+    public Node standingSpot;
 
     [Header("Fixed stats")]
     public int budget;

@@ -121,14 +121,18 @@ public class ServiceManager : MonoBehaviour
                         tableobject.GetComponent<Table>().OnFinalCall();
                     }                    
                 }
+                else
+                {
+                    // Check if customer has placed order at bar
+                    customerBase.OnFinalCall();
+                }
             }
         }
-
-        Debug.Log(TavernManager.state);
     }
 
     public void CheckIfFinalCallIsFinished()
     {
+        // Check if any bar orders are open
         if (PlayerServiceManager.instance.takenOrders.Count == 0)
         {
             ShowOverview();
