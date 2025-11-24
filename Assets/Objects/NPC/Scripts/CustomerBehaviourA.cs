@@ -13,11 +13,6 @@ public class CustomerBehaviourA : CustomerBase
      * 
     **/
 
-    public bool isDoingTask;
-
-    public float tickTimer = 0f;
-    public float tickInterval;
-
     List<MenuItem> claimedItems = new List<MenuItem>();
     public int toPay = 0;
 
@@ -34,7 +29,7 @@ public class CustomerBehaviourA : CustomerBase
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (customerState == CustomerState.Idling || customerState == CustomerState.MovingToTable)
+        if (customerState == CustomerState.Idling || customerState == CustomerState.Moving)
         {
             TickTimer();
         }
@@ -44,7 +39,7 @@ public class CustomerBehaviourA : CustomerBase
             DoTask();
         }
 
-        if (customerState == CustomerState.MovingToTable && this.transform.position != currentgoal ||
+        if (customerState == CustomerState.Moving && this.transform.position != currentgoal ||
             customerState == CustomerState.MovingToExit && this.transform.position != currentgoal)
         {
             if (currentPos != null)
@@ -127,7 +122,7 @@ public class CustomerBehaviourA : CustomerBase
                     newQueue.Add(customerStats.assignedChair.transform.position);
                     InjectNewQueue(newQueue);
                 }
-                customerState = CustomerState.MovingToTable;
+                customerState = CustomerState.Moving;
                 break;
             case CustomerGoal.Thirst:
                 // Order drink
@@ -141,7 +136,7 @@ public class CustomerBehaviourA : CustomerBase
                     newQueue.Add(customerStats.assignedChair.transform.position);
                     InjectNewQueue(newQueue);
                 }
-                customerState = CustomerState.MovingToTable;
+                customerState = CustomerState.Moving;
                 break;
             case CustomerGoal.Exit:
                 if (this.transform.position != customerStats.assignedChair.transform.position)
@@ -164,7 +159,7 @@ public class CustomerBehaviourA : CustomerBase
         {
             case CustomerState.Idling:
                 break;
-            case CustomerState.MovingToTable:             
+            case CustomerState.Moving:             
 
                 // Depending on goal, determine next customerstate
                 switch (customerGoal)

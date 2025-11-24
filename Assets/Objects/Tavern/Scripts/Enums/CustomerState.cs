@@ -5,7 +5,7 @@ using UnityEngine;
 public enum CustomerState
 {
     Idling,
-    MovingToTable,
+    Moving,
     Ordering,
     WaitingOnOrder,
     EatingOrder,
@@ -15,7 +15,12 @@ public enum CustomerState
 public enum CustomerGoal
 {
     None,
+
     Hunger,
     Thirst,
+
+    Meet,
+    Idle,
+
     Exit
 }

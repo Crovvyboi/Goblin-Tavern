@@ -12,8 +12,10 @@ public class CustomerBase : MonoBehaviour
     [SerializeField]
     public CustomerStats customerStats;
 
-    //public Vector3? targetPosition;
-    //public bool isMoving = false;
+    public bool isDoingTask;
+
+    public float tickTimer = 0f;
+    public float tickInterval;
 
     public CustomerGoal customerGoal = CustomerGoal.None;
     public CustomerState customerState = CustomerState.Idling;
@@ -32,31 +34,6 @@ public class CustomerBase : MonoBehaviour
     public bool canWander = false;
 
     #region Movement
-    //public void SetTarget(Vector3 target)
-    //{
-    //    this.targetPosition = target;
-    //}
-
-    //public IEnumerator MoveToTarget()
-    //{
-    //    isMoving = true;
-
-    //    Debug.Log("Moving to target");
-    //    yield return new WaitForSeconds(5);
-
-    //    Vector3 target = (Vector3)targetPosition;
-    //    this.transform.position = target;
-
-    //    if (this.transform.position == target)
-    //    {
-    //        targetPosition = null;
-    //    }
-
-    //    Debug.Log("Moved to target");
-
-    //    isMoving = false;
-    //}
-
     // Goal injections
     public void InjectNewGoalNode(Node newGoal)
     {
@@ -309,6 +286,25 @@ public class CustomerBase : MonoBehaviour
     {
         ServiceManager.instance.goldMadeInService += amount;
         ServiceManager.instance.stats.AddGold(amount);
+    }
+
+    public void TargetedIdle()
+    {
+        // When idle is allowed or chosen, idle for extended time
+
+        customerGoal = CustomerGoal.None;
+        customerState = CustomerState.Idling;
+
+        // Select empty tile within small range
+
+        // Wait a bit (prevent new decision)
+
+        // Move to range
+
+        // Wait a bit (prevent new decision)
+
+        // Make new decision
+
     }
     #endregion
 
