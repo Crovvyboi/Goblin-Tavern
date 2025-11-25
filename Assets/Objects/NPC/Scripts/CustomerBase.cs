@@ -34,6 +34,21 @@ public class CustomerBase : MonoBehaviour
 
     public bool canWander = false;
 
+    [Header("State History")]
+    public CustomerGoal previousGoal = CustomerGoal.None;
+    public CustomerState previousState = CustomerState.Idling;
+
+    public void AssignNewGoal(CustomerGoal newGoal)
+    {
+        previousGoal = customerGoal;
+        customerGoal = newGoal;
+    }
+    public void AssignNewState(CustomerState newState)
+    {
+        previousState = customerState;
+        customerState = newState;
+    }
+
     #region Movement
     // Goal injections
     public void InjectNewGoalNode(Node newGoal)
@@ -90,6 +105,18 @@ public class CustomerBase : MonoBehaviour
     public void AddToQueue(Vector3 newGoal)
     {
         goalQueue.Add(newGoal);
+    }
+
+    public void MoveToTarget(Vector3 target, Vector3 currentPos)
+    {
+        List<Vector3> newQueue = new List<Vector3>();
+        Vector3 throughPoint = FindThroughpoint(target, currentPos).transform.position;
+        if (throughPoint != null)
+        {
+            newQueue.Add(throughPoint);
+        }
+        newQueue.Add(target);
+        InjectNewQueue(newQueue);
     }
 
     // Through point calculations
@@ -162,8 +189,8 @@ public class CustomerBase : MonoBehaviour
 
     public void OnFinalCall()
     {
-        customerGoal = CustomerGoal.Exit;
-        customerState = CustomerState.MovingToExit;
+        AssignNewGoal(CustomerGoal.Exit);
+        AssignNewState(CustomerState.MovingToExit);
 
         InjectNewGoalPosition(CustomerGenerator.instance.spawnLocation.transform.position);
         

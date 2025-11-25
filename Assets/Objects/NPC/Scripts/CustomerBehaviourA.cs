@@ -113,48 +113,34 @@ public class CustomerBehaviourA : CustomerBase
         {
             case CustomerGoal.Hunger:
                 // Order food (& drink)
-                customerGoal = CustomerGoal.Hunger;
+                AssignNewGoal(CustomerGoal.Hunger);
 
                 if (this.transform.position != customerStats.assignedChair.transform.position)
                 {
-                    List<Vector3> newQueue = new List<Vector3>();
-                    Vector3 throughPoint = FindThroughpoint(customerStats.assignedChair.transform.position, this.transform.position).transform.position;
-                    if (throughPoint != null)
-                    {
-                        newQueue.Add(throughPoint);
-                    }
-                    newQueue.Add(customerStats.assignedChair.transform.position);
-                    InjectNewQueue(newQueue);
+                    MoveToTarget(customerStats.assignedChair.transform.position, this.transform.position);
                 }
-                customerState = CustomerState.Moving;
+                AssignNewState(CustomerState.Moving);
                 break;
             case CustomerGoal.Thirst:
                 // Order drink
-                customerGoal = CustomerGoal.Thirst;
+                AssignNewGoal(CustomerGoal.Thirst);
 
                 if (this.transform.position != customerStats.assignedChair.transform.position)
                 {
-                    List<Vector3> newQueue = new List<Vector3>();
-                    Vector3 throughPoint = FindThroughpoint(customerStats.assignedChair.transform.position, this.transform.position).transform.position;
-                    if (throughPoint != null)
-                    {
-                        newQueue.Add(throughPoint);
-                    }
-                    newQueue.Add(customerStats.assignedChair.transform.position);
-                    InjectNewQueue(newQueue);
+                    MoveToTarget(customerStats.assignedChair.transform.position, this.transform.position);
                 }
-                customerState = CustomerState.Moving;
+                AssignNewState(CustomerState.Moving);
                 break;
             case CustomerGoal.Exit:
                 if (this.transform.position != customerStats.assignedChair.transform.position)
                 {
                     InjectNewGoalPosition(CustomerGenerator.instance.spawnLocation.transform.position);
                 }
-                customerState = CustomerState.MovingToExit;
+                AssignNewState(CustomerState.MovingToExit);
                 break;
             default:
-                customerGoal = CustomerGoal.None;
-                customerState = CustomerState.Idling;
+                AssignNewGoal(CustomerGoal.None);
+                AssignNewState(CustomerState.Idling);
                 break;
         }
     }
@@ -174,18 +160,18 @@ public class CustomerBehaviourA : CustomerBase
                     case CustomerGoal.Hunger:
                         if (this.transform.position == customerStats.assignedChair.transform.position)
                         {
-                            customerState = CustomerState.Ordering;
+                            AssignNewState(CustomerState.Ordering);
                         }  
                         break;
                     case CustomerGoal.Thirst:
                         if (this.transform.position == customerStats.assignedChair.transform.position)
                         {
-                            customerState = CustomerState.Ordering;
+                            AssignNewState(CustomerState.Ordering);
                         }
                         break;
                     default:
-                        customerGoal = CustomerGoal.None;
-                        customerState = CustomerState.Idling;
+                        AssignNewGoal(CustomerGoal.None);
+                        AssignNewState(CustomerState.Idling);
                         break;
                 }
                 break;
@@ -211,10 +197,13 @@ public class CustomerBehaviourA : CustomerBase
                 else
                 {
                     // Switch to Idle and make new decision
-                    customerState = CustomerState.Idling;
-                    customerGoal = CustomerGoal.None;
+                    AssignNewState(CustomerState.Idling);
+                    AssignNewGoal(CustomerGoal.None);
                 }
                
+                break;
+            case CustomerState.MeetTarget:
+
                 break;
             case CustomerState.MovingToExit:
                 if (this.transform.position == CustomerGenerator.instance.spawnLocation.transform.position)
@@ -264,13 +253,13 @@ public class CustomerBehaviourA : CustomerBase
             currentOrder = order;
             customerStats.assignedTable.GetComponent<Table>().nextOrder.AddRange(order);
 
-            customerState = CustomerState.WaitingOnOrder;
+            AssignNewState(CustomerState.WaitingOnOrder);
         }
         else
         {
             // Switch to waiting on order
-            customerGoal = CustomerGoal.None;
-            customerState = CustomerState.Idling;
+            AssignNewGoal(CustomerGoal.None);
+            AssignNewState(CustomerState.Idling);
         }
     }
 
@@ -302,7 +291,7 @@ public class CustomerBehaviourA : CustomerBase
             ServiceManager.instance.stats.AddToServedMenuItems(claimedItems);
 
             // Switch state to eating order
-            customerState = CustomerState.EatingOrder;
+            AssignNewState(CustomerState.EatingOrder);
         }
     }
 }

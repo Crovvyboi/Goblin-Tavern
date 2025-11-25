@@ -149,8 +149,7 @@ public class CustomerGenerator : MonoBehaviour
             {
                 customer.knowsOthers = new List<CustomerStats>(group);
                 customer.knowsOthers.Remove(customer);
-                customer.meetingSpot = hangoutSpot;
-                customer.standingSpot = hangoutSpot.connections.First(x => !customer.knowsOthers.Any(y => y.standingSpot == x));
+                customer.AssignHangoutSpot(hangoutSpot);
 
             }
 

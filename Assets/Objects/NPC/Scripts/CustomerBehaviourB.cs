@@ -17,6 +17,9 @@ public class CustomerBehaviourB : CustomerBase
     List<MenuItem> claimedItems = new List<MenuItem>();
     public int toPay = 0;
 
+    public GameObject meetTarget;
+    public bool isMeeting;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -88,7 +91,11 @@ public class CustomerBehaviourB : CustomerBase
             int thirstDiff = 100 - customerStats.thirst;
             inRange.Add(CustomerGoal.Thirst, thirstDiff);
 
-            // inRange.Add(CustomerGoal.Meet, 15);
+            if (previousState == CustomerState.Idling)
+            {
+                inRange.Add(CustomerGoal.Meet, 15);
+            }
+            
             inRange.Add(CustomerGoal.Idle, 15);
 
             // Determine highest priority
@@ -116,7 +123,7 @@ public class CustomerBehaviourB : CustomerBase
                 if (Bar.instance.OccupySpot(this.gameObject, out GameObject freeSpot))
                 {
                     barWaitingSpot = freeSpot;
-                    customerGoal = CustomerGoal.Thirst;
+                    AssignNewGoal(CustomerGoal.Thirst);
                     if (this.transform.position != barWaitingSpot.transform.position)
                     {
                         List<Vector3> newQueue = new List<Vector3>();
@@ -134,6 +141,8 @@ public class CustomerBehaviourB : CustomerBase
 
                 break;
             case CustomerGoal.Meet:
+                SelectMeetTarget();
+
                 break;
             case CustomerGoal.Idle:
                 customerState = CustomerState.Idling;
@@ -166,7 +175,7 @@ public class CustomerBehaviourB : CustomerBase
                             // Moved to the bar to order items
                             if (this.transform.position == barWaitingSpot.transform.position)
                             {
-                                customerState = CustomerState.Ordering;
+                                AssignNewState(CustomerState.Ordering);
                             }
                         }
                         else
@@ -174,11 +183,16 @@ public class CustomerBehaviourB : CustomerBase
                             // Has moved to standing spot to consume items
                             if (this.transform.position == customerStats.standingSpot.transform.position)
                             {
-                                customerState = CustomerState.EatingOrder;
+                                AssignNewState(CustomerState.EatingOrder);
                             }
                         }
                         break;
                     case CustomerGoal.Meet:
+                        // Meet with the target
+                        if (this.transform.position == meetTarget.transform.position)
+                        {
+                            AssignNewState(CustomerState.MeetTarget);
+                        }
                         break;
                     default:
                         break;
@@ -204,9 +218,17 @@ public class CustomerBehaviourB : CustomerBase
                 else
                 {
                     // Switch to Idle and make new decision
-                    customerState = CustomerState.Idling;
-                    customerGoal = CustomerGoal.None;
+                    AssignNewState(CustomerState.Idling);
+                    AssignNewGoal(CustomerGoal.None);
                 }
+                break;
+            case CustomerState.MeetTarget:
+                if (!isMeeting)
+                {
+                    isMeeting = true;
+                    StartCoroutine(MeetTarget());
+                }
+                
                 break;
             case CustomerState.MovingToExit:
                 if (this.transform.position == CustomerGenerator.instance.spawnLocation.transform.position)
@@ -225,23 +247,15 @@ public class CustomerBehaviourB : CustomerBase
     public void TargetedIdle()
     {
         // Idle at specific spot
-        customerGoal = CustomerGoal.None;
-        customerState = CustomerState.Idling;
+        AssignNewGoal(CustomerGoal.None);
+        AssignNewState(CustomerState.Idling);
 
         // Go to meeting spot
         if (customerStats.standingSpot  == null || this.currentPos != customerStats.standingSpot.transform.position)
         {
             // Move to range
-            List<Vector3> newQueue = new List<Vector3>();
-            Vector3 throughPoint = FindThroughpoint(customerStats.standingSpot.transform.position, this.transform.position).transform.position;
-            if (throughPoint != null)
-            {
-                newQueue.Add(throughPoint);
-            }
-            newQueue.Add(customerStats.standingSpot.transform.position);
-            InjectNewQueue(newQueue);
-            customerState = CustomerState.Moving;
-
+            MoveToTarget(customerStats.standingSpot.transform.position, this.transform.position);
+            AssignNewState(CustomerState.Moving);
         }
     }
 
@@ -254,7 +268,7 @@ public class CustomerBehaviourB : CustomerBase
         currentOrder = DetermineDrinkOrder();
         Bar.instance.barOrders.AddRange(currentOrder);
 
-        customerState = CustomerState.WaitingOnOrder;
+        AssignNewState(CustomerState.WaitingOnOrder);
     }
 
     public void WaitingOnOrder()
@@ -288,25 +302,99 @@ public class CustomerBehaviourB : CustomerBase
             Bar.instance.LeaveSpot(this.gameObject);
             if (TavernManager.state != TavernState.ServiceFinalCall || TavernManager.state != TavernState.ServiceOverview)
             {
-                if (this.transform.position != customerStats.standingSpot.transform.position)
+                if (customerStats.standingSpot.transform.position != null && this.transform.position != customerStats.standingSpot.transform.position)
                 {
-                    List<Vector3> newQueue = new List<Vector3>();
-                    Vector3 throughPoint = FindThroughpoint(customerStats.standingSpot.transform.position, this.transform.position).transform.position;
-                    if (throughPoint != null)
-                    {
-                        newQueue.Add(throughPoint);
-                    }
-                    newQueue.Add(customerStats.standingSpot.transform.position);
-                    InjectNewQueue(newQueue);
+                    MoveToTarget(customerStats.standingSpot.transform.position, this.transform.position);
                 }
                 hasOrdered = true;
-                customerState = CustomerState.Moving;
+                AssignNewState(CustomerState.Moving);
             }
             else
             {
-                customerState = CustomerState.EatingOrder;
+                AssignNewState(CustomerState.EatingOrder);
             }
             
         }
+    }
+
+    public void SelectMeetTarget()
+    {
+        List<GameObject> unknownPeople = ServiceManager.instance.generatedCustomers.Where(x => !customerStats.knowsOthers.Any(y => y == x.GetComponent<CustomerBase>().customerStats)).ToList();
+
+        GameObject selectedTarget = null;
+        for (int i = 0; i < 5; i++)
+        {
+            GameObject tempSelected = unknownPeople[Random.Range(0, unknownPeople.Count)];
+            if (tempSelected != null && tempSelected.GetComponent<CustomerBase>().customerState != CustomerState.Moving && tempSelected.GetComponent<CustomerBase>().customerState != CustomerState.MovingToExit)
+            {
+                if (Vector3.Distance(this.transform.position, tempSelected.transform.position) < 25f)
+                {
+                    selectedTarget = tempSelected;
+                    break;
+                }
+            }
+        }
+
+        if (selectedTarget != null)
+        {
+            meetTarget = selectedTarget;
+            AssignNewGoal(CustomerGoal.Meet);
+
+            // Hold target at position
+            selectedTarget.GetComponent<CustomerBase>().AssignNewState(CustomerState.MeetTarget);
+
+            // Move to meet target
+            MoveToTarget(meetTarget.transform.position, this.transform.position);
+            AssignNewState(CustomerState.Moving);
+
+            isMeeting = false;
+
+            Debug.Log($"Meeting target | {this.gameObject.name} -> {selectedTarget.name}");
+        }
+        else
+        {
+            AssignNewGoal(CustomerGoal.None);
+            AssignNewState(CustomerState.Idling);
+        }
+    }
+
+    public IEnumerator MeetTarget()
+    {
+        // Have conversation
+        yield return new WaitForSeconds(3f);
+
+        // Add to known people if behaviour B and both have less than 4 known people
+        // If groups together are 4 or less, merge groups together
+        if (meetTarget != null && meetTarget.GetComponent<CustomerBehaviourB>() != null)
+        {
+            CustomerStats selectedStats = meetTarget.GetComponent<CustomerBase>().customerStats;
+            if (customerStats.knowsOthers.Count + selectedStats.knowsOthers.Count <= 4)
+            {
+                foreach (CustomerStats item in customerStats.knowsOthers)
+                {
+                    item.knowsOthers.Add(selectedStats);
+                    item.knowsOthers.AddRange(selectedStats.knowsOthers);
+                }
+
+                selectedStats.AssignHangoutSpot(customerStats.meetingSpot);
+                selectedStats.knowsOthers.Add(customerStats);
+                selectedStats.knowsOthers.AddRange(selectedStats.knowsOthers);
+                //foreach (CustomerStats item in selectedStats.knowsOthers)
+                //{
+                //    item.AssignHangoutSpot(customerStats.meetingSpot);
+                //    item.knowsOthers.Add(customerStats);
+                //    item.knowsOthers.AddRange(selectedStats.knowsOthers);
+                //}
+            }
+        }
+
+        // Resume what target was doing
+        meetTarget.GetComponent<CustomerBase>().AssignNewState(meetTarget.GetComponent<CustomerBase>().previousState);
+
+        // Make new decision
+        AssignNewGoal(CustomerGoal.None);
+        AssignNewState(CustomerState.Idling);
+
+        Debug.Log("Done meeting");
     }
 }

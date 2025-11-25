@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [Serializable]
@@ -53,5 +55,13 @@ public class CustomerStats
 
     }
 
-    
+    public void AssignHangoutSpot(Node hangoutSpot)
+    {
+        this.meetingSpot = hangoutSpot;
+        if (hangoutSpot.connections.Any(x => !this.knowsOthers.Any(y => y.standingSpot == x)))
+        {
+            this.standingSpot = hangoutSpot.connections.First(x => !this.knowsOthers.Any(y => y.standingSpot == x));
+        }
+        
+    }
 }

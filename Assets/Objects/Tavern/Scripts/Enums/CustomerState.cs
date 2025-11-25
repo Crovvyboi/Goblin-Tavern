@@ -9,6 +9,7 @@ public enum CustomerState
     Ordering,
     WaitingOnOrder,
     EatingOrder,
+    MeetTarget,
     MovingToExit
 }
 
