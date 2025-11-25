@@ -17,13 +17,16 @@ public class TavernTilemapManager : MonoBehaviour
     [Header("Tilemaps")]
     public Tilemap tavernFloorMap;
     public Tilemap tavernWallMap;
-    public Tilemap tavernFurnitureMap;
     public Tilemap tavernZoningMap;
 
     [Header("Collisions")]
     public List<Vector3> tavernFloorBorders = new List<Vector3>();
     public Tilemap tavernCollisionMap;
     public RuleTile collisionTile;
+
+    [Header("Tavern Furniture")]
+    public GameObject tavernFurnitureContainer;
+    public List<Vector3> tavernFurnitureTiles;
 
     // Start is called before the first frame update
     void Start()
@@ -47,11 +50,15 @@ public class TavernTilemapManager : MonoBehaviour
 
         GenerateFloorNodes();
         GenerateWallCollisions();
+
+        GenerateFurnitureTiles();
         GenerateHangoutSpots();
     }
 
     public void GenerateFloorNodes()
     {
+        GenerateFurnitureTiles();
+        GenerateHangoutSpots();
         for (int i = tavernFloorMap.cellBounds.xMin; i < tavernFloorMap.cellBounds.xMax; i++)
         {
             for (int j = tavernFloorMap.cellBounds.yMin; j < tavernFloorMap.cellBounds.yMax; j++)
@@ -65,7 +72,7 @@ public class TavernTilemapManager : MonoBehaviour
                     tilePostitionsWorld.Add(place);
 
                     // Check if furnituremap does not have tile on that pos
-                    if (!tavernFurnitureMap.HasTile(localPlace))
+                    if (!CheckIfPositionHasFurniture(localPlace))
                     {
                         GameObject newNode = GameObject.Instantiate(nodePrefab);
                         newNode.transform.SetParent(tavernFloorMap.gameObject.transform, false);
@@ -101,6 +108,26 @@ public class TavernTilemapManager : MonoBehaviour
                 Node newNode = tavernFloorNodes.Where(x => x.transform.position.x == nodePos.x).First(x => x.transform.position.y == nodePos.y - 1f);
                 node.connections.Add(newNode);
             }
+        }
+    }
+
+    public bool CheckIfPositionHasFurniture(Vector3Int position)
+    {
+        if (tavernFurnitureTiles.Any(x => Vector3.Distance(new Vector3(x.x - 0.5f, x.y - 0.5f), position) < 0.75f))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public void GenerateFurnitureTiles()
+    {
+        tavernFurnitureTiles = new List<Vector3>();
+
+        tavernFurnitureContainer.GetComponentsInChildren<FurnitureOrientation>();
+        foreach (FurnitureOrientation tile in tavernFurnitureContainer.GetComponentsInChildren<FurnitureOrientation>())
+        {
+            tavernFurnitureTiles.AddRange(tile.tiles);
         }
     }
 

@@ -127,10 +127,10 @@ public class CustomerBehaviourB : CustomerBase
                     if (this.transform.position != barWaitingSpot.transform.position)
                     {
                         List<Vector3> newQueue = new List<Vector3>();
-                        Vector3 throughPoint = FindThroughpoint(barWaitingSpot.transform.position, this.transform.position).transform.position;
+                        Vector3? throughPoint = FindThroughpoint(barWaitingSpot.transform.position, this.transform.position).transform.position;
                         if (throughPoint != null)
                         {
-                            newQueue.Add(throughPoint);
+                            newQueue.Add((Vector3)throughPoint);
                         }
                         newQueue.Add(barWaitingSpot.transform.position);
                         InjectNewQueue(newQueue);
@@ -251,7 +251,7 @@ public class CustomerBehaviourB : CustomerBase
         AssignNewState(CustomerState.Idling);
 
         // Go to meeting spot
-        if (customerStats.standingSpot  == null || this.currentPos != customerStats.standingSpot.transform.position)
+        if (customerStats.standingSpot  != null || this.currentPos != customerStats.standingSpot.transform.position)
         {
             // Move to range
             MoveToTarget(customerStats.standingSpot.transform.position, this.transform.position);
@@ -386,15 +386,17 @@ public class CustomerBehaviourB : CustomerBase
                 //    item.knowsOthers.AddRange(selectedStats.knowsOthers);
                 //}
             }
+
+            // Resume what target was doing
+            meetTarget.GetComponent<CustomerBase>().AssignNewState(meetTarget.GetComponent<CustomerBase>().previousState);
+
+            // Make new decision
+            AssignNewGoal(CustomerGoal.None);
+            AssignNewState(CustomerState.Idling);
+
+            Debug.Log("Done meeting");
         }
 
-        // Resume what target was doing
-        meetTarget.GetComponent<CustomerBase>().AssignNewState(meetTarget.GetComponent<CustomerBase>().previousState);
-
-        // Make new decision
-        AssignNewGoal(CustomerGoal.None);
-        AssignNewState(CustomerState.Idling);
-
-        Debug.Log("Done meeting");
+        
     }
 }

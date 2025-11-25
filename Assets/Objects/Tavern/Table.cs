@@ -7,6 +7,7 @@ using static PlayerServiceManager;
 
 public class Table : MonoBehaviour
 {
+    public GameObject chairPositionHolder;
     public List<GameObject> chairs;
     private int chairCount;
 
@@ -25,7 +26,7 @@ public class Table : MonoBehaviour
     {
         orderInterval = Random.Range(0, 4);
 
-        // GetChairs();
+        GetChairs();
 
         orderReadyMarker.SetActive(false);
         orderHighlightMarker.SetActive(false);
@@ -65,11 +66,22 @@ public class Table : MonoBehaviour
 
     public void GetChairs()
     {
-        foreach (Transform child in this.transform)
+        chairs.Clear();
+        foreach (Transform child in chairPositionHolder.transform)
         {
-            if (child.tag == "Chair")
+            bool hasChair = GameObject.FindGameObjectsWithTag("Chair").Any(
+                x => 
+                x.GetComponent<FurnitureOrientation>().currentOrientation == child.gameObject.GetComponent<ChairSpot>().needsDirection &&
+                Vector3.Distance(x.transform.position, child.position) < 0.1f
+                );
+            if (hasChair)
             {
-                chairs.Add(child.gameObject);
+                GameObject foundChair = GameObject.FindGameObjectsWithTag("Chair").First(
+                x =>
+                x.GetComponent<FurnitureOrientation>().currentOrientation == child.gameObject.GetComponent<ChairSpot>().needsDirection &&
+                Vector3.Distance(x.transform.position, child.position) < 0.1f
+                );
+                chairs.Add(foundChair);
             }
         }
 

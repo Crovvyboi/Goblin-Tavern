@@ -110,17 +110,17 @@ public class CustomerBase : MonoBehaviour
     public void MoveToTarget(Vector3 target, Vector3 currentPos)
     {
         List<Vector3> newQueue = new List<Vector3>();
-        Vector3 throughPoint = FindThroughpoint(target, currentPos).transform.position;
+        Vector3? throughPoint = FindThroughpoint(target, currentPos).transform.position;
         if (throughPoint != null)
         {
-            newQueue.Add(throughPoint);
+            newQueue.Add((Vector3)throughPoint);
         }
         newQueue.Add(target);
         InjectNewQueue(newQueue);
     }
 
     // Through point calculations
-    public Node FindThroughpoint(Vector3 goal, Vector3 currentPos)
+    public Node? FindThroughpoint(Vector3 goal, Vector3 currentPos)
     {
         return PathfinderScript.instance.FindThroughpoint(goal, currentPos);
 
