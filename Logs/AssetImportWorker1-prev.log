@@ -15,7 +15,7 @@ G:/Unity Projects/Goblin Tavern
 -logFile
 Logs/AssetImportWorker1.log
 -srvPort
-56936
+62733
 Successfully changed project path to: G:/Unity Projects/Goblin Tavern
 G:/Unity Projects/Goblin Tavern
 [UnityMemory] Configuration Parameters - Can be set up in boot.config
@@ -49,15 +49,15 @@ G:/Unity Projects/Goblin Tavern
     "memorysetup-temp-allocator-size-cloud-worker=32768"
     "memorysetup-temp-allocator-size-gi-baking-worker=262144"
     "memorysetup-temp-allocator-size-gfx=262144"
-Player connection [27888]  Target information:
+Player connection [31456]  Target information:
 
-Player connection [27888]  * "[IP] 192.168.178.192 [Port] 0 [Flags] 2 [Guid] 1924465935 [EditorId] 1924465935 [Version] 1048832 [Id] WindowsEditor(7,Desktop-Rik) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
+Player connection [31456]  * "[IP] 192.168.178.192 [Port] 0 [Flags] 2 [Guid] 3543633851 [EditorId] 3543633851 [Version] 1048832 [Id] WindowsEditor(7,Desktop-Rik) [Debug] 1 [PackageName] WindowsEditor [ProjectName] Editor" 
 
-Player connection [27888] Host joined multi-casting on [225.0.0.222:54997]...
-Player connection [27888] Host joined alternative multi-casting on [225.0.0.222:34997]...
+Player connection [31456] Host joined multi-casting on [225.0.0.222:54997]...
+Player connection [31456] Host joined alternative multi-casting on [225.0.0.222:34997]...
 Input System module state changed to: Initialized.
 [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
-Refreshing native plugins compatible for Editor in 8.31 ms, found 4 plugins.
+Refreshing native plugins compatible for Editor in 9.41 ms, found 4 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2022.3.62f3 (96770f904ca7)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Resources/UnitySubsystems
@@ -73,51 +73,51 @@ Initialize mono
 Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2022.3.62f3/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2022.3.62f3/Editor/Data/MonoBleedingEdge/lib/mono/unityjit-win32'
 Mono config path = 'C:/Program Files/Unity/Hub/Editor/2022.3.62f3/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56472
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56444
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.62f3/Editor/Data/PlaybackEngines/AndroidPlayer/UnityEditor.Android.Extensions.dll
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.62f3/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.dll
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2022.3.62f3/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.015804 seconds.
-- Loaded All Assemblies, in  0.363 seconds
+Registered in 0.018705 seconds.
+- Loaded All Assemblies, in  0.359 seconds
 Native extension for WindowsStandalone target not found
 [usbmuxd] Start listen thread
 [usbmuxd] Listen thread started
 Native extension for iOS target not found
 Native extension for Android target not found
-Android Extension - Scanning For ADB Devices 255 ms
+Android Extension - Scanning For ADB Devices 293 ms
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  0.564 seconds
-Domain Reload Profiling: 925ms
-	BeginReloadAssembly (103ms)
+- Finished resetting the current domain, in  0.610 seconds
+Domain Reload Profiling: 967ms
+	BeginReloadAssembly (107ms)
 		ExecutionOrderSort (0ms)
 		DisableScriptedObjects (0ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
 		CreateAndSetChildDomain (1ms)
-	RebuildCommonClasses (34ms)
+	RebuildCommonClasses (31ms)
 	RebuildNativeTypeToScriptingClass (10ms)
-	initialDomainReloadingComplete (67ms)
-	LoadAllAssembliesAndSetupDomain (145ms)
-		LoadAssemblies (101ms)
+	initialDomainReloadingComplete (68ms)
+	LoadAllAssembliesAndSetupDomain (140ms)
+		LoadAssemblies (104ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (143ms)
-			TypeCache.Refresh (141ms)
-				TypeCache.ScanAssembly (128ms)
+		AnalyzeDomain (138ms)
+			TypeCache.Refresh (136ms)
+				TypeCache.ScanAssembly (122ms)
 			ScanForSourceGeneratedMonoScriptInfo (0ms)
 			ResolveRequiredComponents (0ms)
-	FinalizeReload (565ms)
+	FinalizeReload (611ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (519ms)
+		SetupLoadedEditorAssemblies (565ms)
 			LogAssemblyErrors (0ms)
-			InitializePlatformSupportModulesInManaged (354ms)
+			InitializePlatformSupportModulesInManaged (397ms)
 			SetLoadedEditorAssemblies (5ms)
 			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (3ms)
-			ProcessInitializeOnLoadAttributes (115ms)
-			ProcessInitializeOnLoadMethodAttributes (43ms)
+			BeforeProcessingInitializeOnLoad (2ms)
+			ProcessInitializeOnLoadAttributes (116ms)
+			ProcessInitializeOnLoadMethodAttributes (45ms)
 			AfterProcessingInitializeOnLoad (0ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
@@ -126,52 +126,52 @@ Domain Reload Profiling: 925ms
 Worker process is ready to serve import requests
 Caller must complete domain reload
 Begin MonoManager ReloadAssembly
-- Loaded All Assemblies, in  0.742 seconds
+- Loaded All Assemblies, in  0.697 seconds
 Native extension for WindowsStandalone target not found
 Native extension for iOS target not found
 Native extension for Android target not found
 Mono: successfully reloaded assembly
-- Finished resetting the current domain, in  1.037 seconds
-Domain Reload Profiling: 1775ms
-	BeginReloadAssembly (161ms)
+- Finished resetting the current domain, in  0.952 seconds
+Domain Reload Profiling: 1645ms
+	BeginReloadAssembly (149ms)
 		ExecutionOrderSort (0ms)
-		DisableScriptedObjects (5ms)
+		DisableScriptedObjects (6ms)
 		BackupInstance (0ms)
 		ReleaseScriptingObjects (0ms)
-		CreateAndSetChildDomain (26ms)
-	RebuildCommonClasses (41ms)
-	RebuildNativeTypeToScriptingClass (12ms)
-	initialDomainReloadingComplete (42ms)
-	LoadAllAssembliesAndSetupDomain (481ms)
-		LoadAssemblies (371ms)
+		CreateAndSetChildDomain (23ms)
+	RebuildCommonClasses (33ms)
+	RebuildNativeTypeToScriptingClass (11ms)
+	initialDomainReloadingComplete (44ms)
+	LoadAllAssembliesAndSetupDomain (456ms)
+		LoadAssemblies (357ms)
 		RebuildTransferFunctionScriptingTraits (0ms)
-		AnalyzeDomain (206ms)
-			TypeCache.Refresh (169ms)
-				TypeCache.ScanAssembly (149ms)
-			ScanForSourceGeneratedMonoScriptInfo (29ms)
+		AnalyzeDomain (186ms)
+			TypeCache.Refresh (156ms)
+				TypeCache.ScanAssembly (139ms)
+			ScanForSourceGeneratedMonoScriptInfo (22ms)
 			ResolveRequiredComponents (6ms)
-	FinalizeReload (1037ms)
+	FinalizeReload (952ms)
 		ReleaseScriptCaches (0ms)
 		RebuildScriptCaches (0ms)
-		SetupLoadedEditorAssemblies (845ms)
+		SetupLoadedEditorAssemblies (787ms)
 			LogAssemblyErrors (0ms)
 			InitializePlatformSupportModulesInManaged (33ms)
-			SetLoadedEditorAssemblies (6ms)
+			SetLoadedEditorAssemblies (5ms)
 			RefreshPlugins (0ms)
-			BeforeProcessingInitializeOnLoad (136ms)
-			ProcessInitializeOnLoadAttributes (619ms)
-			ProcessInitializeOnLoadMethodAttributes (39ms)
-			AfterProcessingInitializeOnLoad (12ms)
+			BeforeProcessingInitializeOnLoad (125ms)
+			ProcessInitializeOnLoadAttributes (573ms)
+			ProcessInitializeOnLoadMethodAttributes (37ms)
+			AfterProcessingInitializeOnLoad (14ms)
 			EditorAssembliesLoaded (0ms)
 		ExecutionOrderSort2 (0ms)
 		AwakeInstancesAfterBackupRestoration (8ms)
-Launched and connected shader compiler UnityShaderCompiler.exe after 0.04 seconds
-Refreshing native plugins compatible for Editor in 3.82 ms, found 4 plugins.
+Launched and connected shader compiler UnityShaderCompiler.exe after 0.05 seconds
+Refreshing native plugins compatible for Editor in 3.69 ms, found 4 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 4508 Unused Serialized files (Serialized files now loaded: 0)
-Unloading 40 unused Assets / (241.2 KB). Loaded Objects now: 4978.
-Memory consumption went from 153.5 MB to 153.3 MB.
-Total: 4.599600 ms (FindLiveObjects: 0.433700 ms CreateObjectMapping: 0.119200 ms MarkObjects: 3.813800 ms  DeleteObjects: 0.231700 ms)
+Unloading 4510 Unused Serialized files (Serialized files now loaded: 0)
+Unloading 40 unused Assets / (241.7 KB). Loaded Objects now: 4980.
+Memory consumption went from 153.6 MB to 153.4 MB.
+Total: 4.490100 ms (FindLiveObjects: 0.446000 ms CreateObjectMapping: 0.115900 ms MarkObjects: 3.684100 ms  DeleteObjects: 0.242600 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
@@ -188,519 +188,31 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  Time since last request: 172975.612390 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_49.asset
-  artifactKey: Guid(b6ff6f81f3b8b6545a423260222289c5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_49.asset using Guid(b6ff6f81f3b8b6545a423260222289c5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '25d77d6f0a6f8cc8db3727e2d0d4719f') in 0.076017 seconds
+  Time since last request: 213261.646275 seconds.
+  path: Assets/Objects/Player/UI Prefabs/OrderBar/SelectionBar.prefab
+  artifactKey: Guid(1a341181370ce0e4590cf7b7440398f5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Objects/Player/UI Prefabs/OrderBar/SelectionBar.prefab using Guid(1a341181370ce0e4590cf7b7440398f5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '6e7b9589e5e061e9bc69dabc8ccb270d') in 0.026121 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000040 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_26.asset
-  artifactKey: Guid(887892675810fc94eb2689e74822bacd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_26.asset using Guid(887892675810fc94eb2689e74822bacd) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '94d7e2d833c08e223a25607d7ca5ca53') in 0.011472 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000026 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_1.asset
-  artifactKey: Guid(3a6e6564abc52fd49974451d57a2b737) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_1.asset using Guid(3a6e6564abc52fd49974451d57a2b737) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '89f9f5da6a04dddc04c5d744d6220893') in 0.014024 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_8.asset
-  artifactKey: Guid(e23953810dd9d27438c5695680e6c95c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_8.asset using Guid(e23953810dd9d27438c5695680e6c95c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '068d83f3e172538c55e4732f98ef88e8') in 0.043979 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
+Number of asset objects unloaded after import = 6
 ========================================================================
 Received Import Request.
   Time since last request: 0.000023 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_37.asset
-  artifactKey: Guid(ee9b2b772d366e94491376eb52159c48) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_37.asset using Guid(ee9b2b772d366e94491376eb52159c48) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: 'de7110f3c375e990e4349e8e821d8e4e') in 0.013771 seconds
+  path: Assets/Objects/Player/UI Prefabs/PlayerMenu/MenuItemGrid/MenuListItem.prefab
+  artifactKey: Guid(836bb3fb19c248f428c7a82a4be07054) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Objects/Player/UI Prefabs/PlayerMenu/MenuItemGrid/MenuListItem.prefab using Guid(836bb3fb19c248f428c7a82a4be07054) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: 'a154ec66218ada7f8e301542fc1135ea') in 0.038047 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_30.asset
-  artifactKey: Guid(26d40f6b807793e439dfc910d0df8048) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_30.asset using Guid(26d40f6b807793e439dfc910d0df8048) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: 'a9c7b990fb7fc9eb9e590cca93f07bbf') in 0.013126 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_44.asset
-  artifactKey: Guid(814a4e59d855ec141bd018979a0af8bf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_44.asset using Guid(814a4e59d855ec141bd018979a0af8bf) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '9b206d2dff5a270469198fb59e4c8d84') in 0.012055 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_7.asset
-  artifactKey: Guid(38c8e0810936bf04dbaa3512e2ca007b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_7.asset using Guid(38c8e0810936bf04dbaa3512e2ca007b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '25a012a8a8206c580fe4be8bdede021b') in 0.005049 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000017 seconds.
-  path: Assets/Objects/Tavern/Temp assets/TempFloor.prefab
-  artifactKey: Guid(10afecffb97c49846b9a1705b30ec7f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/TempFloor.prefab using Guid(10afecffb97c49846b9a1705b30ec7f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '444a167141a96c02e69025569623865e') in 0.082398 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 336
-========================================================================
-Received Import Request.
-  Time since last request: 0.000027 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_34.asset
-  artifactKey: Guid(a95785844408b5644996480e8b4ebde2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_34.asset using Guid(a95785844408b5644996480e8b4ebde2) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: 'a023d333771654351097e938bc1e4509') in 0.012908 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000021 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_36.asset
-  artifactKey: Guid(0ae3bd26d0a2c9d419f9260f0af67927) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_36.asset using Guid(0ae3bd26d0a2c9d419f9260f0af67927) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '139eb123567cc3661ba589bf30f6cea9') in 0.012009 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000028 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_45.asset
-  artifactKey: Guid(081c15d848fe6d348b7561a9b2428066) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_45.asset using Guid(081c15d848fe6d348b7561a9b2428066) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '8320fe61ecd007f6cd1cd0ea79c66fb4') in 0.013874 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
+Number of asset objects unloaded after import = 29
 ========================================================================
 Received Import Request.
   Time since last request: 0.000016 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_28.asset
-  artifactKey: Guid(db7f9f67f751bc142906138b73b103c6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_28.asset using Guid(db7f9f67f751bc142906138b73b103c6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: 'da11fbb316fc0680cf5d07fe75bf07e1') in 0.063423 seconds
+  path: Assets/Objects/Player/UI Prefabs/PlayerMenu/MenuItemGrid/GridItem.prefab
+  artifactKey: Guid(cc58bc4d9f398794eaa137bd3b9d95c6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Objects/Player/UI Prefabs/PlayerMenu/MenuItemGrid/GridItem.prefab using Guid(cc58bc4d9f398794eaa137bd3b9d95c6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
+ -> (artifact id: '2bb5527c30da4bba54569fb4c3b46323') in 0.021623 seconds
 Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000020 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_4.asset
-  artifactKey: Guid(84145414a7cf06846856e2ac2681166e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_4.asset using Guid(84145414a7cf06846856e2ac2681166e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: 'd14f881be0a382b353cea5ddd48996e8') in 0.015754 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000025 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_46.asset
-  artifactKey: Guid(3e9d81c131d0e9e45a19636e3a25f885) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_46.asset using Guid(3e9d81c131d0e9e45a19636e3a25f885) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '97ddeefc72e478db8f396c9b3ae2f965') in 0.016546 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000020 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_10.asset
-  artifactKey: Guid(fce5acf64986a174c9b7da51e1398642) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_10.asset using Guid(fce5acf64986a174c9b7da51e1398642) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '458af39fd7a6a65a648636d7abc3e4f6') in 0.004699 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000015 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Kitchen temp.png
-  artifactKey: Guid(cffdf281cc868db41b9123bdf6f26b40) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Kitchen temp.png using Guid(cffdf281cc868db41b9123bdf6f26b40) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
-[PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '8d6ef9c18fa0021c0478073369d3026a') in 0.038564 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000150 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_41.asset
-  artifactKey: Guid(3d843ce3086d5b64caa01e68d1d8d747) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_41.asset using Guid(3d843ce3086d5b64caa01e68d1d8d747) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: 'c63df5e6119fabb63c62be329a27b750') in 0.013081 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000018 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_31.asset
-  artifactKey: Guid(9e14f6e976d22f741a044300c7c608d3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_31.asset using Guid(9e14f6e976d22f741a044300c7c608d3) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '6162203ad61116d8e442b9ad738cf459') in 0.012236 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000025 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_47.asset
-  artifactKey: Guid(c7e5622cabdda964c8dd4a0ffbda0b55) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_47.asset using Guid(c7e5622cabdda964c8dd4a0ffbda0b55) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '150aa1ffcbb33a5b0c9ce75997166fc1') in 0.071523 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000023 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_42.asset
-  artifactKey: Guid(dd84ad45f30e2da49ac0811916d27960) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_42.asset using Guid(dd84ad45f30e2da49ac0811916d27960) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: 'bfe8ba91b5c3af5f10bd07eeb05c3eec') in 0.012231 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000032 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_25.asset
-  artifactKey: Guid(2dec7b600387a6b46a733f941aa03868) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_25.asset using Guid(2dec7b600387a6b46a733f941aa03868) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '69c28df3af9f379c6354fab50f1e585f') in 0.004782 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000023 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_59.asset
-  artifactKey: Guid(31119ba8a3c9f1140aa9d02d7157fc8a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_59.asset using Guid(31119ba8a3c9f1140aa9d02d7157fc8a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '0362475161ba8a33c07fb62fde44de91') in 0.012429 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000021 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_18.asset
-  artifactKey: Guid(2b9bdc613fcf9dc4182421f9e339370d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_18.asset using Guid(2b9bdc613fcf9dc4182421f9e339370d) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '2325ae5bd7d523959303e645b61838e0') in 0.013517 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 63.887009 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_63.asset
-  artifactKey: Guid(ed747ec77e82ef141a45f27f12c918ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_63.asset using Guid(ed747ec77e82ef141a45f27f12c918ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '1ce88d5bb7677d06c17b9a7d0ba3d2e0') in 0.014450 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000037 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_75.asset
-  artifactKey: Guid(a59c034813aa04247ab8701d8b330236) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_75.asset using Guid(a59c034813aa04247ab8701d8b330236) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '9bb30bd98745bb2bb7261d9029054a2f') in 0.037251 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000022 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_67.asset
-  artifactKey: Guid(c2186e1f32a99d64a97dbda3fcca705e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_67.asset using Guid(c2186e1f32a99d64a97dbda3fcca705e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '02932d23ef46ef0dd35519efa993c52b') in 0.012540 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000033 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_69.asset
-  artifactKey: Guid(a426f6d01e8100b41a3065691e7f4f7e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_69.asset using Guid(a426f6d01e8100b41a3065691e7f4f7e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '9636da701c00ba5feec38a26c0925179') in 0.013961 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000029 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_74.asset
-  artifactKey: Guid(ab024870ec8c10b4abdff467b2f19142) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_74.asset using Guid(ab024870ec8c10b4abdff467b2f19142) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '93243526fcf2b2a632a89eace1eec658') in 0.020096 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000023 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_85.asset
-  artifactKey: Guid(d83572efe56b4264ea72135a6c5a810b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_85.asset using Guid(d83572efe56b4264ea72135a6c5a810b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '5bbdddab40582ebf77463e935524b18b') in 0.014197 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000028 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_86.asset
-  artifactKey: Guid(a1a61ce0b60c5434c85ab1623a41f400) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_86.asset using Guid(a1a61ce0b60c5434c85ab1623a41f400) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: 'f8c4cba5db3c694a4c126ff09b512977') in 0.013441 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000023 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_83.asset
-  artifactKey: Guid(bc83729f254505445a9b2c9127708936) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_83.asset using Guid(bc83729f254505445a9b2c9127708936) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: 'a741097498fbab804dc0981e1fda7813') in 0.015173 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000025 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_120.asset
-  artifactKey: Guid(f5c92385aa5724a4da05c33995eb195e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_120.asset using Guid(f5c92385aa5724a4da05c33995eb195e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '2c175615d0c311e845adc0e7eee01f6a') in 0.015116 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_113.asset
-  artifactKey: Guid(3b8c0d4d69f0cbf4aa0a11cef5490c45) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_113.asset using Guid(3b8c0d4d69f0cbf4aa0a11cef5490c45) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '7cc22297034e4f7e2fed81e18d833221') in 0.014259 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000023 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_137.asset
-  artifactKey: Guid(5e9b455818e856445bacb2eefa8c40f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_137.asset using Guid(5e9b455818e856445bacb2eefa8c40f6) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '071cc6ef5b011ff0594665c6a0e46b79') in 0.014501 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_99.asset
-  artifactKey: Guid(8480ea0fd3eec1a45a7641073c0306f4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_99.asset using Guid(8480ea0fd3eec1a45a7641073c0306f4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '579e4d5e095ac7e88046e07ef208e187') in 0.017870 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000020 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_108.asset
-  artifactKey: Guid(86543dcd8d038cc489fa9153b84561cf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_108.asset using Guid(86543dcd8d038cc489fa9153b84561cf) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: 'ffe4cc1a4b5e5987bf3487c6321ec973') in 0.014421 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000028 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_147.asset
-  artifactKey: Guid(a29092addfd3e2943b33d0d8feab4664) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_147.asset using Guid(a29092addfd3e2943b33d0d8feab4664) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '19fdaf3cd27b6b40efd04bc35e0c3712') in 0.016854 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000023 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_160.asset
-  artifactKey: Guid(fb42c60888f6cf947840929880de4977) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_160.asset using Guid(fb42c60888f6cf947840929880de4977) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '2ced5334970994a150acb4a4ec83aae1') in 0.013880 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000031 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_119.asset
-  artifactKey: Guid(4f7854eece6fe4f4aba3c7ec14f75c1e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_119.asset using Guid(4f7854eece6fe4f4aba3c7ec14f75c1e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '6ac64f4538784bf1a9ceffbf7ff16fc5') in 0.015926 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000034 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_114.asset
-  artifactKey: Guid(adaf9a71152c081499f3b9c1f76ae010) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_114.asset using Guid(adaf9a71152c081499f3b9c1f76ae010) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '23142e0caf65f25d8c5d2e987d46f26d') in 0.018018 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000027 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_89.asset
-  artifactKey: Guid(fb264d44db865ee46a4733d0f5725b66) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_89.asset using Guid(fb264d44db865ee46a4733d0f5725b66) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: 'b4f902ab1aedf5e078674d321d44b8bc') in 0.013817 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000021 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_126.asset
-  artifactKey: Guid(c50a3f244e8e05b4b9406d8991b6dd9e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_126.asset using Guid(c50a3f244e8e05b4b9406d8991b6dd9e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: 'ed0794bf901345f7e47042a4db043a03') in 0.016081 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000020 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_144.asset
-  artifactKey: Guid(cfea0d53c8128d347b9e639ec58eee43) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_144.asset using Guid(cfea0d53c8128d347b9e639ec58eee43) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '30cede1e8f2103b1cfd18ed167a7f516') in 0.013288 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000024 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_139.asset
-  artifactKey: Guid(38067dd6e4c1ebd448fe6bba160815ec) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_139.asset using Guid(38067dd6e4c1ebd448fe6bba160815ec) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '8721623a639cbf7d30220f7eab9002f4') in 0.016556 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000026 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_150.asset
-  artifactKey: Guid(3b5494ab310233348a5bbadc63364de2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_150.asset using Guid(3b5494ab310233348a5bbadc63364de2) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '3d8222d0a0cb0c71b4e624fd69bb7ec7') in 0.015692 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000023 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_117.asset
-  artifactKey: Guid(91a08d38ecdf92b40ad572666612f86b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_117.asset using Guid(91a08d38ecdf92b40ad572666612f86b) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '09b277ef04cc4450f9f32370bbd369e1') in 0.018429 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000027 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_80.asset
-  artifactKey: Guid(5d81449d27b9ae54daf8ebe868539c5a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_80.asset using Guid(5d81449d27b9ae54daf8ebe868539c5a) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '403d42d3167fdb89729e9ed5a31d4ca1') in 0.014076 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000019 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_107.asset
-  artifactKey: Guid(2f030ea73bf95e94a9ec989c87075955) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_107.asset using Guid(2f030ea73bf95e94a9ec989c87075955) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: 'a0687634f7aa775e60089c833c76be29') in 0.016935 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000023 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_109.asset
-  artifactKey: Guid(2560defe13358a74b8157e6b89155fc5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_109.asset using Guid(2560defe13358a74b8157e6b89155fc5) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '3eebf035024aa07b566c451579288aac') in 0.015067 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000022 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_124.asset
-  artifactKey: Guid(cbe07eee9c042314e9598f9e6e68eab7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_124.asset using Guid(cbe07eee9c042314e9598f9e6e68eab7) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: 'c22e841eee678165d2201a010f06d71d') in 0.013768 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000016 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_135.asset
-  artifactKey: Guid(eaf6331944bc5d54db6494b286428c91) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_135.asset using Guid(eaf6331944bc5d54db6494b286428c91) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '91e68a1c72e04c42c1b28fdeafd597d8') in 0.013219 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000016 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_158.asset
-  artifactKey: Guid(9175f288d08c54a4cb0b3d51b659cbc4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_158.asset using Guid(9175f288d08c54a4cb0b3d51b659cbc4) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '8d9e75e260b1ca7ad193626f4baf237a') in 0.004614 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000024 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_127.asset
-  artifactKey: Guid(86a7de3c45c98d9459b9e2e268812cde) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_127.asset using Guid(86a7de3c45c98d9459b9e2e268812cde) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: 'a6e6ec1d77173040c74cf94091c05d60') in 0.013702 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000025 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_149.asset
-  artifactKey: Guid(392f690880f805e419bb419082eef069) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_149.asset using Guid(392f690880f805e419bb419082eef069) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '02232581dfee2cf5506859e8297fdd96') in 0.013191 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000035 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_100.asset
-  artifactKey: Guid(7cfe139d36285bd48981e1a113bff44c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_100.asset using Guid(7cfe139d36285bd48981e1a113bff44c) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '9ea07824cfc25fd112552aa4b8341198') in 0.014224 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
-========================================================================
-Received Import Request.
-  Time since last request: 0.000020 seconds.
-  path: Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_121.asset
-  artifactKey: Guid(f4183f10f4708b6498a80474cd67104e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Objects/Tavern/Temp assets/Tiles/TopDownHouse_FloorsAndWalls_121.asset using Guid(f4183f10f4708b6498a80474cd67104e) Importer(815301076,1909f56bfc062723c751e8b465ee728b) [PhysX] Initialized MultithreadedTaskDispatcher with 16 workers.
- -> (artifact id: '1f272d5432d77a942e251ed1f2893603') in 0.013185 seconds
-Number of updated asset objects reloaded before import = 0
-Number of asset objects unloaded after import = 3
+Number of asset objects unloaded after import = 34
 Editor requested this worker to shutdown with reason: Scaling down because of idle timeout
 TcpMessagingSession - receive error: operation aborted. errorcode: 995, details: De I/O-bewerking is afgebroken vanwege het afsluiten van een thread of vanwege een opdracht van een toepassing.
 AssetImportWorker is now disconnected from the server

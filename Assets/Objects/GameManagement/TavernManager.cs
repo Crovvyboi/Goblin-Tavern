@@ -11,9 +11,8 @@ public class TavernManager : MonoBehaviour
 
     public static TavernState state;
 
-    private ServiceManager _serviceManager;
-    private TavernStatManager _tavernStatManager;
-    private CustomerGenerator _customerGenerator;
+    public GameObject furnitureContainer;
+    public GameObject decorationContainer;
 
     [Header("Recipes")]
     public List<MenuItem> menuItems = new List<MenuItem>();
@@ -30,10 +29,6 @@ public class TavernManager : MonoBehaviour
         {
             instance = this;
         }
-
-        _serviceManager = this.GetComponent<ServiceManager>();
-        _tavernStatManager = this.GetComponent<TavernStatManager>();
-        _customerGenerator = this.GetComponent<CustomerGenerator>();
 
         state = TavernState.OverworldDay;
 

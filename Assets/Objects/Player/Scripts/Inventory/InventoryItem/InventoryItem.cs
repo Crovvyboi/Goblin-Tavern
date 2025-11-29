@@ -17,6 +17,10 @@ public class InventoryItem : ScriptableObject
 
     [Header("Hotbar")]
     public Texture2D hotbarIcon;
+
+    [Header("Placeable")]
+    public bool isPlaceable;
+    public GameObject prefab;
 }
 
 public enum InventoryItemType

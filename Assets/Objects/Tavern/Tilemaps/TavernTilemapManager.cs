@@ -120,6 +120,30 @@ public class TavernTilemapManager : MonoBehaviour
         return false;
     }
 
+    public bool CheckIfPositionHasTavernTile(List<Vector3> positions)
+    {
+        foreach (Vector3 position in positions)
+        {
+            if (!tilePostitionsWorld.Any(x => Vector3.Distance(new Vector3(x.x + 0.5f, x.y + 0.5f, 0), position) < 0.1f))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public bool CanPlaceFurniture(List<Vector3> positions)
+    {
+        foreach (Vector3 position in positions)
+        {
+            if (tavernFurnitureTiles.Any(x => Vector3.Distance(new Vector3(x.x, x.y), position) < 0.1f))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void GenerateFurnitureTiles()
     {
         tavernFurnitureTiles = new List<Vector3>();

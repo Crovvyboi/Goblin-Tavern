@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 
 public class InteractionSender : MonoBehaviour
 {
+    public static InteractionSender instance;
+
     public bool canInteract = true;
     private PlayerControls playerControls;
 
@@ -14,6 +16,13 @@ public class InteractionSender : MonoBehaviour
     public Collider2D collisionObject;
 
     // Start is called before the first frame update
+    private void Start()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+    }
     private void Awake()
     {
         playerControls = new PlayerControls();

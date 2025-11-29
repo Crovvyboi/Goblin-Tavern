@@ -135,6 +135,15 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""RotateHotbarItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""2da9a704-cd48-4318-8007-c10c2d5aef76"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -234,6 +243,17 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""PlayerMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""296a750f-068a-4c5f-9928-50a22d308cee"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateHotbarItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -609,6 +629,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_General_Interact = m_General.FindAction("Interact", throwIfNotFound: true);
         m_General_Pause = m_General.FindAction("Pause", throwIfNotFound: true);
         m_General_PlayerMenu = m_General.FindAction("PlayerMenu", throwIfNotFound: true);
+        m_General_RotateHotbarItem = m_General.FindAction("RotateHotbarItem", throwIfNotFound: true);
         // Menu
         m_Menu = asset.FindActionMap("Menu", throwIfNotFound: true);
         m_Menu_InventoryRotateItem = m_Menu.FindAction("Inventory-RotateItem", throwIfNotFound: true);
@@ -704,6 +725,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private readonly InputAction m_General_Interact;
     private readonly InputAction m_General_Pause;
     private readonly InputAction m_General_PlayerMenu;
+    private readonly InputAction m_General_RotateHotbarItem;
     /// <summary>
     /// Provides access to input actions defined in input action map "General".
     /// </summary>
@@ -735,6 +757,10 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "General/PlayerMenu".
         /// </summary>
         public InputAction @PlayerMenu => m_Wrapper.m_General_PlayerMenu;
+        /// <summary>
+        /// Provides access to the underlying input action "General/RotateHotbarItem".
+        /// </summary>
+        public InputAction @RotateHotbarItem => m_Wrapper.m_General_RotateHotbarItem;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -776,6 +802,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @PlayerMenu.started += instance.OnPlayerMenu;
             @PlayerMenu.performed += instance.OnPlayerMenu;
             @PlayerMenu.canceled += instance.OnPlayerMenu;
+            @RotateHotbarItem.started += instance.OnRotateHotbarItem;
+            @RotateHotbarItem.performed += instance.OnRotateHotbarItem;
+            @RotateHotbarItem.canceled += instance.OnRotateHotbarItem;
         }
 
         /// <summary>
@@ -802,6 +831,9 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @PlayerMenu.started -= instance.OnPlayerMenu;
             @PlayerMenu.performed -= instance.OnPlayerMenu;
             @PlayerMenu.canceled -= instance.OnPlayerMenu;
+            @RotateHotbarItem.started -= instance.OnRotateHotbarItem;
+            @RotateHotbarItem.performed -= instance.OnRotateHotbarItem;
+            @RotateHotbarItem.canceled -= instance.OnRotateHotbarItem;
         }
 
         /// <summary>
@@ -1091,6 +1123,13 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPlayerMenu(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "RotateHotbarItem" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRotateHotbarItem(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Menu" which allows adding and removing callbacks.

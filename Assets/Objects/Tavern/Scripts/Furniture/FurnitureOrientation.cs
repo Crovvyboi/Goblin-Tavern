@@ -19,6 +19,7 @@ public class FurnitureOrientation : MonoBehaviour
     }
     public void FindTiles()
     {
+        tiles.Clear();
         switch (currentOrientation)
         {
             case FurnitureDirection.Up:
@@ -50,14 +51,47 @@ public class FurnitureOrientation : MonoBehaviour
         }
     }
 
-    public void RotateRight()
+    public List<Vector3> GetTiles()
     {
-
+        FindTiles();
+        return tiles;
     }
 
-    public void RotateLeft()
+    public void RotateRight()
     {
+        switch (currentOrientation)
+        {
+            case FurnitureDirection.Up:
+                upSprite.gameObject.SetActive(false);
 
+                rightSprite.gameObject.SetActive(true);
+                rightSprite.GetComponent<BoxCollider2D>().enabled = false;
+                currentOrientation = FurnitureDirection.Right;
+                break;
+            case FurnitureDirection.Down:
+                downSprite.gameObject.SetActive(false);
+
+                leftSprite.gameObject.SetActive(true);
+                leftSprite.GetComponent<BoxCollider2D>().enabled = false;
+                currentOrientation = FurnitureDirection.Left;
+                break;
+            case FurnitureDirection.Left:
+                leftSprite.gameObject.SetActive(false);
+
+                upSprite.gameObject.SetActive(true);
+                upSprite.GetComponent<BoxCollider2D>().enabled = false;
+                currentOrientation = FurnitureDirection.Up;
+                break;
+            case FurnitureDirection.Right:
+                rightSprite.gameObject.SetActive(false);
+
+                downSprite.gameObject.SetActive(true);
+                downSprite.GetComponent<BoxCollider2D>().enabled = false;
+                currentOrientation = FurnitureDirection.Down;
+                break;
+            default:
+                break;
+        }
     }
 }
 
