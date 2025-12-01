@@ -45,7 +45,16 @@ public class CustomerBehaviourA : CustomerBase
         {
             if (currentPos != null)
             {
-                CreatePath();
+                if (Vector3.Distance(currentPos, customerStats.assignedChair.transform.position) < 1.2f)
+                {
+                    goalQueue.Clear();
+                    currentgoal = null;
+                    this.transform.position = customerStats.assignedChair.transform.position;
+                }
+                else
+                {
+                    CreatePath();
+                }    
             }
         }
     }
@@ -117,7 +126,7 @@ public class CustomerBehaviourA : CustomerBase
 
                 if (this.transform.position != customerStats.assignedChair.transform.position)
                 {
-                    MoveToTarget(customerStats.assignedChair.transform.position, this.transform.position);
+                    MoveToChair(customerStats.assignedChair.transform.position, this.transform.position);
                 }
                 AssignNewState(CustomerState.Moving);
                 break;
@@ -127,7 +136,7 @@ public class CustomerBehaviourA : CustomerBase
 
                 if (this.transform.position != customerStats.assignedChair.transform.position)
                 {
-                    MoveToTarget(customerStats.assignedChair.transform.position, this.transform.position);
+                    MoveToChair(customerStats.assignedChair.transform.position, this.transform.position);
                 }
                 AssignNewState(CustomerState.Moving);
                 break;
@@ -143,6 +152,39 @@ public class CustomerBehaviourA : CustomerBase
                 AssignNewState(CustomerState.Idling);
                 break;
         }
+    }
+
+    public void MoveToChair(Vector3 target, Vector3 currentPos)
+    {
+        // Find closest position next to chair
+        List<Vector3> closestPositions = new List<Vector3>() 
+        { 
+            new Vector3(target.x - 1, target.y),
+            new Vector3(target.x + 1, target.y),
+            new Vector3(target.x, target.y - 1),
+            new Vector3(target.x, target.y + 1)
+        };
+        Vector3? closest = null;
+        foreach (Vector3 pos in closestPositions)
+        {
+            if (TavernTilemapManager.instance.CheckIfPositionHasNode(pos))
+            {
+                if (closest == null || Vector3.Distance(pos, currentPos) < Vector3.Distance((Vector3)closest, currentPos))
+                {
+                    closest = pos;
+                }
+            }
+        }
+
+        // Make queue
+        List<Vector3> newQueue = new List<Vector3>();
+        Vector3? throughPoint = FindThroughpoint((Vector3)closest, currentPos).transform.position;
+        if (throughPoint != null)
+        {
+            newQueue.Add((Vector3)throughPoint);
+        }
+        newQueue.Add((Vector3)closest);
+        InjectNewQueue(newQueue);
     }
 
     public void DoTask()

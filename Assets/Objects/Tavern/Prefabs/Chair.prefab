@@ -1141,7 +1141,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8013345575825281024}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1847423c6e39ef74a9d6174970aecbf3, type: 3}
+  m_Script: {fileID: 11500000, guid: b349afa3f84753d4dae2b4a3e8cf73fd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   currentOrientation: 0
@@ -1150,6 +1150,7 @@ MonoBehaviour:
   leftSprite: {fileID: 7978639318477628762}
   rightSprite: {fileID: 7387020437944616794}
   tiles: []
+  inventoryItem: {fileID: 11400000, guid: 858dfad6febfab049b17ca175226975f, type: 2}
 --- !u!61 &1860750103793862197
 BoxCollider2D:
   m_ObjectHideFlags: 0

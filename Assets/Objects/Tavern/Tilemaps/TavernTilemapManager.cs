@@ -1,8 +1,11 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 
 public class TavernTilemapManager : MonoBehaviour
 {
@@ -57,6 +60,14 @@ public class TavernTilemapManager : MonoBehaviour
 
     public void GenerateFloorNodes()
     {
+        foreach (Node item in tavernFloorNodes)
+        {
+            Destroy(item.gameObject);
+        }
+
+        tilePostitionsWorld.Clear();
+        tavernFloorNodes.Clear();
+
         GenerateFurnitureTiles();
         GenerateHangoutSpots();
         for (int i = tavernFloorMap.cellBounds.xMin; i < tavernFloorMap.cellBounds.xMax; i++)
@@ -86,32 +97,37 @@ public class TavernTilemapManager : MonoBehaviour
         // Connect nodes
         foreach (Node node in tavernFloorNodes)
         {
-            Vector3 nodePos = node.gameObject.transform.position;
-
-            if (tavernFloorNodes.Where(x => x.transform.position.y == nodePos.y).Any(x => x.transform.position.x == nodePos.x - 1f))
-            {
-                Node newNode = tavernFloorNodes.Where(x => x.transform.position.y == nodePos.y).First(x => x.transform.position.x == nodePos.x - 1f);
-                node.connections.Add(newNode);
-            }
-            if (tavernFloorNodes.Where(x => x.transform.position.y == nodePos.y).Any(x => x.transform.position.x == nodePos.x + 1f))
-            {
-                Node newNode = tavernFloorNodes.Where(x => x.transform.position.y == nodePos.y).First(x => x.transform.position.x == nodePos.x + 1f);
-                node.connections.Add(newNode);
-            }
-            if (tavernFloorNodes.Where(x => x.transform.position.x == nodePos.x).Any(x => x.transform.position.y == nodePos.y + 1f))
-            {
-                Node newNode = tavernFloorNodes.Where(x => x.transform.position.x == nodePos.x).First(x => x.transform.position.y == nodePos.y + 1f);
-                node.connections.Add(newNode);
-            }
-            if (tavernFloorNodes.Where(x => x.transform.position.x == nodePos.x).Any(x => x.transform.position.y == nodePos.y - 1f))
-            {
-                Node newNode = tavernFloorNodes.Where(x => x.transform.position.x == nodePos.x).First(x => x.transform.position.y == nodePos.y - 1f);
-                node.connections.Add(newNode);
-            }
+            ConnectNode(node); 
         }
     }
 
-    public bool CheckIfPositionHasFurniture(Vector3Int position)
+    public void ConnectNode(Node node)
+    {
+        Vector3 nodePos = node.gameObject.transform.position;
+
+        if (tavernFloorNodes.Where(x => x.transform.position.y == nodePos.y).Any(x => x.transform.position.x == nodePos.x - 1f))
+        {
+            Node newNode = tavernFloorNodes.Where(x => x.transform.position.y == nodePos.y).First(x => x.transform.position.x == nodePos.x - 1f);
+            node.connections.Add(newNode);
+        }
+        if (tavernFloorNodes.Where(x => x.transform.position.y == nodePos.y).Any(x => x.transform.position.x == nodePos.x + 1f))
+        {
+            Node newNode = tavernFloorNodes.Where(x => x.transform.position.y == nodePos.y).First(x => x.transform.position.x == nodePos.x + 1f);
+            node.connections.Add(newNode);
+        }
+        if (tavernFloorNodes.Where(x => x.transform.position.x == nodePos.x).Any(x => x.transform.position.y == nodePos.y + 1f))
+        {
+            Node newNode = tavernFloorNodes.Where(x => x.transform.position.x == nodePos.x).First(x => x.transform.position.y == nodePos.y + 1f);
+            node.connections.Add(newNode);
+        }
+        if (tavernFloorNodes.Where(x => x.transform.position.x == nodePos.x).Any(x => x.transform.position.y == nodePos.y - 1f))
+        {
+            Node newNode = tavernFloorNodes.Where(x => x.transform.position.x == nodePos.x).First(x => x.transform.position.y == nodePos.y - 1f);
+            node.connections.Add(newNode);
+        }
+    }
+
+    public bool CheckIfPositionHasFurniture(Vector3 position)
     {
         if (tavernFurnitureTiles.Any(x => Vector3.Distance(new Vector3(x.x - 0.5f, x.y - 0.5f), position) < 0.75f))
         {
@@ -132,6 +148,15 @@ public class TavernTilemapManager : MonoBehaviour
         return true;
     }
 
+    public bool CheckIfPositionHasNode(Vector3 position)
+    {
+        if (!tavernFloorNodes.Any(x => Vector3.Distance(new Vector3(x.transform.position.x, x.transform.position.y, 0), position) < 0.1f))
+        {
+            return false;
+        }
+        return true;
+    }
+
     public bool CanPlaceFurniture(List<Vector3> positions)
     {
         foreach (Vector3 position in positions)
@@ -148,10 +173,76 @@ public class TavernTilemapManager : MonoBehaviour
     {
         tavernFurnitureTiles = new List<Vector3>();
 
-        tavernFurnitureContainer.GetComponentsInChildren<FurnitureOrientation>();
-        foreach (FurnitureOrientation tile in tavernFurnitureContainer.GetComponentsInChildren<FurnitureOrientation>())
+        foreach (Furniture tile in tavernFurnitureContainer.GetComponentsInChildren<Furniture>())
         {
             tavernFurnitureTiles.AddRange(tile.tiles);
+        }
+    }
+    
+    public Vector3? GetClosestPos(Vector3 mousepos)
+    {
+        if (tilePostitionsWorld.Any(x => Vector3.Distance(x, mousepos) < 1f))
+        {
+            return tilePostitionsWorld.First(x => Vector3.Distance(x, mousepos) < 1f);
+        }
+        return null;
+    }
+
+    public GameObject? GetFurnitureOnPos(Vector3 position)
+    {
+        foreach (Furniture tile in tavernFurnitureContainer.GetComponentsInChildren<Furniture>())
+        {
+            if (tile.tiles.Any(x => Vector3.Distance(x, position) < 0.5f))
+            {
+                return tile.gameObject;
+            }
+        }
+        return null;
+    }
+
+    public void OnFurnitureAdd(List<Vector3> tiles)
+    {
+        foreach (Vector3 tile in tiles)
+        {
+            Vector3Int localPlace = (new Vector3Int(Convert.ToInt32(tile.x - 0.5f), Convert.ToInt32(tile.y - 0.5f), (int)tavernFloorMap.transform.position.y));
+            Vector3 place = tavernFloorMap.CellToWorld(localPlace);
+
+            if (tavernFloorNodes.Any(x => x.transform.position == new Vector3(place.x + 0.5f, place.y + 0.5f)))
+            {
+                Node node = tavernFloorNodes.First(x => x.transform.position == new Vector3(place.x + 0.5f, place.y + 0.5f));
+                tavernFloorNodes.Remove(node);
+
+                List<Node> nodes = tavernFloorNodes.Where(x => x.connections.Contains(node)).ToList();
+                foreach (Node item in nodes)
+                {
+                    item.connections.Remove(node);
+                }
+
+                Destroy(node.gameObject);
+            }
+
+            tavernFurnitureTiles.Add(tile);
+        }
+    }
+    public void OnFurnitureRemove(List<Vector3> tiles)
+    {
+        foreach (Vector3 tile in tiles)
+        {
+            Vector3Int localPlace = (new Vector3Int(Convert.ToInt32(tile.x - 0.5f), Convert.ToInt32(tile.y - 0.5f), (int)tavernFloorMap.transform.position.y));
+            Vector3 place = tavernFloorMap.CellToWorld(localPlace);
+            // Check if floormap has tile on that pos
+            if (tavernFloorMap.HasTile(localPlace))
+            {
+                GameObject newNode = GameObject.Instantiate(nodePrefab);
+                newNode.transform.SetParent(tavernFloorMap.gameObject.transform, false);
+                newNode.transform.position = new Vector3(place.x + 0.5f, place.y + 0.5f);
+                tavernFloorNodes.Add(newNode.GetComponent<Node>());
+
+                ConnectNode(newNode.GetComponent<Node>());
+               
+            }
+
+            tavernFurnitureTiles.Remove(tile);
         }
     }
 

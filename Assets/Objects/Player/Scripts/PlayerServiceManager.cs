@@ -134,12 +134,12 @@ public class PlayerServiceManager : MonoBehaviour
         selectionBar.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
         selectionBar.transform.localPosition = Vector3.zero;
 
-        orderSelectionTags.Keys.ElementAt(highlightedOrder).gameObject.transform.Find("OrderSelectedSquare").gameObject.SetActive(true);
+        orderSelectionTags.Keys.ElementAt(highlightedOrder).gameObject.GetComponent<Table>().orderHighlightMarker.SetActive(true);
     }
 
     public void RemoveOrder(Table table)
     {
-        orderSelectionTags.Keys.ElementAt(highlightedOrder).gameObject.transform.Find("OrderSelectedSquare").gameObject.SetActive(false);
+        orderSelectionTags.Keys.ElementAt(highlightedOrder).gameObject.GetComponent<Table>().orderHighlightMarker.SetActive(false);
 
         GameObject.Destroy(orderSelectionTags.GetValueOrDefault(table));
         orderSelectionTags.Remove(table);
@@ -198,7 +198,7 @@ public class PlayerServiceManager : MonoBehaviour
         // Check if order is completed
         if (takenOrders.GetValueOrDefault(table).Count == 0)
         {
-            table.transform.Find("OrderReadySquare").GetComponent<SpriteRenderer>().color = new Color(0, 0, 255);
+            table.orderReadyMarker.GetComponent<SpriteRenderer>().color = new Color(0, 0, 255);
         }
     }
 
@@ -260,7 +260,7 @@ public class PlayerServiceManager : MonoBehaviour
 
     public void NextOrder()
     {
-        orderSelectionTags.Keys.ElementAt(highlightedOrder).gameObject.transform.Find("OrderSelectedSquare").gameObject.SetActive(false);
+        orderSelectionTags.Keys.ElementAt(highlightedOrder).gameObject.GetComponent<Table>().orderHighlightMarker.SetActive(false);
 
         if (playerControls.Service.ScrollOrderTag.ReadValue<float>() < 0)
         {

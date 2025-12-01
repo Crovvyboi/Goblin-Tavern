@@ -273,7 +273,7 @@ public class PlayerInventory : MonoBehaviour
     #endregion
 
     #region Give item
-    public void GiveItem(InventoryItem giveItem)
+    public bool GiveItem(InventoryItem giveItem)
     {
         // Check if there's room in the inventory to place the item
         // First if there's a container available
@@ -292,7 +292,7 @@ public class PlayerInventory : MonoBehaviour
                 x.GetComponent<InventoryItemContainer>().containerType == giveItem.containerType &&
                 x.GetComponent<InventoryItemContainer>().CanAddItem()).GetComponent<InventoryItemContainer>().AddItem(giveItem);
 
-
+            return true;
         }
         else if (FindSpot(giveItem, out InventoryCell selectedStartCell, out List<InventoryCell> cellsToOccupy, out int rotation))
         {
@@ -320,12 +320,12 @@ public class PlayerInventory : MonoBehaviour
                 givenItemObject.GetComponent<InventoryItemContainer>().AddItem(giveItem);
             }
 
+            return true;
         }
-        else
-        {
-            // Item has no space to be placed
 
-        }
+        // Item has no space to be placed
+        return false;
+        
     }
 
     public bool FindSpot(InventoryItem giveItem, out InventoryCell selected, out List<InventoryCell> cellsToOccupyNext, out int rotation)

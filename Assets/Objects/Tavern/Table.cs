@@ -69,17 +69,22 @@ public class Table : MonoBehaviour
         chairs.Clear();
         foreach (Transform child in chairPositionHolder.transform)
         {
-            bool hasChair = GameObject.FindGameObjectsWithTag("Chair").Any(
-                x => 
-                x.GetComponent<FurnitureOrientation>().currentOrientation == child.gameObject.GetComponent<ChairSpot>().needsDirection &&
-                Vector3.Distance(x.transform.position, child.position) < 0.1f
+            List<GameObject> chairsInDirection = GameObject.FindGameObjectsWithTag("Chair").ToList();
+            ChairSpot chairspot = child.gameObject.GetComponent<ChairSpot>();
+            List<GameObject> morechairs =  chairsInDirection.Where(
+                x =>
+                x.GetComponent<Furniture>().currentOrientation == chairspot.needsDirection
+                ).ToList();
+            bool hasChair = morechairs.Any(
+                x =>    
+                Vector3.Distance(x.transform.position, new Vector3(child.position.x, child.position.y)) < 0.5f
                 );
             if (hasChair)
             {
                 GameObject foundChair = GameObject.FindGameObjectsWithTag("Chair").First(
                 x =>
-                x.GetComponent<FurnitureOrientation>().currentOrientation == child.gameObject.GetComponent<ChairSpot>().needsDirection &&
-                Vector3.Distance(x.transform.position, child.position) < 0.1f
+                x.GetComponent<Furniture>().currentOrientation == child.gameObject.GetComponent<ChairSpot>().needsDirection &&
+                Vector3.Distance(x.transform.position, new Vector3(child.position.x, child.position.y)) < 0.5f
                 );
                 chairs.Add(foundChair);
             }

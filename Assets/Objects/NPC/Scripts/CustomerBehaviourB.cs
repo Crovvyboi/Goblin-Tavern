@@ -251,7 +251,7 @@ public class CustomerBehaviourB : CustomerBase
         AssignNewState(CustomerState.Idling);
 
         // Go to meeting spot
-        if (customerStats.standingSpot  != null || this.currentPos != customerStats.standingSpot.transform.position)
+        if (customerStats.standingSpot  != null && this.currentPos != customerStats.standingSpot.transform.position)
         {
             // Move to range
             MoveToTarget(customerStats.standingSpot.transform.position, this.transform.position);
