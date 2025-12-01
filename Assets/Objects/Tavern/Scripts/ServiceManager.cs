@@ -84,7 +84,7 @@ public class ServiceManager : MonoBehaviour
             stats = new ServiceStats();
 
             // Close door
-
+            TavernManager.instance.tavernDoor.SetActive(false);
 
             // Activate playerservicemanager
             GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerServiceManager>().enabled = true;
@@ -191,7 +191,9 @@ public class ServiceManager : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
         yield return Fader.instance.FadeOut();
-        
+
+        TavernManager.instance.tavernDoor.SetActive(true);
+
         GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().enabled = true;
 
         Debug.Log("Stopping service");

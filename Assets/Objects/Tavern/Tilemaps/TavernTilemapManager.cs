@@ -70,26 +70,23 @@ public class TavernTilemapManager : MonoBehaviour
 
         GenerateFurnitureTiles();
         GenerateHangoutSpots();
-        for (int i = tavernFloorMap.cellBounds.xMin; i < tavernFloorMap.cellBounds.xMax; i++)
+
+        foreach (Vector3Int pos in tavernFloorMap.cellBounds.allPositionsWithin)
         {
-            for (int j = tavernFloorMap.cellBounds.yMin; j < tavernFloorMap.cellBounds.yMax; j++)
+            Vector3 place = tavernFloorMap.CellToWorld(pos);
+
+            // Check if floormap has tile on that pos
+            if (tavernFloorMap.HasTile(pos))
             {
-                Vector3Int localPlace = (new Vector3Int(i, j, (int)tavernFloorMap.transform.position.y));
-                Vector3 place = tavernFloorMap.CellToWorld(localPlace);
+                tilePostitionsWorld.Add(pos);
 
-                // Check if floormap has tile on that pos
-                if (tavernFloorMap.HasTile(localPlace))
+                // Check if furnituremap does not have tile on that pos
+                if (!CheckIfPositionHasFurniture(place))
                 {
-                    tilePostitionsWorld.Add(place);
-
-                    // Check if furnituremap does not have tile on that pos
-                    if (!CheckIfPositionHasFurniture(localPlace))
-                    {
-                        GameObject newNode = GameObject.Instantiate(nodePrefab);
-                        newNode.transform.SetParent(tavernFloorMap.gameObject.transform, false);
-                        newNode.transform.position = new Vector3(place.x + 0.5f, place.y + 0.5f);
-                        tavernFloorNodes.Add(newNode.GetComponent<Node>());
-                    }
+                    GameObject newNode = GameObject.Instantiate(nodePrefab);
+                    newNode.transform.SetParent(tavernFloorMap.gameObject.transform, false);
+                    newNode.transform.position = new Vector3(place.x + 0.5f, place.y + 0.5f);
+                    tavernFloorNodes.Add(newNode.GetComponent<Node>());
                 }
             }
         }

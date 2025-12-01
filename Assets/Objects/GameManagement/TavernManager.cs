@@ -13,6 +13,7 @@ public class TavernManager : MonoBehaviour
 
     public GameObject furnitureContainer;
     public GameObject decorationContainer;
+    public GameObject tavernDoor;
 
     [Header("Recipes")]
     public List<MenuItem> menuItems = new List<MenuItem>();
