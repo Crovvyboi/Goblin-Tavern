@@ -17,6 +17,8 @@ public class CustomerBehaviourA : CustomerBase
     List<MenuItem> claimedItems = new List<MenuItem>();
     public int toPay = 0;
 
+    public Vector3 exitNode;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,7 +50,7 @@ public class CustomerBehaviourA : CustomerBase
                 if (Vector3.Distance(currentPos, customerStats.assignedChair.transform.position) < 1.2f)
                 {
                     goalQueue.Clear();
-                    currentgoal = null;
+                    AssignNewTarget(null);
                     this.transform.position = customerStats.assignedChair.transform.position;
                 }
                 else
@@ -116,7 +118,7 @@ public class CustomerBehaviourA : CustomerBase
         }
     }
 
-    public void SetTask(CustomerGoal goingToDo)
+    public override void SetTask(CustomerGoal goingToDo)
     {
         switch (goingToDo)
         {
@@ -141,6 +143,8 @@ public class CustomerBehaviourA : CustomerBase
                 AssignNewState(CustomerState.Moving);
                 break;
             case CustomerGoal.Exit:
+                AssignNewGoal(CustomerGoal.Exit);
+                this.transform.position = exitNode;
                 if (this.transform.position != customerStats.assignedChair.transform.position)
                 {
                     InjectNewGoalPosition(CustomerGenerator.instance.spawnLocation.transform.position);
@@ -175,6 +179,8 @@ public class CustomerBehaviourA : CustomerBase
                 }
             }
         }
+
+        exitNode = (Vector3)closest;
 
         // Make queue
         List<Vector3> newQueue = new List<Vector3>();

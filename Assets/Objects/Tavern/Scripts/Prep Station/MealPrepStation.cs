@@ -24,8 +24,6 @@ public class MealPrepStation : PrepStation
                 break;
             case TavernState.ServiceOverview:
                 break;
-            case TavernState.PlaceFurniture:
-                break;
             default:
                 break;
         }

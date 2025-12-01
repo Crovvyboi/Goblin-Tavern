@@ -40,6 +40,7 @@ public class KnownRecipesUI : MonoBehaviour
     public GameObject favoritedButton;
 
     [Header("Unknown recipe")]
+    public GameObject unknownRecipeName;
     public GameObject unknownRecipeObject;
     public GameObject favoritedRecipeButton;
     public GameObject unkownRecipeHints;
@@ -70,7 +71,7 @@ public class KnownRecipesUI : MonoBehaviour
         }
 
         // Load in recipes
-        List<MenuItem> items = TavernManager.instance.menuItems;
+        List<MenuItem> items = TavernManager.instance.menuItems.Where(x => x.knowRecipe || x.recipeHints.Where(y => y.knowHint).ToList().Count > 0 || x.knowName).ToList();
 
         // Make tile in grid for each recipe
         foreach (MenuItem item in items)
@@ -85,8 +86,14 @@ public class KnownRecipesUI : MonoBehaviour
             if (!item.knowRecipe)
             {
                 // If player does not know recipe, set as unkown tile & decrease opacity
-
-                newGridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "? ? ?";
+                if (item.knowName)
+                {
+                    newGridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.itemName;
+                }
+                else
+                {
+                    newGridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "? ? ?";
+                } 
                 newGridItem.GetComponent<CanvasGroup>().alpha = 0.5f;
 
                 newGridItem.transform.GetChild(2).gameObject.SetActive(false);
@@ -349,6 +356,11 @@ public class KnownRecipesUI : MonoBehaviour
         favoritedRecipeButton.GetComponent<Button>().onClick.RemoveAllListeners();
         favoritedRecipeButton.GetComponent<Button>().onClick.AddListener(() => FavoriteMenuItem(item));
         UpdateFavoriteButton(item);
+
+        if (item.knowName)
+        {
+            unknownRecipeName.GetComponent<TextMeshProUGUI>().text = item.itemName;
+        }
 
         string hintString = "";
         foreach (MenuItemHint hint in item.recipeHints)

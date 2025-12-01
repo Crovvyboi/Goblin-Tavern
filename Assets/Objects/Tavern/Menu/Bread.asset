@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Bread
   m_EditorClassIdentifier: 
   itemName: Bread
+  knowName: 1
   itemDescription: I'm bready.
-  type: 0
+  menuItemType: 0
   cost: 3
   tags: []
   starrating: 1

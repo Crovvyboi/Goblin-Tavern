@@ -18,9 +18,22 @@ public class PathfinderScript : MonoBehaviour
 
     public List<Node> FindPathFromPosToPos(Vector3 startObject, Vector3 endObject)
     {
-        Node startNode = TavernTilemapManager.instance.tavernFloorNodes.First(x => x.transform.position == startObject);
-        Node endNode = TavernTilemapManager.instance.tavernFloorNodes.First(x => x.transform.position == endObject);
+        Node startNode = null;
+        if (TavernTilemapManager.instance.tavernFloorNodes.Any(x => x.transform.position == startObject))
+        {
+            startNode = TavernTilemapManager.instance.tavernFloorNodes.First(x => x.transform.position == startObject);
+        }
 
+        Node endNode = null;
+        if (TavernTilemapManager.instance.tavernFloorNodes.Any(x => x.transform.position == endObject))
+        {
+            endNode = TavernTilemapManager.instance.tavernFloorNodes.First(x => x.transform.position == endObject);
+        }  
+
+        if (startNode == null || endNode == null)
+        {
+            return null;
+        }
         return FindPathFromNodeToNode(startNode, endNode);
     }
 

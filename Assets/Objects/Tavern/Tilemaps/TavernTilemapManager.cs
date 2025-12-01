@@ -390,4 +390,18 @@ public class TavernTilemapManager : MonoBehaviour
         return null;
         
     }
+
+    public Vector3 GetMeetingPos(Vector3 target, Vector3 currentPos)
+    {
+        Node targetNode = tavernFloorNodes.First(x => Vector3.Distance(x.transform.position, target) <= 1f);
+        Node closestNode = null;
+        foreach (Node item in targetNode.connections)
+        {
+            if (closestNode == null || Vector3.Distance(item.transform.position, currentPos) < Vector3.Distance(closestNode.transform.position, currentPos))
+            {
+                closestNode = item;
+            }
+        }
+        return closestNode.transform.position;
+    }
 }

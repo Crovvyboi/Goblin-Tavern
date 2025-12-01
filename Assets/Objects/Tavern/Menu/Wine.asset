@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Wine
   m_EditorClassIdentifier: 
   itemName: Wine
+  knowName: 1
   itemDescription: Wijnen, wijnen, wijnen.
   menuItemType: 1
   cost: 10

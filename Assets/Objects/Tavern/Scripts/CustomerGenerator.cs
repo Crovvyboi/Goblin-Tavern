@@ -55,35 +55,42 @@ public class CustomerGenerator : MonoBehaviour
 
         // Generate passive customer groups
         List<GameObject> tablelist = GameObject.FindGameObjectsWithTag("Table").Where(x => x.GetComponent<Table>() != null).ToList();
-        foreach (GameObject table in tablelist) {
-            table.GetComponent<Table>().GetChairs();
-            List<CustomerStats> customersAtTable = GenerateCustomerGroup(table.GetComponent<Table>().GetChairCount(), true);
-
-            // Assign table & chair to customer
-            List<GameObject> availableChairs = table.GetComponent<Table>().chairs;
-            foreach (CustomerStats stats in customersAtTable)
+        if (GameObject.FindGameObjectsWithTag("MealStation").Length > 0 && GameObject.FindGameObjectsWithTag("DrinkStation").Length > 0 && tablelist.Count > 0)
+        {
+            foreach (GameObject table in tablelist)
             {
-                stats.assignedTable = table;
+                table.GetComponent<Table>().GetChairs();
+                List<CustomerStats> customersAtTable = GenerateCustomerGroup(table.GetComponent<Table>().GetChairCount(), true);
 
-                int chairIndex = Random.Range(0, availableChairs.Count);
-                stats.assignedChair = availableChairs[chairIndex];
-                availableChairs.RemoveAt(chairIndex);
+                // Assign table & chair to customer
+                List<GameObject> availableChairs = table.GetComponent<Table>().chairs;
+                foreach (CustomerStats stats in customersAtTable)
+                {
+                    stats.assignedTable = table;
+
+                    int chairIndex = Random.Range(0, availableChairs.Count);
+                    stats.assignedChair = availableChairs[chairIndex];
+                    availableChairs.RemoveAt(chairIndex);
+                }
+
+                customerGroups.Add(customersAtTable);
             }
-
-            customerGroups.Add(customersAtTable);
         }
 
         // Generate active customer groups based on tavern size
-        int amount = 5;
-        for (int i = 0; i < amount; i++)
+        if (GameObject.FindGameObjectsWithTag("Bar").Length > 0)
         {
-            List<CustomerStats> group = GenerateCustomerGroup();
-            if (group != null)
+            int amount = 5;
+            for (int i = 0; i < amount; i++)
             {
-                customerGroups.Add(group);
+                List<CustomerStats> group = GenerateCustomerGroup();
+                if (group != null)
+                {
+                    customerGroups.Add(group);
+                }
             }
         }
-
+        
         return customerGroups;
     }
 

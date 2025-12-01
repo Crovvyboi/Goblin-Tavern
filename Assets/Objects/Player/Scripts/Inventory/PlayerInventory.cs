@@ -320,6 +320,9 @@ public class PlayerInventory : MonoBehaviour
                 givenItemObject.GetComponent<InventoryItemContainer>().AddItem(giveItem);
             }
 
+            // Add to hotbar
+            Hotbar.instance.AssignToHotbar(givenItemObject);
+
             return true;
         }
 

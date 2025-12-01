@@ -8,6 +8,8 @@ TagManager:
   - Chair
   - Bar
   - Bar Standing Spot
+  - MealStation
+  - DrinkStation
   layers:
   - Default
   - TransparentFX

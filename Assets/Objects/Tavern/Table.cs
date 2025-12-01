@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UI;
 using static PlayerServiceManager;
 
 public class Table : MonoBehaviour
 {
     public GameObject chairPositionHolder;
+    public List<GameObject> chairPositions;
     public List<GameObject> chairs;
     private int chairCount;
 
@@ -35,6 +37,19 @@ public class Table : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (TavernManager.state == TavernState.OverworldNight || TavernManager.state == TavernState.OverworldDay)
+        {
+            if (Hotbar.instance.furniturePlacementMold != null && Hotbar.instance.furniturePlacementMold.tag == "Chair")
+            {
+                chairPositionHolder.SetActive(true);
+                GetChairs();
+            }
+            else
+            {
+                chairPositionHolder.SetActive(false);
+            }
+        }
+
         if (!orderTaken && nextOrder.Count > 0)
         {
             OrderTimer();
@@ -64,11 +79,27 @@ public class Table : MonoBehaviour
         }
     }
 
+    public void UpdateChairSpotArrow(ChairSpot spot, bool add)
+    {
+        if (add)
+        {
+            spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.green;
+        }
+        else
+        {
+            spot.transform.GetChild(0).GetComponent<SpriteRenderer>().color = Color.red;
+        }
+        
+    }
+
     public void GetChairs()
     {
+        chairPositions.Clear();
         chairs.Clear();
         foreach (Transform child in chairPositionHolder.transform)
         {
+            chairPositions.Add(child.gameObject);
+
             List<GameObject> chairsInDirection = GameObject.FindGameObjectsWithTag("Chair").ToList();
             ChairSpot chairspot = child.gameObject.GetComponent<ChairSpot>();
             List<GameObject> morechairs =  chairsInDirection.Where(
@@ -87,6 +118,12 @@ public class Table : MonoBehaviour
                 Vector3.Distance(x.transform.position, new Vector3(child.position.x, child.position.y)) < 0.5f
                 );
                 chairs.Add(foundChair);
+
+                UpdateChairSpotArrow(chairspot, true);
+            }
+            else
+            {
+                UpdateChairSpotArrow(chairspot, false);
             }
         }
 

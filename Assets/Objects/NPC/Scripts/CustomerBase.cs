@@ -27,7 +27,7 @@ public class CustomerBase : MonoBehaviour
     public float moveSpeed;
     public Vector3 currentPos;
 
-    public List<Node> path = new List<Node>();
+    public List<Node>? path = new List<Node>();
 
     public List<Vector3> goalQueue = new List<Vector3>();
     public Vector3? currentgoal;
@@ -36,6 +36,7 @@ public class CustomerBase : MonoBehaviour
 
     [Header("State History")]
     public CustomerGoal previousGoal = CustomerGoal.None;
+    public Vector3? previousMoveTarget = null;
     public CustomerState previousState = CustomerState.Idling;
 
     public void AssignNewGoal(CustomerGoal newGoal)
@@ -48,6 +49,11 @@ public class CustomerBase : MonoBehaviour
         previousState = customerState;
         customerState = newState;
     }
+    public void AssignNewTarget(Vector3? newTarget)
+    {
+        previousMoveTarget = currentgoal;
+        currentgoal = newTarget;
+    }
 
     #region Movement
     // Goal injections
@@ -57,7 +63,7 @@ public class CustomerBase : MonoBehaviour
         {
             goalQueue.Clear();
             path.Clear();
-            currentgoal = newGoal.gameObject.transform.position;
+            AssignNewTarget(newGoal.gameObject.transform.position);
         }
     }
     public void InjectNewGoalObject(GameObject newGoal)
@@ -66,7 +72,7 @@ public class CustomerBase : MonoBehaviour
         {
             goalQueue.Clear();
             path.Clear();
-            currentgoal = newGoal.gameObject.transform.position;
+            AssignNewTarget(newGoal.gameObject.transform.position);
         }
     }
     public void InjectNewGoalPosition(Vector3 newGoal)
@@ -75,7 +81,7 @@ public class CustomerBase : MonoBehaviour
         {
             goalQueue.Clear();
             path.Clear();
-            currentgoal = newGoal;
+            AssignNewTarget(newGoal);
         }
     }
 
@@ -88,7 +94,7 @@ public class CustomerBase : MonoBehaviour
             AddToQueue(goal.transform.position);
         }
 
-        currentgoal = goalQueue[0];
+        AssignNewTarget(goalQueue[0]);
         goalQueue.RemoveAt(0);
     }
     public void InjectNewQueue(List<Vector3> newGoals)
@@ -99,7 +105,7 @@ public class CustomerBase : MonoBehaviour
             AddToQueue(goal);
         }
 
-        currentgoal = goalQueue[0];
+        AssignNewTarget(goalQueue[0]);
         goalQueue.RemoveAt(0);
     }
     public void AddToQueue(Vector3 newGoal)
@@ -110,10 +116,11 @@ public class CustomerBase : MonoBehaviour
     public void MoveToTarget(Vector3 target, Vector3 currentPos)
     {
         List<Vector3> newQueue = new List<Vector3>();
-        Vector3? throughPoint = FindThroughpoint(target, currentPos).transform.position;
+        Node? throughPoint = FindThroughpoint(target, currentPos);
         if (throughPoint != null)
         {
-            newQueue.Add((Vector3)throughPoint);
+            Node node = throughPoint;
+            newQueue.Add(node.transform.position);
         }
         newQueue.Add(target);
         InjectNewQueue(newQueue);
@@ -146,12 +153,12 @@ public class CustomerBase : MonoBehaviour
                 // Check if there's another goal in queue
                 if (goalQueue.Count > 0)
                 {
-                    currentgoal = goalQueue[0];
+                    AssignNewTarget(goalQueue[0]);
                     goalQueue.RemoveAt(0);
                 }
                 else
                 {
-                    currentgoal = null;
+                    AssignNewTarget(null);
                 }    
             }
         }
@@ -160,7 +167,7 @@ public class CustomerBase : MonoBehaviour
             path = PathfinderScript.instance.FindPathFromPosToPos(currentPos, (Vector3)currentgoal);
             if (path == null || path.Count == 0)
             {
-                currentgoal = null;
+                AssignNewTarget(null);
                 path = new List<Node>();
             }
 
@@ -173,6 +180,11 @@ public class CustomerBase : MonoBehaviour
                 while (path == null || path.Count == 0)
                 {
                     path = PathfinderScript.instance.FindPathFromPosToPos(currentPos, nodes[Random.Range(0, nodes.Length)].gameObject.transform.position);
+                    if (path == null || path.Count == 0)
+                    {
+                        AssignNewTarget(null);
+                        path = new List<Node>();
+                    }
                 }
             }
         }
@@ -186,13 +198,16 @@ public class CustomerBase : MonoBehaviour
         }
         return false;
     }
+    public virtual void SetTask(CustomerGoal goal)
+    {
 
+    }
     public void OnFinalCall()
     {
-        AssignNewGoal(CustomerGoal.Exit);
-        AssignNewState(CustomerState.MovingToExit);
+        SetTask(CustomerGoal.Exit);
+        // AssignNewState(CustomerState.MovingToExit);
 
-        InjectNewGoalPosition(CustomerGenerator.instance.spawnLocation.transform.position);
+        // InjectNewGoalPosition(CustomerGenerator.instance.spawnLocation.transform.position);
         
     }
     #endregion

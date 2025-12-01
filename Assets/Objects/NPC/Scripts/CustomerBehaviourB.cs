@@ -114,7 +114,7 @@ public class CustomerBehaviourB : CustomerBase
         }
     }
 
-    public void SetTask(CustomerGoal goingToDo)
+    public override void SetTask(CustomerGoal goingToDo)
     {
         switch (goingToDo)
         {
@@ -136,7 +136,7 @@ public class CustomerBehaviourB : CustomerBase
                         InjectNewQueue(newQueue);
                     }
                     hasOrdered = false;
-                    customerState = CustomerState.Moving;
+                    AssignNewState(CustomerState.Moving);
                 }
 
                 break;
@@ -145,14 +145,14 @@ public class CustomerBehaviourB : CustomerBase
 
                 break;
             case CustomerGoal.Idle:
-                customerState = CustomerState.Idling;
+                AssignNewState(CustomerState.Idling);
                 break;
             case CustomerGoal.Exit:
                 InjectNewGoalPosition(CustomerGenerator.instance.spawnLocation.transform.position);
-                customerState = CustomerState.MovingToExit;
+                AssignNewState(CustomerState.MovingToExit);
                 break;
             default:
-                customerState = CustomerState.Idling;
+                AssignNewState(CustomerState.Idling);
                 break;
         }
     }
@@ -338,18 +338,26 @@ public class CustomerBehaviourB : CustomerBase
         if (selectedTarget != null)
         {
             meetTarget = selectedTarget;
-            AssignNewGoal(CustomerGoal.Meet);
+            if (meetTarget != null && meetTarget.transform.position != null)
+            {
+                AssignNewGoal(CustomerGoal.Meet);
 
-            // Hold target at position
-            selectedTarget.GetComponent<CustomerBase>().AssignNewState(CustomerState.MeetTarget);
+                // Hold target at position
+                meetTarget.GetComponent<CustomerBase>().AssignNewState(CustomerState.MeetTarget);
 
-            // Move to meet target
-            MoveToTarget(meetTarget.transform.position, this.transform.position);
-            AssignNewState(CustomerState.Moving);
+                // Move to meet target
+                MoveToTarget(TavernTilemapManager.instance.GetMeetingPos(meetTarget.transform.position, this.transform.position), this.transform.position);
+                AssignNewState(CustomerState.Moving);
 
-            isMeeting = false;
+                isMeeting = false;
 
-            Debug.Log($"Meeting target | {this.gameObject.name} -> {selectedTarget.name}");
+                Debug.Log($"Meeting target | {this.gameObject.name} -> {selectedTarget.name}");
+            }
+            else
+            {
+                AssignNewGoal(CustomerGoal.None);
+                AssignNewState(CustomerState.Idling);
+            }
         }
         else
         {

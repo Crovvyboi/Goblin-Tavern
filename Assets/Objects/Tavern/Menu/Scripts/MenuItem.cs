@@ -8,6 +8,7 @@ public class MenuItem : ScriptableObject
 {
     [Header("Typing")]
     public string itemName;
+    public bool knowName;
     public string itemDescription;
     public MenuItemType menuItemType;
     public int cost;

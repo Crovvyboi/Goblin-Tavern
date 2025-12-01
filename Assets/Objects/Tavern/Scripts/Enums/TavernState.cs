@@ -8,6 +8,5 @@ public enum TavernState
     OverworldNight,
     Service,
     ServiceFinalCall,
-    ServiceOverview,
-    PlaceFurniture
+    ServiceOverview
 }

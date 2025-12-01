@@ -44,8 +44,6 @@ public class ServiceManager : MonoBehaviour
 
                 ShowOverview();
                 break;
-            case TavernState.PlaceFurniture:
-                break;
             default:
                 break;
         }
@@ -68,33 +66,45 @@ public class ServiceManager : MonoBehaviour
 
     public void StartService()
     {
-        serviceTimer = serviceTimerStart;
+        // If tavern contains either a meal & drink station or a bar
+        if (GameObject.FindGameObjectsWithTag("MealStation").Length > 0 && GameObject.FindGameObjectsWithTag("DrinkStation").Length > 0 || GameObject.FindGameObjectsWithTag("Bar").Length > 0)
+        {
+            serviceTimer = serviceTimerStart;
 
-        // Lock in set menu
-        definitiveMenu = TavernManager.instance.tavernMenu;
-        definitiveMenu.AddRange(TavernManager.instance.menuItems.Where(x => x.standardInMenu));
+            // Lock in set menu
+            definitiveMenu = TavernManager.instance.tavernMenu;
+            definitiveMenu.AddRange(TavernManager.instance.menuItems.Where(x => x.standardInMenu));
 
-        // Generate customer pool
-        generatedCustomers = new List<GameObject>();
-        customerGroupPool = new List<List<CustomerStats>>();
-        customerGroupPool = CustomerGenerator.instance.GenerateAllCustomers();
+            // Generate customer pool
+            generatedCustomers = new List<GameObject>();
+            customerGroupPool = new List<List<CustomerStats>>();
+            customerGroupPool = CustomerGenerator.instance.GenerateAllCustomers();
 
-        // Reset stats
-        stats = new ServiceStats();
+            // Reset stats
+            stats = new ServiceStats();
 
-        // Close door
+            // Close door
 
 
-        // Activate playerservicemanager
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerServiceManager>().enabled = true;
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerServiceManager>().OnServiceStart();
+            // Activate playerservicemanager
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerServiceManager>().enabled = true;
+            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerServiceManager>().OnServiceStart();
 
-        // Switch tavern state
-        TavernManager.state = TavernState.Service;
+            // Switch tavern state
+            TavernManager.state = TavernState.Service;
 
-        // Switch UI elements
-        PlayerUIManager.instance.StartService();
-        PlayerServiceUI.instance.StartService();
+            // Switch UI elements
+            PlayerUIManager.instance.StartService();
+            PlayerServiceUI.instance.StartService();
+        }
+        else
+        {
+            // Warn player
+
+
+
+        }
+        
     }
 
     public void InitiateFinalCall()

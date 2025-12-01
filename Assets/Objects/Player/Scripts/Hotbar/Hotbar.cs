@@ -179,6 +179,51 @@ public class Hotbar : MonoBehaviour
         }
         
     }
+    public void AssignToHotbar(GameObject gameObject)
+    {
+        // Get next empty slot
+        int index = -1;
+        for (int i = 0; i < hotbarSlotsGameObjects.Count; i++)
+        {            
+            if (hotbarSlotsGameObjects[i].GetComponent<HotbarSlot>().assignedInventoryItem == null)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        // Assign to hotbar
+        if (index != -1)
+        {
+            if (hotbarSlotsGameObjects[index].GetComponent<HotbarSlot>().assignedInventoryItem == gameObject)
+            {
+                hotbarSlotsGameObjects[index].GetComponent<HotbarSlot>().RemoveItem();
+
+                GameObject assignedIconSlot = hotbarSlotsGameObjects[index].transform.GetChild(0).gameObject;
+                assignedIconSlot.GetComponent<RawImage>().texture = null;
+                assignedIconSlot.GetComponent<RawImage>().enabled = false;
+            }
+            else
+            {
+                // Clear slot if already assigned
+                if (hotbarSlotsGameObjects.Any(x => x.GetComponent<HotbarSlot>().assignedInventoryItem == gameObject))
+                {
+                    GameObject slot = hotbarSlotsGameObjects.First(x => x.GetComponent<HotbarSlot>().assignedInventoryItem == gameObject);
+                    slot.GetComponent<HotbarSlot>().assignedInventoryItem = null;
+                    slot.transform.GetChild(0).gameObject.GetComponent<RawImage>().texture = null;
+                    slot.transform.GetChild(0).gameObject.GetComponent<RawImage>().enabled = false;
+                }
+
+                // Assign to slot
+                hotbarSlotsGameObjects[index].GetComponent<HotbarSlot>().AssignItem(gameObject);
+
+                GameObject assignedIconSlot = hotbarSlotsGameObjects[index].transform.GetChild(0).gameObject;
+                assignedIconSlot.GetComponent<RawImage>().texture = gameObject.GetComponent<InventoryItemHolder>().item.hotbarIcon;
+                assignedIconSlot.GetComponent<RawImage>().enabled = true;
+            }
+        }
+    }
+
     public void RemoveFromHotbar(int slot)
     {
         hotbarSlotsGameObjects[slot].GetComponent<HotbarSlot>().assignedInventoryItem = null;
@@ -336,11 +381,6 @@ public class Hotbar : MonoBehaviour
 
                     foreach (Transform child in furniturePlacementMold.transform)
                     {
-                        //if (furniturePlacementMold.GetComponent<Table>() != null)
-                        //{
-                        //    furniturePlacementMold.GetComponent<Table>().orderHighlightMarker.SetActive(true);
-                        //    furniturePlacementMold.GetComponent<Table>().orderReadyMarker.SetActive(true);
-                        //}
                         if (child.Find("InteractionField") != null)
                         {
                             child.Find("InteractionField").gameObject.SetActive(true);
@@ -394,6 +434,7 @@ public class Hotbar : MonoBehaviour
                             {
                                 // Remove furniture item
                                 TavernTilemapManager.instance.OnFurnitureRemove(furnitureComponent.tiles);
+
                                 Destroy(furniture);
                             }
                             else
