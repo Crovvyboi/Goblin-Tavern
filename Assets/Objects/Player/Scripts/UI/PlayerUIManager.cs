@@ -75,7 +75,7 @@ public class PlayerUIManager : MonoBehaviour
     void PauseGame(InputAction.CallbackContext input)
     {
 
-        if (input.started && canInteract && !Fader.instance.isFading)
+        if (input.started && !Fader.instance.isFading)
         {
             Debug.Log("pressed");
             if (!showingPause)
@@ -103,8 +103,8 @@ public class PlayerUIManager : MonoBehaviour
 
         Time.timeScale = 0;
 
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().enabled = false;
-        GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<InteractionSender>().enabled = false;
+        PlayerMovement.instance.enabled = false;
+        InteractionSender.instance.enabled = false;
 
         pausemenuObject.SetActive(true);
     }
@@ -115,8 +115,8 @@ public class PlayerUIManager : MonoBehaviour
 
         pausemenuObject.SetActive(false);
 
-        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().enabled = true;
-        GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<InteractionSender>().enabled = true;
+        PlayerMovement.instance.enabled = true;
+        InteractionSender.instance.enabled = true;
 
         Time.timeScale = 1;
     }
@@ -165,15 +165,15 @@ public class PlayerUIManager : MonoBehaviour
 
     public void PlayerMenu(InputAction.CallbackContext input)
     {
-        if (input.started && canInteract && !Fader.instance.isFading)
+        if (input.started && canInteract && !Fader.instance.isFading && !MenuItemStation.instance.isShowingMenu)
         {
             if (showingPlayerMenu)
             {
                 showingPlayerMenu = false;
                 playermenuObject.SetActive(false);
 
-                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().enabled = true;
-                GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<InteractionSender>().enabled = true;
+                PlayerMovement.instance.enabled = true;
+                InteractionSender.instance.enabled = true;
 
                 Hotbar.instance.SelectSlot();
                 if (TavernManager.state == TavernState.OverworldNight || TavernManager.state == TavernState.OverworldDay)
@@ -190,8 +190,8 @@ public class PlayerUIManager : MonoBehaviour
                 showingPlayerMenu = true;
                 playermenuObject.SetActive(true);
 
-                GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerMovement>().enabled = false;
-                GameObject.FindGameObjectWithTag("Player").GetComponentInChildren<InteractionSender>().enabled = false;
+                PlayerMovement.instance.enabled = false;
+                InteractionSender.instance.enabled = false;
 
                 Hotbar.instance.DeselectSlot();
                 switch (menuState)
