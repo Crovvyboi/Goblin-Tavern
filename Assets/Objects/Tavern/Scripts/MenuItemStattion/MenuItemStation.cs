@@ -12,6 +12,12 @@ public class MenuItemStation : MonoBehaviour
     public bool isShowingMenu;
     public GameObject uiObject;
 
+    [Header("Side panels")]
+    public GameObject popupBackground;
+    public GameObject ingredientPicker;
+    public GameObject liquidPicker;
+    public GameObject gemPicker;
+
     private void Start()
     {
         
@@ -28,6 +34,10 @@ public class MenuItemStation : MonoBehaviour
 
         isShowingMenu = false;
         uiObject.SetActive(false);
+
+        ingredientPicker.GetComponent<MenuItemStationSidebar>().SetPlayerControls(playerControls);
+        gemPicker.GetComponent<MenuItemStationSidebar>().SetPlayerControls(playerControls);
+        liquidPicker.GetComponent<MenuItemStationSidebar>().SetPlayerControls(playerControls);
     }
 
     public void OnEnable()
@@ -77,6 +87,9 @@ public class MenuItemStation : MonoBehaviour
         PlayerMovement.instance.enabled = false;
         InteractionSender.instance.enabled = false;
 
+        // Reset Menu
+        ResetMenu();
+
         isShowingMenu = true;
     }
 
@@ -94,5 +107,53 @@ public class MenuItemStation : MonoBehaviour
         PlayerMovement.instance.enabled = true;
         InteractionSender.instance.enabled = true;
 
+    }
+
+    public void ResetMenu()
+    {
+        // Close popups
+        popupBackground.SetActive(false);
+        ingredientPicker.SetActive(false);
+        gemPicker.SetActive(false);
+        liquidPicker.SetActive(false);
+
+
+    }
+
+    public void ToggleSideMenu(string menuName)
+    {
+        switch (menuName)
+        {
+            case "Ingredient":
+                playerControls.General.PlayerMenu.performed -= ExitMenu;
+
+                popupBackground.SetActive(true);
+                ingredientPicker.SetActive(true);
+                gemPicker.SetActive(false);
+                liquidPicker.SetActive(false);
+                break;
+            case "Gem":
+                playerControls.General.PlayerMenu.performed -= ExitMenu;
+
+                popupBackground.SetActive(true);
+                ingredientPicker.SetActive(false);
+                gemPicker.SetActive(true);
+                liquidPicker.SetActive(false);
+                break;
+            case "Liquid":
+                playerControls.General.PlayerMenu.performed -= ExitMenu;
+
+                popupBackground.SetActive(true);
+                ingredientPicker.SetActive(false);
+                gemPicker.SetActive(false);
+                liquidPicker.SetActive(true);
+                break;
+            default:
+                break;
+        }
+    }
+    public void OnCloseSidebar()
+    {
+        playerControls.General.PlayerMenu.performed += ExitMenu;
     }
 }
