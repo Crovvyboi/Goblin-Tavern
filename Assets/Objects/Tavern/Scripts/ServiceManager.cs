@@ -11,7 +11,7 @@ public class ServiceManager : MonoBehaviour
     public ServiceStats stats;
 
     public static float serviceTimer;
-    private float serviceTimerStart = 30f;
+    private float serviceTimerStart = 300f;
 
     public int goldMadeInService = 0;
     public int customersServed = 0;
