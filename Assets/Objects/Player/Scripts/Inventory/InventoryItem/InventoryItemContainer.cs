@@ -43,5 +43,7 @@ public class InventoryItemContainer : MonoBehaviour
 public enum ContainerType
 {
     Herb,
-    Fish
+    Fish,
+    Flour,
+    Yeast
 }

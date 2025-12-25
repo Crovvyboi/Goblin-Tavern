@@ -10,15 +10,15 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2add828b3ee624f4ab9785e2f57abf3c, type: 3}
-  m_Name: Herb
+  m_Name: Butter
   m_EditorClassIdentifier: 
-  inventoryItemName: Herb
+  inventoryItemName: Butter
   type: 1
-  inventoryItemHolder: {fileID: 329492762772526054, guid: e546e36dda6e7134f928b45dc5d993a8, type: 3}
-  containerItem: 1
+  inventoryItemHolder: {fileID: 2334957189676364092, guid: 3db41f39c6bc1b944a5e32169a767c05, type: 3}
+  containerItem: 0
   containerType: 0
   containerSprite: {fileID: 0}
-  hotbarIcon: {fileID: 2800000, guid: 0db9d4fa9e305144ba456793a2deb8e5, type: 3}
+  hotbarIcon: {fileID: 0}
   isPlaceable: 0
   prefab: {fileID: 0}
-  ingredientType: 2
+  ingredientType: 0

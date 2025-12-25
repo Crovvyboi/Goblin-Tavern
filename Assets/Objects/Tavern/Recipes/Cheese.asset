@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fda09dc6c424a1b4ab1a07f887317453, type: 3}
+  m_Name: Cheese
+  m_EditorClassIdentifier: 
+  menuItemBase: {fileID: 11400000, guid: 2de5fa306d8917c4da8eb695bdc43c2f, type: 2}
+  recipeLiquid: 0
+  recipeTemp: 2
+  recipeGem: 0
+  recipeIngredients:
+  - {fileID: 11400000, guid: 6880327cf209d214f8d778bc813b095a, type: 2}
+  resultMenuItem: {fileID: 0}
+  resultIngredient: {fileID: 11400000, guid: b938c626e2961524ea672e35712b331e, type: 2}

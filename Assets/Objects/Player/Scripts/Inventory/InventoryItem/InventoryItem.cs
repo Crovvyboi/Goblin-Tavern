@@ -18,9 +18,12 @@ public class InventoryItem : ScriptableObject
     [Header("Hotbar")]
     public Texture2D hotbarIcon;
 
-    [Header("Placeable")]
+    [Header("Furniture")]
     public bool isPlaceable;
     public GameObject prefab;
+
+    [Header("Ingredient")]
+    public IngredientType ingredientType;
 }
 
 public enum InventoryItemType
@@ -28,4 +31,13 @@ public enum InventoryItemType
     Quest,
     Ingredient,
     Furniture
+}
+
+public enum IngredientType
+{
+    None,
+    Cheese,
+    Herb,
+    Meat,
+    Bread
 }
