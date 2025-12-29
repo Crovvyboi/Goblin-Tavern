@@ -44329,6 +44329,7 @@ MonoBehaviour:
   selectedMenuItemBase: {fileID: 0}
   selectedLiquid: 0
   selectedGem: 0
+  selectedTemp: 0
   popupBackground: {fileID: 1394571442}
   menuitembasePicker: {fileID: 919138911}
   ingredientPicker: {fileID: 1808756770}
@@ -44355,6 +44356,7 @@ MonoBehaviour:
   gemSlot: {fileID: 2088872607}
   gemGrid: {fileID: 1444730444}
   gemGameObjectList: []
+  temperatureSlider: {fileID: 1943246018}
 --- !u!1 &1637568952
 GameObject:
   m_ObjectHideFlags: 0
@@ -49569,6 +49571,8 @@ MonoBehaviour:
   oilMilestone: 0
   elvengemMilestone: 1
   orcishgemMilestone: 0
+  negativeTempMilestone: 0
+  highTempMilestone: 1
 --- !u!1 &1893318144
 GameObject:
   m_ObjectHideFlags: 0
@@ -51324,7 +51328,19 @@ MonoBehaviour:
   m_Value: 1
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1634913211}
+        m_TargetAssemblyTypeName: MenuItemStation, Assembly-CSharp
+        m_MethodName: SetTemperature
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1949264829
 GameObject:
   m_ObjectHideFlags: 0
