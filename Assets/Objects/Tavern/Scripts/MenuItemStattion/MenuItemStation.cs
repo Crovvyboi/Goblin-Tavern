@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -21,6 +22,9 @@ public class MenuItemStation : MonoBehaviour
     public int selectedIngredientSlot;
     public Dictionary<int, InventoryItem> selectedIngredients = new Dictionary<int, InventoryItem>();
     public MenuItem selectedMenuItemBase;
+    public LiquidSetting selectedLiquid;
+    public GemSetting selectedGem;
+    public TempSetting selectedTemp;
 
     [Header("Side panels")]
     public GameObject popupBackground;
@@ -38,6 +42,19 @@ public class MenuItemStation : MonoBehaviour
     public GameObject menuItemBaseSlot;
     public GameObject menuItemBaseGrid;
     public GameObject menuItemBaseGridPrefab;
+
+    [Header("Liquid")]
+    public GameObject liquidSlot;
+    public GameObject liquidGrid;
+    public List<GameObject> liquidGameObjectList = new List<GameObject>();
+
+    [Header("Gem")]
+    public GameObject gemSlot;
+    public GameObject gemGrid;
+    public List<GameObject> gemGameObjectList = new List<GameObject>();
+
+    [Header("Temperature")]
+    public GameObject temperatureSlider;
 
     private void Start()
     {
@@ -140,6 +157,7 @@ public class MenuItemStation : MonoBehaviour
         gemPicker.SetActive(false);
         liquidPicker.SetActive(false);
 
+        // Ingredients
         selectedIngredients = new Dictionary<int, InventoryItem>();
         foreach (GameObject item in ingredientSlots)
         {
@@ -147,10 +165,57 @@ public class MenuItemStation : MonoBehaviour
             item.GetComponentInChildren<TextMeshProUGUI>().text = "";
         }
 
+        // Menu item base
         selectedMenuItemBase = null;
         menuItemBaseSlot.GetComponent<RawImage>().texture = null;
         menuItemBaseSlot.GetComponentInChildren<TextMeshProUGUI>().text = "";
 
+        // Liquid
+        selectedLiquid = LiquidSetting.None;
+        liquidSlot.GetComponent<RawImage>().texture = null;
+        liquidSlot.GetComponentInChildren<TextMeshProUGUI>().text = "";
+        if (TavernMilestones.instance.CheckIfAnyLiquidIsUnlocked())
+        {
+            liquidSlot.GetComponent<Button>().interactable = true;
+        }
+        else
+        {
+            liquidSlot.GetComponent<Button>().interactable = false;
+        }
+
+        // Gem
+        selectedGem = GemSetting.None;
+        gemSlot.GetComponent<RawImage>().texture = null;
+        gemSlot.GetComponentInChildren<TextMeshProUGUI>().text = "";
+        if (TavernMilestones.instance.CheckIfAnyGemIsUnlocked())
+        {
+            gemSlot.GetComponent<Button>().interactable = true;
+        }
+        else
+        {
+            gemSlot.GetComponent<Button>().interactable = false;
+        }
+
+        // Temperature
+        selectedTemp = TempSetting.None;
+        temperatureSlider.GetComponent<Slider>().value = 1;
+        temperatureSlider.GetComponentInChildren<TextMeshProUGUI>().text = TempSetting.None.ToString();
+        if (!TavernMilestones.instance.negativeTempMilestone)
+        {
+            temperatureSlider.GetComponent<Slider>().minValue = 1;
+        }
+        else
+        {
+            temperatureSlider.GetComponent<Slider>().minValue = 0;
+        }
+        if (!TavernMilestones.instance.highTempMilestone)
+        {
+            temperatureSlider.GetComponent<Slider>().maxValue = 3;
+        }
+        else
+        {
+            temperatureSlider.GetComponent<Slider>().maxValue = 4;
+        }
     }
 
     public void ToggleIngredientMenu(int index)
@@ -178,6 +243,8 @@ public class MenuItemStation : MonoBehaviour
                 ingredientPicker.SetActive(false);
                 gemPicker.SetActive(true);
                 liquidPicker.SetActive(false);
+
+                ShowGems();
                 break;
             case "Liquid":
                 playerControls.General.PlayerMenu.performed -= ExitMenu;
@@ -187,6 +254,8 @@ public class MenuItemStation : MonoBehaviour
                 ingredientPicker.SetActive(false);
                 gemPicker.SetActive(false);
                 liquidPicker.SetActive(true);
+
+                ShowLiquids();
                 break;
             case "MenuItem":
                 playerControls.General.PlayerMenu.performed -= ExitMenu;
@@ -306,6 +375,7 @@ public class MenuItemStation : MonoBehaviour
 
         newGameObject2.GetComponent<IngredientSelector>().ingredientName.text = "None";
         newGameObject2.GetComponent<IngredientSelector>().amountText.text = "";
+        newGameObject2.GetComponent<IngredientSelector>().icon.gameObject.SetActive(false);
 
         entries.Add(newGameObject2);
     }
@@ -396,7 +466,7 @@ public class MenuItemStation : MonoBehaviour
             newGameObject2.transform.SetParent(menuItemBaseGrid.transform, false);
             newGameObject2.transform.SetAsFirstSibling();
 
-            newGameObject2.GetComponent<MenuItemBaseSelector>().icon.texture = null;
+            newGameObject2.GetComponent<MenuItemBaseSelector>().icon.gameObject.SetActive(false);
             newGameObject2.GetComponent<MenuItemBaseSelector>().menuItemName.text = "None";
 
             entries.Add(newGameObject2);
@@ -431,11 +501,114 @@ public class MenuItemStation : MonoBehaviour
     #endregion
 
     #region Liquid
+    public void ShowLiquids()
+    {
+        // Get all entries
+        liquidGameObjectList = new List<GameObject>();
+        foreach (Transform item in liquidGrid.transform)
+        {
+            liquidGameObjectList.Add(item.gameObject);
 
+            // Check if there's a selected liquid
+            // if yes, disable selected liquid entry and enable others
+            // if no, disable none option and enable all
+            if (selectedLiquid == item.gameObject.GetComponent<LiquidSelector>().liquidName && item.gameObject.GetComponent<LiquidSelector>().liquidName == LiquidSetting.None)
+            {
+                item.gameObject.SetActive(true);
+            }
+            else if (selectedLiquid == item.gameObject.GetComponent<LiquidSelector>().liquidName || !TavernMilestones.instance.CheckIfLiquidMilestoneIsAchieved(item.gameObject.GetComponent<LiquidSelector>().liquidName))
+            {
+                item.gameObject.SetActive(false);
+            }
+            else
+            {
+                item.gameObject.SetActive(true);
+            }
+        }
+
+        
+    }
+
+    public void SelectLiquid(int liquid)
+    {
+        if ((LiquidSetting)liquid != LiquidSetting.None)
+        {
+            LiquidSelector liquidObject = liquidGameObjectList.First(x => x.GetComponent<LiquidSelector>().liquidName == (LiquidSetting)liquid).GetComponent<LiquidSelector>();
+
+            liquidSlot.GetComponent<RawImage>().texture = liquidObject.icon;
+            liquidSlot.GetComponentInChildren<TextMeshProUGUI>().text = liquidObject.liquidName.ToString();
+            
+            selectedLiquid = (LiquidSetting)liquid;
+        }
+        else
+        {
+            liquidSlot.GetComponent<RawImage>().texture = null;
+            liquidSlot.GetComponentInChildren<TextMeshProUGUI>().text = "";
+
+            selectedLiquid = LiquidSetting.None;
+        }
+
+
+        popupBackground.SetActive(false);
+        liquidPicker.SetActive(false);
+    }
     #endregion
 
     #region Gem
+    public void ShowGems()
+    {
+        gemGameObjectList = new List<GameObject>();
+        foreach (Transform item in gemGrid.transform)
+        {
+            gemGameObjectList.Add(item.gameObject);
 
+            if (selectedGem == item.gameObject.GetComponent<GemSelector>().gemName && item.gameObject.GetComponent<GemSelector>().gemName == GemSetting.None)
+            {
+                item.gameObject.SetActive(true);
+            }
+            else if (selectedGem == item.gameObject.GetComponent<GemSelector>().gemName || !TavernMilestones.instance.CheckIfGemMilestoneIsAchieved(item.gameObject.GetComponent<GemSelector>().gemName))
+            {
+                item.gameObject.SetActive(false);
+            }
+            else
+            {
+                item.gameObject.SetActive(true);
+            }
+        }
+    }
+
+    public void SelectGem(int gem)
+    {
+        if ((GemSetting)gem != GemSetting.None)
+        {
+            GemSelector gemObject = gemGameObjectList.First(x => x.GetComponent<GemSelector>().gemName == (GemSetting)gem).GetComponent<GemSelector>();
+
+            gemSlot.GetComponent<RawImage>().texture = gemObject.icon;
+            gemSlot.GetComponentInChildren<TextMeshProUGUI>().text = gemObject.gemName.ToString();
+
+            selectedGem = (GemSetting)gem;
+        }
+        else
+        {
+            gemSlot.GetComponent<RawImage>().texture = null;
+            gemSlot.GetComponentInChildren<TextMeshProUGUI>().text = "";
+
+            selectedGem = GemSetting.None;
+        }
+
+            popupBackground.SetActive(false);
+        gemPicker.SetActive(false);
+    }
+    #endregion
+
+    #region Temperature
+    public void SetTemperature()
+    {
+        TempSetting tempsetting = (TempSetting)temperatureSlider.GetComponent<Slider>().value;
+
+        selectedTemp = tempsetting;
+        temperatureSlider.GetComponentInChildren<TextMeshProUGUI>().text = tempsetting.ToString();
+    }
     #endregion
 
     public void OnCloseSidebar()

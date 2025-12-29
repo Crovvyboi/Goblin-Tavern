@@ -23,6 +23,7 @@ public enum LiquidSetting
 {
     None,
     Water,
+    Milk,
     Oil
 }
 
