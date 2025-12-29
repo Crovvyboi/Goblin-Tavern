@@ -25,12 +25,6 @@ public class PlayerInventory : MonoBehaviour
     public Vector2 draggedItemPos;
     public Quaternion draggedItemRot;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     private void Awake()
     {
         if (instance == null)
@@ -40,10 +34,8 @@ public class PlayerInventory : MonoBehaviour
 
         playerControls = new PlayerControls();
 
-        this.gameObject.SetActive(true);
         InitAllInventoryItems();
         InitAllInventoryCells();
-        this.gameObject.SetActive(false);
     }
     private void OnEnable()
     {

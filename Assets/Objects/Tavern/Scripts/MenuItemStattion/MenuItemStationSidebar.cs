@@ -25,6 +25,11 @@ public class MenuItemStationSidebar : MonoBehaviour
         playerControls.General.PlayerMenu.performed += CloseSideBar;
     }
 
+    private void OnDisable()
+    {
+        playerControls.General.PlayerMenu.performed -= CloseSideBar;
+    }
+
     public void CloseSideBar(InputAction.CallbackContext input)
     {
         CloseSideBar();

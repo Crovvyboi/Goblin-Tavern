@@ -35,7 +35,7 @@ MonoBehaviour:
   isFavorited: 0
   gridTitle: Milk
   icon: {fileID: 0}
-  knowRecipe: 0
+  knowRecipe: 1
   recipeHints: []
   standardInMenu: 0
   inMenu: 0
