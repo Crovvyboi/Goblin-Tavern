@@ -17,6 +17,7 @@ public class TavernManager : MonoBehaviour
 
     [Header("Recipes")]
     public List<MenuItem> menuItems = new List<MenuItem>();
+    public List<Recipe> recipes = new List<Recipe>();
 
     [Header("Menu")]
     public int maxMealOnMenu = 5;
@@ -34,6 +35,7 @@ public class TavernManager : MonoBehaviour
         state = TavernState.OverworldDay;
 
         GetAllMenuItems();
+        GetAllRecipes();
     }
 
     // Update is called once per frame
@@ -56,6 +58,18 @@ public class TavernManager : MonoBehaviour
         }
 
         // Update menuItems according to save file (known & in menu)
+    }
+
+    public void GetAllRecipes()
+    {
+        string[] assets = AssetDatabase.FindAssets("t:Recipe", null);
+        foreach (string asset in assets)
+        {
+            Recipe recipe = (Recipe)AssetDatabase.LoadAssetAtPath(AssetDatabase.GUIDToAssetPath(asset), typeof(Recipe));
+            recipes.Add(recipe);
+        }
+
+        // Update according to save file
     }
     public bool CanAddItem(MenuItem item)
     {

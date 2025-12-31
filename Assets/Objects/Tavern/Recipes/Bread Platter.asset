@@ -18,6 +18,6 @@ MonoBehaviour:
   recipeGem: 0
   recipeIngredients:
   - {fileID: 11400000, guid: 30a84fbc90f5c3b409eda3ea763e330f, type: 2}
-  recipeIngredientType: 0300000001000000
+  recipeIngredientType: 0200000004000000
   resultMenuItem: {fileID: 11400000, guid: a7dcc8dcd84152c4293630a552d9911c, type: 2}
   resultIngredient: {fileID: 0}

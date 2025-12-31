@@ -378,6 +378,7 @@ public class MenuItemStation : MonoBehaviour
         newGameObject2.GetComponent<IngredientSelector>().icon.gameObject.SetActive(false);
 
         entries.Add(newGameObject2);
+
     }
 
     public void SelectIngredient(InventoryItem ingredient)
@@ -408,6 +409,8 @@ public class MenuItemStation : MonoBehaviour
         ingredientPicker.SetActive(false);
 
         selectedIngredientSlot = 0;
+
+        CheckCombination();
     }
     #endregion
 
@@ -495,6 +498,8 @@ public class MenuItemStation : MonoBehaviour
 
         popupBackground.SetActive(false);
         menuitembasePicker.SetActive(false);
+
+        CheckCombination();
     }
 
 
@@ -551,6 +556,9 @@ public class MenuItemStation : MonoBehaviour
 
         popupBackground.SetActive(false);
         liquidPicker.SetActive(false);
+
+
+        CheckCombination();
     }
     #endregion
 
@@ -596,8 +604,10 @@ public class MenuItemStation : MonoBehaviour
             selectedGem = GemSetting.None;
         }
 
-            popupBackground.SetActive(false);
+        popupBackground.SetActive(false);
         gemPicker.SetActive(false);
+
+        CheckCombination();
     }
     #endregion
 
@@ -608,11 +618,77 @@ public class MenuItemStation : MonoBehaviour
 
         selectedTemp = tempsetting;
         temperatureSlider.GetComponentInChildren<TextMeshProUGUI>().text = tempsetting.ToString();
+
+
+        CheckCombination();
     }
     #endregion
 
     public void OnCloseSidebar()
     {
         playerControls.General.PlayerMenu.performed += ExitMenu;
+    }
+
+    public void CheckCombination()
+    {
+        List<InventoryItem> ingredients = new List<InventoryItem>();
+        ingredients.AddRange(selectedIngredients.Values.ToList());
+
+        bool combinationValid = TavernManager.instance.recipes.Any(x =>
+            x.menuItemBase == selectedMenuItemBase &&
+            x.recipeLiquid == selectedLiquid &&
+            x.recipeGem == selectedGem &&
+            x.recipeTemp == selectedTemp &&
+            x.CheckIngredients(ingredients)
+        );
+        Debug.Log(combinationValid);
+
+    }
+
+    public void MakeCombination()
+    {
+        List<InventoryItem> ingredients = new List<InventoryItem>();
+        ingredients.AddRange(selectedIngredients.Values.ToList());
+
+        List<Recipe> combinationValid = TavernManager.instance.recipes.Where(x =>
+            x.menuItemBase == selectedMenuItemBase &&
+            x.recipeLiquid == selectedLiquid &&
+            x.recipeGem == selectedGem &&
+            x.recipeTemp == selectedTemp &&
+            x.CheckIngredients(ingredients)
+        ).ToList();
+
+        if (combinationValid.Count == 0)
+        {
+            Debug.Log("No recpies found. Grant Gruel");
+
+            ConsumeItems(ingredients);
+            FailRecipe();
+        }
+        else if (combinationValid.Count == 1)
+        {
+            Debug.Log($"Recipe found: {combinationValid[0].name}");
+
+            Recipe recipe = combinationValid[0];
+            ConsumeItems(ingredients);
+            GrantRewards(recipe);
+        }
+        else
+        {
+            Debug.Log("Multiple recipes detected");
+        }
+    }
+
+    public void FailRecipe()
+    {
+
+    }
+    public void ConsumeItems(List<InventoryItem> ingredients)
+    {
+
+    }
+    public void GrantRewards(Recipe recipe)
+    {
+
     }
 }
