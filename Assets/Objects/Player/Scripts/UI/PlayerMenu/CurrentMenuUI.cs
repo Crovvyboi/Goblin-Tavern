@@ -134,7 +134,7 @@ public class CurrentMenuUI : MonoBehaviour
         }
 
         // Load in known recipes
-        List<MenuItem> items = TavernManager.instance.menuItems.Where(x => x.knowRecipe && !x.standardInMenu).ToList();
+        List<MenuItem> items = TavernManager.instance.menuItems.Where(x => x.recipeKnown && !x.standardInMenu).ToList();
 
         // Make tile in grid for each recipe
         foreach (MenuItem item in items)
@@ -145,7 +145,7 @@ public class CurrentMenuUI : MonoBehaviour
 
             newGridItem.GetComponent<GridItem>().menuItem = item;
             
-            if (!item.knowRecipe)
+            if (!item.recipeKnown)
             {
                 // If player does not know recipe, set as unkown tile & decrease opacity
 

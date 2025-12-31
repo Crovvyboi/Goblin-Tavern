@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Milk
   m_EditorClassIdentifier: 
   itemName: Milk
-  knowName: 0
   itemDescription: Every good story starts with a glass of milk
   menuItemType: 1
   cost: 3
@@ -35,7 +34,7 @@ MonoBehaviour:
   isFavorited: 0
   gridTitle: Milk
   icon: {fileID: 0}
-  knowRecipe: 1
-  recipeHints: []
+  recipeKnown: 1
+  recipe: {fileID: 0}
   standardInMenu: 0
   inMenu: 0

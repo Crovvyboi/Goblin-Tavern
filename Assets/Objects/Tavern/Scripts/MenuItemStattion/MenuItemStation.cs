@@ -418,7 +418,7 @@ public class MenuItemStation : MonoBehaviour
     public void ShowMenuItemBases()
     {
         // Get known menuitems
-        List<MenuItem> knownMenuItems = TavernManager.instance.menuItems.Where(x => x.knowRecipe && selectedMenuItemBase != x && !x.standardInMenu).ToList();
+        List<MenuItem> knownMenuItems = TavernManager.instance.menuItems.Where(x => x.recipeKnown && selectedMenuItemBase != x && !x.standardInMenu).ToList();
 
         // Get existing entries
         List<GameObject> entries = new List<GameObject>();
@@ -634,15 +634,28 @@ public class MenuItemStation : MonoBehaviour
         List<InventoryItem> ingredients = new List<InventoryItem>();
         ingredients.AddRange(selectedIngredients.Values.ToList());
 
-        bool combinationValid = TavernManager.instance.recipes.Any(x =>
+        List<Recipe> combinationValid = TavernManager.instance.recipes.Where(x =>
             x.menuItemBase == selectedMenuItemBase &&
             x.recipeLiquid == selectedLiquid &&
             x.recipeGem == selectedGem &&
             x.recipeTemp == selectedTemp &&
             x.CheckIngredients(ingredients)
-        );
+        ).ToList();
         Debug.Log(combinationValid);
 
+
+        // Show result if combination is valid && discovered
+        if (combinationValid.Count == 1)
+        {
+            if (combinationValid[0].resultMenuItem != null && combinationValid[0].resultMenuItem.recipeKnown)
+            {
+                
+            }
+            else if (combinationValid[0].resultIngredient != null && combinationValid[0].resultIngredient.ingredientKnown)
+            {
+
+            }
+        }
     }
 
     public void MakeCombination()
@@ -670,25 +683,85 @@ public class MenuItemStation : MonoBehaviour
             Debug.Log($"Recipe found: {combinationValid[0].name}");
 
             Recipe recipe = combinationValid[0];
-            ConsumeItems(ingredients);
-            GrantRewards(recipe);
+
+            if (recipe.resultMenuItem != null)
+            {
+                if (!recipe.resultMenuItem.recipeKnown)
+                {
+                    ConsumeItems(ingredients);
+                    GrantRewards(recipe);
+
+                    recipe.resultMenuItem.recipeKnown = true;
+
+                    recipe.resultMenuItem.inMenu = false;
+                    recipe.resultMenuItem.isNew = true;
+                    if (KnownRecipesUI.instance != null)
+                    {
+                        KnownRecipesUI.instance.AddMenuItemToGrid(recipe.resultMenuItem);
+                    }
+
+                    DiscoveryPopup(recipe);
+                }
+            }
+            else if (recipe.resultIngredient != null) 
+            {
+                ConsumeItems(ingredients);
+                GrantRewards(recipe);
+
+                if (!recipe.resultIngredient.ingredientKnown)
+                {
+                    recipe.resultIngredient.ingredientKnown = true;
+                    DiscoveryPopup(recipe);
+                }
+            }
         }
         else
         {
             Debug.Log("Multiple recipes detected");
         }
+
+        
     }
 
     public void FailRecipe()
     {
 
     }
+    
     public void ConsumeItems(List<InventoryItem> ingredients)
     {
+        foreach (InventoryItem item in ingredients)
+        {
 
+            // Check inventory first, then storage
+            if (item.containerItem && PlayerInventory.instance.itemsInInventory.Any(x =>
+                    x.GetComponent<InventoryItemContainer>().itemsInContainer.Contains(item)
+                ) ||
+                !item.containerItem && PlayerInventory.instance.itemsInInventory.Any(x => 
+                    x.GetComponent<InventoryItemHolder>().item == item                    
+                )
+            )
+            {
+                // Take from inventory
+                PlayerInventory.instance.TakeItem(item);
+            }
+            else
+            {
+                // Take from storage
+                TavernStorage.instance.TakeItem(item);
+            }
+        }
     }
+
     public void GrantRewards(Recipe recipe)
     {
+        
+    }
+
+    public void DiscoveryPopup(Recipe recipe)
+    {
+        
+
 
     }
 }

@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Tomato Soup
   m_EditorClassIdentifier: 
   itemName: Tomato soup
-  knowName: 0
   itemDescription: Soup
   menuItemType: 0
   cost: 10
@@ -35,9 +34,7 @@ MonoBehaviour:
   isFavorited: 1
   gridTitle: Tomato soup
   icon: {fileID: 0}
-  knowRecipe: 1
-  recipeHints:
-  - hintText: Tomatoes need to be crushed before added to water.
-    knowHint: 0
+  recipeKnown: 1
+  recipe: {fileID: 0}
   standardInMenu: 0
   inMenu: 1

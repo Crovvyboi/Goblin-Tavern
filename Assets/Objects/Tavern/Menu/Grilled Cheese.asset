@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Grilled Cheese
   m_EditorClassIdentifier: 
   itemName: Grilled Cheese
-  knowName: 0
   itemDescription: Nice & easy
   menuItemType: 0
   cost: 5
@@ -35,7 +34,7 @@ MonoBehaviour:
   isFavorited: 0
   gridTitle: Grilled cheese
   icon: {fileID: 0}
-  knowRecipe: 1
-  recipeHints: []
+  recipeKnown: 0
+  recipe: {fileID: 11400000, guid: 05ebd718ea99609438d6030a7c17dc94, type: 2}
   standardInMenu: 0
   inMenu: 0

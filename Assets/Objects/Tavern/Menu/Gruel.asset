@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Gruel
   m_EditorClassIdentifier: 
   itemName: Unsightly Gruel
-  knowName: 1
   itemDescription: YUCK!
   menuItemType: 0
   cost: 1
@@ -35,7 +34,7 @@ MonoBehaviour:
   isFavorited: 0
   gridTitle: Gruel
   icon: {fileID: 0}
-  knowRecipe: 1
-  recipeHints: []
+  recipeKnown: 1
+  recipe: {fileID: 0}
   standardInMenu: 1
   inMenu: 0

@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Wine
   m_EditorClassIdentifier: 
   itemName: Wine
-  knowName: 1
   itemDescription: Wijnen, wijnen, wijnen.
   menuItemType: 1
   cost: 10
@@ -35,11 +34,7 @@ MonoBehaviour:
   isFavorited: 0
   gridTitle: Wine
   icon: {fileID: 0}
-  knowRecipe: 0
-  recipeHints:
-  - hintText: Wine I haven't heard of this I don't know.
-    knowHint: 0
-  - hintText: I heard through the grapevine how to make this.
-    knowHint: 1
+  recipeKnown: 1
+  recipe: {fileID: 0}
   standardInMenu: 0
   inMenu: 0

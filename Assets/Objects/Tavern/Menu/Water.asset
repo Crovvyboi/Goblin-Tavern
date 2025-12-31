@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Water
   m_EditorClassIdentifier: 
   itemName: Water
-  knowName: 1
   itemDescription: Not exactly fresh wotah
   menuItemType: 1
   cost: 1
@@ -35,7 +34,7 @@ MonoBehaviour:
   isFavorited: 0
   gridTitle: Water
   icon: {fileID: 0}
-  knowRecipe: 1
-  recipeHints: []
+  recipeKnown: 1
+  recipe: {fileID: 0}
   standardInMenu: 1
   inMenu: 0

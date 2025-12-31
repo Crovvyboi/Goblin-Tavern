@@ -13,7 +13,6 @@ MonoBehaviour:
   m_Name: Beer
   m_EditorClassIdentifier: 
   itemName: Beer
-  knowName: 0
   itemDescription: 
   menuItemType: 1
   cost: 5
@@ -33,9 +32,9 @@ MonoBehaviour:
   addToRowdyness: 0
   alcoholPercent: 0
   isFavorited: 0
-  gridTitle: 
+  gridTitle: Beer
   icon: {fileID: 0}
-  knowRecipe: 0
-  recipeHints: []
+  recipeKnown: 1
+  recipe: {fileID: 0}
   standardInMenu: 0
   inMenu: 0

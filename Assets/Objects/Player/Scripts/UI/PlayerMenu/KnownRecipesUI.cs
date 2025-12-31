@@ -71,69 +71,12 @@ public class KnownRecipesUI : MonoBehaviour
         }
 
         // Load in recipes
-        List<MenuItem> items = TavernManager.instance.menuItems.Where(x => x.knowRecipe || x.recipeHints.Where(y => y.knowHint).ToList().Count > 0 || x.knowName).ToList();
+        List<MenuItem> items = TavernManager.instance.menuItems.Where(x => x.recipeKnown || x.recipe.hints.Where(y => y.knowHint).ToList().Count > 0).ToList();
 
         // Make tile in grid for each recipe
         foreach (MenuItem item in items)
         {
-            GameObject newGridItem = GameObject.Instantiate(gridItemPrefab);
-            gridItems.Add(newGridItem);
-            newGridItem.transform.SetParent(contentParent.transform, false);
-
-            newGridItem.GetComponent<GridItem>().menuItem = item;
-            newGridItem.GetComponent<Button>().onClick.AddListener(() => OnShow(item));
-
-            if (!item.knowRecipe)
-            {
-                // If player does not know recipe, set as unkown tile & decrease opacity
-                if (item.knowName)
-                {
-                    newGridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.itemName;
-                }
-                else
-                {
-                    newGridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "? ? ?";
-                } 
-                newGridItem.GetComponent<CanvasGroup>().alpha = 0.5f;
-
-                newGridItem.transform.GetChild(2).gameObject.SetActive(false);
-                
-                if (item.isFavorited)
-                {
-                    newGridItem.transform.GetChild(3).gameObject.SetActive(true);
-                }
-                else
-                {
-                    newGridItem.transform.GetChild(3).gameObject.SetActive(false);
-                }
-            }
-            else
-            {
-                // Set icon & title
-                if (item.icon)
-                {
-                    newGridItem.transform.GetChild(0).GetComponent<RawImage>().texture = item.icon;
-                }
-                newGridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.gridTitle;
-                newGridItem.GetComponent<CanvasGroup>().alpha = 1f;
-
-                if (item.inMenu || item.standardInMenu)
-                {
-                    newGridItem.transform.GetChild(2).gameObject.SetActive(true);
-                }
-                else
-                {
-                    newGridItem.transform.GetChild(2).gameObject.SetActive(false);
-                }
-                if (item.isFavorited)
-                {
-                    newGridItem.transform.GetChild(3).gameObject.SetActive(true);
-                }
-                else
-                {
-                    newGridItem.transform.GetChild(3).gameObject.SetActive(false);
-                }
-            }
+           AddMenuItemToGrid(item);
 
         }
 
@@ -189,6 +132,68 @@ public class KnownRecipesUI : MonoBehaviour
         ResetFilters();
     }
 
+    public void AddMenuItemToGrid(MenuItem item)
+    {
+        GameObject newGridItem = GameObject.Instantiate(gridItemPrefab);
+        gridItems.Add(newGridItem);
+        newGridItem.transform.SetParent(contentParent.transform, false);
+
+        newGridItem.GetComponent<GridItem>().menuItem = item;
+        newGridItem.GetComponent<Button>().onClick.AddListener(() => OnShow(item));
+
+        if (!item.recipeKnown)
+        {
+            // If player does not know recipe, set as unkown tile & decrease opacity
+            if (item.recipeKnown)
+            {
+                newGridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.itemName;
+            }
+            else
+            {
+                newGridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "? ? ?";
+            }
+            newGridItem.GetComponent<CanvasGroup>().alpha = 0.5f;
+
+            newGridItem.transform.GetChild(2).gameObject.SetActive(false);
+
+            if (item.isFavorited)
+            {
+                newGridItem.transform.GetChild(3).gameObject.SetActive(true);
+            }
+            else
+            {
+                newGridItem.transform.GetChild(3).gameObject.SetActive(false);
+            }
+        }
+        else
+        {
+            // Set icon & title
+            if (item.icon)
+            {
+                newGridItem.transform.GetChild(0).GetComponent<RawImage>().texture = item.icon;
+            }
+            newGridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.gridTitle;
+            newGridItem.GetComponent<CanvasGroup>().alpha = 1f;
+
+            if (item.inMenu || item.standardInMenu)
+            {
+                newGridItem.transform.GetChild(2).gameObject.SetActive(true);
+            }
+            else
+            {
+                newGridItem.transform.GetChild(2).gameObject.SetActive(false);
+            }
+            if (item.isFavorited)
+            {
+                newGridItem.transform.GetChild(3).gameObject.SetActive(true);
+            }
+            else
+            {
+                newGridItem.transform.GetChild(3).gameObject.SetActive(false);
+            }
+        }
+    }
+
     public void SwitchToDetails()
     {
         menuItemLikeDislike.SetActive(false);
@@ -205,7 +210,7 @@ public class KnownRecipesUI : MonoBehaviour
         selectedMenuItem = item;
 
         // Show selected recipe
-        if (item.knowRecipe)
+        if (item.recipeKnown)
         {
             // Show as known
             ShowKnown(item);
@@ -357,21 +362,26 @@ public class KnownRecipesUI : MonoBehaviour
         favoritedRecipeButton.GetComponent<Button>().onClick.AddListener(() => FavoriteMenuItem(item));
         UpdateFavoriteButton(item);
 
-        if (item.knowName)
+        if (item.recipeKnown)
         {
             unknownRecipeName.GetComponent<TextMeshProUGUI>().text = item.itemName;
         }
 
         string hintString = "";
-        foreach (MenuItemHint hint in item.recipeHints)
+        if (item.recipe != null)
         {
-            if (hint.knowHint)
+            
+
+            foreach (RecipeHint hint in item.recipe.hints)
             {
-                hintString += $" - {hint.hintText}\n";
-            }
-            else
-            {
-                hintString += $" - ? ? ?\n";
+                if (hint.knowHint)
+                {
+                    hintString += $" - {hint.hintText}\n";
+                }
+                else
+                {
+                    hintString += $" - ? ? ?\n";
+                }
             }
         }
 
@@ -473,7 +483,7 @@ public class KnownRecipesUI : MonoBehaviour
     }
     public void UpdateAddRemoveButton()
     {
-        if (selectedMenuItem.knowRecipe && !selectedMenuItem.standardInMenu)
+        if (selectedMenuItem.recipeKnown && !selectedMenuItem.standardInMenu)
         {
             if (selectedMenuItem.inMenu)
             {
@@ -514,7 +524,7 @@ public class KnownRecipesUI : MonoBehaviour
         if (item.isFavorited)
         {
             Rect rect = new Rect(0,0, IconHandler.instance.fullStar.width, IconHandler.instance.fullStar.height);
-            if (item.knowRecipe)
+            if (item.recipeKnown)
             {
                 favoritedButton.GetComponent<Image>().sprite = Sprite.Create(IconHandler.instance.fullStar, rect, new Vector2(0,0), 512);
             }
@@ -526,7 +536,7 @@ public class KnownRecipesUI : MonoBehaviour
         else
         {
             Rect rect = new Rect(0, 0, IconHandler.instance.emptyStar.width, IconHandler.instance.emptyStar.height);
-            if (item.knowRecipe)
+            if (item.recipeKnown)
             {
                 favoritedButton.GetComponent<Image>().sprite = Sprite.Create(IconHandler.instance.emptyStar, rect, new Vector2(0, 0), 512);
             }
@@ -562,15 +572,15 @@ public class KnownRecipesUI : MonoBehaviour
 
             if (trimmedString == string.Empty || gridItem.menuItem.itemName.Trim().ToLower().Contains(trimmedString))
             {
-                if (gridItem.menuItem.knowRecipe && isUndiscovered)
+                if (gridItem.menuItem.recipeKnown && isUndiscovered)
                 {
                     gridObject.SetActive(false);
                 }
-                else if (!gridItem.menuItem.knowRecipe && isHideUndiscovered)
+                else if (!gridItem.menuItem.recipeKnown && isHideUndiscovered)
                 {
                     gridObject.SetActive(false);
                 }
-                else if (!gridItem.menuItem.isFavorited && isFavored)
+                else if ( !gridItem.menuItem.isFavorited && isFavored)
                 {
                     gridObject.SetActive(false);
                 }

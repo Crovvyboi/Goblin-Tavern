@@ -23,6 +23,8 @@ public class InventoryItem : ScriptableObject
     public GameObject prefab;
 
     [Header("Ingredient")]
+    public bool ingredientKnown;
+    public Recipe ingredientRecipe;
     public IngredientType ingredientType;
 }
 

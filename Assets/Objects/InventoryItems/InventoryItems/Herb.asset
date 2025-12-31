@@ -21,4 +21,6 @@ MonoBehaviour:
   hotbarIcon: {fileID: 2800000, guid: 0db9d4fa9e305144ba456793a2deb8e5, type: 3}
   isPlaceable: 0
   prefab: {fileID: 0}
+  ingredientKnown: 1
+  ingredientRecipe: {fileID: 0}
   ingredientType: 2

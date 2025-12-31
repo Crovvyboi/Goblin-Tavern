@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class TavernStorage : MonoBehaviour
@@ -18,6 +19,18 @@ public class TavernStorage : MonoBehaviour
         }  
     }
 
+    public void TakeItem(InventoryItem item)
+    {
+        if (tavernInventory.Any(x => x.item == item))
+        {
+            TavernStorageObject storageobject = tavernInventory.First(x => x.item == item);
+            storageobject.amount--;
+            if (storageobject.amount <= 0)
+            {
+                tavernInventory.Remove(storageobject);
+            }
+        }
+    }
 }
 
 [Serializable]

@@ -12,8 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2990c1a1013a67439a1f3204c8b2661, type: 3}
   m_Name: Butterbeer
   m_EditorClassIdentifier: 
-  itemName: Butter Beer
-  knowName: 0
+  itemName: Butterbeer
   itemDescription: 
   menuItemType: 1
   cost: 7
@@ -33,9 +32,9 @@ MonoBehaviour:
   addToRowdyness: 0
   alcoholPercent: 0
   isFavorited: 0
-  gridTitle: 
+  gridTitle: Butterbeer
   icon: {fileID: 0}
-  knowRecipe: 0
-  recipeHints: []
+  recipeKnown: 1
+  recipe: {fileID: 0}
   standardInMenu: 0
   inMenu: 0

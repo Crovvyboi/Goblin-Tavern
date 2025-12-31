@@ -8,7 +8,6 @@ public class MenuItem : ScriptableObject
 {
     [Header("Typing")]
     public string itemName;
-    public bool knowName;
     public string itemDescription;
     public MenuItemType menuItemType;
     public int cost;
@@ -35,13 +34,14 @@ public class MenuItem : ScriptableObject
     public float alcoholPercent;
 
     [Header("GridSettings")]
+    public bool isNew;
     public bool isFavorited;
     public string gridTitle;
     public Texture2D icon;
 
     [Header("Recipe")]
-    public bool knowRecipe;
-    public List<MenuItemHint> recipeHints = new List<MenuItemHint>();
+    public bool recipeKnown;
+    public Recipe recipe;
 
     [Header("Menu")]
     public bool standardInMenu;
