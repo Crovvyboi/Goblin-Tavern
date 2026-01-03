@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEditor.Progress;
@@ -132,6 +133,24 @@ public class PlayerInventory : MonoBehaviour
                 }
             }
         }
+    }
+
+    public int CountItem(InventoryItem item)
+    {
+        int count = 0;
+        if (item.containerItem)
+        {
+            List<GameObject> containers = itemsInInventory.Where(x => x.GetComponent<InventoryItemContainer>() != null && x.GetComponent<InventoryItemContainer>().containerType == item.containerType).ToList();
+            foreach (GameObject container in containers)
+            {
+                count += container.GetComponent<InventoryItemContainer>().itemsInContainer.Where(x => x == item).Count();
+            }
+        }
+        else
+        {
+            count += itemsInInventory.Where(x => x.GetComponent<InventoryItemHolder>() != null && x.GetComponent<InventoryItemHolder>().item == item).Count();
+        }
+        return count;
     }
 
 

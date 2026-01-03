@@ -144,7 +144,16 @@ public class CurrentMenuUI : MonoBehaviour
             newGridItem.transform.SetParent(contentParent.transform, false);
 
             newGridItem.GetComponent<GridItem>().menuItem = item;
-            
+
+            if (item.isNew)
+            {
+                newGridItem.GetComponent<Outline>().enabled = true;
+            }
+            else
+            {
+                newGridItem.GetComponent<Outline>().enabled = false;
+            }
+
             if (!item.recipeKnown)
             {
                 // If player does not know recipe, set as unkown tile & decrease opacity
@@ -190,7 +199,7 @@ public class CurrentMenuUI : MonoBehaviour
                 {
                     newGridItem.transform.GetChild(3).gameObject.SetActive(false);
                 }
-                
+
             }
         }
 
@@ -236,7 +245,9 @@ public class CurrentMenuUI : MonoBehaviour
     public void LoadCurrentMenu()
     {
         List<MenuItem> mealMenuItems = TavernManager.instance.tavernMenu.Where(x => x.menuItemType == MenuItemType.Meal && !x.standardInMenu).ToList();
+        mealMenuItems.AddRange(TavernManager.instance.menuItems.Where(x => x.menuItemType == MenuItemType.Meal && !x.standardInMenu && x.inMenu));
         List<MenuItem> drinkMenuItems = TavernManager.instance.tavernMenu.Where(x => x.menuItemType == MenuItemType.Drink && !x.standardInMenu).ToList();
+        drinkMenuItems.AddRange(TavernManager.instance.menuItems.Where(x => x.menuItemType == MenuItemType.Drink && !x.standardInMenu && x.inMenu));
         List<MenuItem> alwaysOnMenu = TavernManager.instance.menuItems.Where(x => x.standardInMenu).ToList();
 
         // Add meal menu items
@@ -358,7 +369,7 @@ public class CurrentMenuUI : MonoBehaviour
         {
             TavernManager.instance.RemoveFromMenu(menuItem);
 
-            GameObject menuobject = menuListItems.First(x => x.GetComponent<GridItem>().menuItem.itemName == menuItem.itemName);
+            GameObject menuobject = menuListItems.First(x => x.GetComponent<GridItem>().menuItem == menuItem);
 
             menuListItems.Remove(menuobject);
             GameObject.Destroy(menuobject);
@@ -405,6 +416,16 @@ public class CurrentMenuUI : MonoBehaviour
 
     public void AddRemoveToMenu(MenuItem item)
     {
+        if (item.isNew)
+        {
+            item.isNew = false;
+            UpdateNew(item);
+            if (KnownRecipesUI.instance != null)
+            {
+                KnownRecipesUI.instance.UpdateNew(item);
+            }
+        }
+
         if (TavernManager.state == TavernState.OverworldNight || TavernManager.state == TavernState.OverworldDay)
         {
             if (item.inMenu)
@@ -418,5 +439,10 @@ public class CurrentMenuUI : MonoBehaviour
 
             UpdateMenuList();
         }
+    }
+
+    public void UpdateNew(MenuItem item)
+    {
+        gridItems.First(x => x.GetComponent<GridItem>().menuItem == item).GetComponent<Outline>().enabled = false;
     }
 }

@@ -141,6 +141,15 @@ public class KnownRecipesUI : MonoBehaviour
         newGridItem.GetComponent<GridItem>().menuItem = item;
         newGridItem.GetComponent<Button>().onClick.AddListener(() => OnShow(item));
 
+        if (item.isNew)
+        {
+            newGridItem.GetComponent<Outline>().enabled = true;
+        }
+        else
+        {
+            newGridItem.GetComponent<Outline>().enabled = false;
+        }
+
         if (!item.recipeKnown)
         {
             // If player does not know recipe, set as unkown tile & decrease opacity
@@ -205,9 +214,24 @@ public class KnownRecipesUI : MonoBehaviour
         menuItemLikeDislike.SetActive(true);
     }
 
+    public void UpdateNew(MenuItem item)
+    {
+        gridItems.First(x => x.GetComponent<GridItem>().menuItem == item).GetComponent<Outline>().enabled = false;
+    }
+
     public void OnShow(MenuItem item)
     {
         selectedMenuItem = item;
+
+        if (item.isNew)
+        {
+            item.isNew = false;
+            UpdateNew(item);
+            if (CurrentMenuUI.instance != null)
+            {
+                CurrentMenuUI.instance.UpdateNew(item);
+            }
+        }
 
         // Show selected recipe
         if (item.recipeKnown)

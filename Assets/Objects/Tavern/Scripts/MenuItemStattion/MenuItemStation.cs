@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -56,6 +57,26 @@ public class MenuItemStation : MonoBehaviour
     [Header("Temperature")]
     public GameObject temperatureSlider;
 
+    [Header("Check")]
+    public Button makeButton;
+    public TextMeshProUGUI knownText;
+
+    [Header("Discover new")]
+    public GameObject newRecipeHolder;
+    public TextMeshProUGUI newRecipeText;
+    public RawImage newRecipeIcon;
+
+    [Header("Fail recipe")]
+    public GameObject failRecipeHolder;
+    public CanvasGroup failRecipeCanvasGroup;
+    public bool isShowingFail;
+    public float failShowingTimer;
+
+    [Header("Make counter")]
+    public GameObject makeCounterObject;
+    public int maxCounter;
+    public int currentCounter;
+
     private void Start()
     {
         
@@ -77,6 +98,28 @@ public class MenuItemStation : MonoBehaviour
         ingredientPicker.GetComponent<MenuItemStationSidebar>().SetPlayerControls(playerControls);
         gemPicker.GetComponent<MenuItemStationSidebar>().SetPlayerControls(playerControls);
         liquidPicker.GetComponent<MenuItemStationSidebar>().SetPlayerControls(playerControls);
+
+        isShowingFail = false;
+        failRecipeHolder.SetActive(false);
+
+        makeCounterObject.SetActive(false);
+    }
+
+    private void FixedUpdate()
+    {
+        if (isShowingFail && failRecipeHolder.activeSelf == true)
+        {
+            failShowingTimer += Time.deltaTime;
+            if (failShowingTimer > 3)
+            {
+                failRecipeCanvasGroup.alpha -= 0.05f;
+                if (failRecipeCanvasGroup.alpha <= 0f)
+                {
+                    failRecipeHolder.SetActive(false);
+                    isShowingFail = false;
+                }
+            }
+        }
     }
 
     public void OnEnable()
@@ -163,6 +206,8 @@ public class MenuItemStation : MonoBehaviour
         {
             item.GetComponent<RawImage>().texture = null;
             item.GetComponentInChildren<TextMeshProUGUI>().text = "";
+
+            item.transform.GetChild(1).gameObject.SetActive(false);
         }
 
         // Menu item base
@@ -216,6 +261,8 @@ public class MenuItemStation : MonoBehaviour
         {
             temperatureSlider.GetComponent<Slider>().maxValue = 4;
         }
+
+        CheckCombination();
     }
 
     public void ToggleIngredientMenu(int index)
@@ -390,6 +437,8 @@ public class MenuItemStation : MonoBehaviour
             // update text & icon
             ingredientSlots[selectedIngredientSlot].GetComponent<RawImage>().texture = null;
             ingredientSlots[selectedIngredientSlot].GetComponentInChildren<TextMeshProUGUI>().text = "";
+
+            ingredientSlots[selectedIngredientSlot].transform.GetChild(1).gameObject.SetActive(false);
         }
         else
         {
@@ -402,6 +451,10 @@ public class MenuItemStation : MonoBehaviour
             // update text & icon
             ingredientSlots[selectedIngredientSlot].GetComponent<RawImage>().texture = ingredient.hotbarIcon;
             ingredientSlots[selectedIngredientSlot].GetComponentInChildren<TextMeshProUGUI>().text = ingredient.inventoryItemName;
+
+            ingredientSlots[selectedIngredientSlot].transform.GetChild(1).gameObject.SetActive(true);
+            ingredientSlots[selectedIngredientSlot].transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = $"{PlayerInventory.instance.CountItem(ingredient)}x in inventory";
+            ingredientSlots[selectedIngredientSlot].transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = $"{TavernStorage.instance.CountItem(ingredient)}x in storage";
         }
 
 
@@ -412,6 +465,22 @@ public class MenuItemStation : MonoBehaviour
 
         CheckCombination();
     }
+    
+    public void CounterInteract(int modifier)
+    {
+        currentCounter += modifier;
+        if (currentCounter < 1)
+        {
+            currentCounter = maxCounter;
+        }
+        else if (currentCounter > maxCounter)
+        {
+            currentCounter = 1;
+        }
+
+        makeCounterObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = currentCounter.ToString();
+    }
+    
     #endregion
 
     #region MenuItemBase
@@ -641,7 +710,6 @@ public class MenuItemStation : MonoBehaviour
             x.recipeTemp == selectedTemp &&
             x.CheckIngredients(ingredients)
         ).ToList();
-        Debug.Log(combinationValid);
 
 
         // Show result if combination is valid && discovered
@@ -649,13 +717,65 @@ public class MenuItemStation : MonoBehaviour
         {
             if (combinationValid[0].resultMenuItem != null && combinationValid[0].resultMenuItem.recipeKnown)
             {
-                
+                makeButton.interactable = false;
+                makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Recipe already known!";
+                knownText.text = combinationValid[0].resultMenuItem.itemName;
+                knownText.color = Color.green;
+
+                makeCounterObject.SetActive(false);
             }
             else if (combinationValid[0].resultIngredient != null && combinationValid[0].resultIngredient.ingredientKnown)
             {
+                makeButton.interactable = true;
+                makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
+                knownText.text = combinationValid[0].resultIngredient.inventoryItemName;
+                knownText.color = Color.green;
 
+                // Activate counter
+                makeCounterObject.SetActive(true);
+                currentCounter = 1;
+                maxCounter = CalculateMaxCount();
+                makeCounterObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = currentCounter.ToString();
             }
         }
+        else if (ingredients.Count == 0 && selectedGem == GemSetting.None && selectedLiquid == LiquidSetting.None && selectedMenuItemBase == null && selectedTemp == TempSetting.None)
+        {
+            // If nothing is selected
+            makeButton.interactable = false;
+            makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
+            knownText.text = "No input";
+            knownText.color = Color.red;
+
+            makeCounterObject.SetActive(false);
+        }
+        else
+        {
+            makeButton.interactable = true;
+            makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
+            knownText.text = "???";
+            knownText.color = Color.black;
+
+            makeCounterObject.SetActive(false);
+        }
+    }
+
+    public int CalculateMaxCount()
+    {
+        int count = 0;
+
+        foreach (InventoryItem item in selectedIngredients.Values)
+        {
+            int amount = 0;
+            amount += PlayerInventory.instance.CountItem(item); 
+            amount += TavernStorage.instance.CountItem(item);
+
+            if (count == 0 || amount < count)
+            {
+                count = amount;
+            }
+        }
+
+        return count;
     }
 
     public void MakeCombination()
@@ -680,38 +800,19 @@ public class MenuItemStation : MonoBehaviour
         }
         else if (combinationValid.Count == 1)
         {
-            Debug.Log($"Recipe found: {combinationValid[0].name}");
-
             Recipe recipe = combinationValid[0];
 
             if (recipe.resultMenuItem != null)
             {
-                if (!recipe.resultMenuItem.recipeKnown)
-                {
-                    ConsumeItems(ingredients);
-                    GrantRewards(recipe);
-
-                    recipe.resultMenuItem.recipeKnown = true;
-
-                    recipe.resultMenuItem.inMenu = false;
-                    recipe.resultMenuItem.isNew = true;
-                    if (KnownRecipesUI.instance != null)
-                    {
-                        KnownRecipesUI.instance.AddMenuItemToGrid(recipe.resultMenuItem);
-                    }
-
-                    DiscoveryPopup(recipe);
-                }
+                ConsumeItems(ingredients);
+                GrantRewards(recipe.resultMenuItem);
             }
             else if (recipe.resultIngredient != null) 
             {
-                ConsumeItems(ingredients);
-                GrantRewards(recipe);
-
-                if (!recipe.resultIngredient.ingredientKnown)
+                for (int i = 0; i < currentCounter; i++)
                 {
-                    recipe.resultIngredient.ingredientKnown = true;
-                    DiscoveryPopup(recipe);
+                    ConsumeItems(ingredients);
+                    GrantRewards(recipe.resultIngredient);
                 }
             }
         }
@@ -720,12 +821,15 @@ public class MenuItemStation : MonoBehaviour
             Debug.Log("Multiple recipes detected");
         }
 
-        
+        CheckCombination();
     }
 
     public void FailRecipe()
     {
-
+        failRecipeHolder.SetActive(true);
+        failRecipeCanvasGroup.alpha = 1.0f;
+        isShowingFail = true;
+        failShowingTimer = 0;
     }
     
     public void ConsumeItems(List<InventoryItem> ingredients)
@@ -734,10 +838,12 @@ public class MenuItemStation : MonoBehaviour
         {
 
             // Check inventory first, then storage
-            if (item.containerItem && PlayerInventory.instance.itemsInInventory.Any(x =>
+            if (item.containerItem && PlayerInventory.instance.itemsInInventory.Any(x => 
+                    x.GetComponent<InventoryItemContainer>() != null &&
                     x.GetComponent<InventoryItemContainer>().itemsInContainer.Contains(item)
                 ) ||
                 !item.containerItem && PlayerInventory.instance.itemsInInventory.Any(x => 
+                    x.GetComponent<InventoryItemHolder>() != null &&
                     x.GetComponent<InventoryItemHolder>().item == item                    
                 )
             )
@@ -750,18 +856,69 @@ public class MenuItemStation : MonoBehaviour
                 // Take from storage
                 TavernStorage.instance.TakeItem(item);
             }
+
+            // If all ingredients from inventory are gone, apply to UI
+            if (PlayerInventory.instance.CountItem(item) == 0 && TavernStorage.instance.CountItem(item) == 0)
+            {
+                int key = selectedIngredients.First(x => x.Value == item).Key;
+                ingredientSlots[key].GetComponent<RawImage>().texture = null;
+                ingredientSlots[key].GetComponentInChildren<TextMeshProUGUI>().text = "";
+
+                ingredientSlots[key].transform.GetChild(1).gameObject.SetActive(false);
+
+                selectedIngredients.Remove(selectedIngredients.First(x => x.Value == item).Key);
+            }
+            else
+            {
+                int key = selectedIngredients.First(x => x.Value == item).Key;
+                ingredientSlots[key].transform.GetChild(1).gameObject.SetActive(true);
+                ingredientSlots[key].transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = $"{PlayerInventory.instance.CountItem(item)}x in inventory";
+                ingredientSlots[key].transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = $"{TavernStorage.instance.CountItem(item)}x in storage";
+            }
         }
     }
 
-    public void GrantRewards(Recipe recipe)
+    public void GrantRewards(MenuItem menuItem)
     {
-        
+        if (!menuItem.recipeKnown)
+        {
+            menuItem.recipeKnown = true;
+
+            menuItem.inMenu = false;
+            menuItem.isNew = true;
+            if (KnownRecipesUI.instance != null)
+            {
+                KnownRecipesUI.instance.AddMenuItemToGrid(menuItem);
+            }
+
+            DiscoveryPopup(menuItem);
+        }
     }
 
-    public void DiscoveryPopup(Recipe recipe)
+    public void GrantRewards(InventoryItem ingredient)
     {
-        
+        if (!ingredient.ingredientKnown)
+        {
+            ingredient.ingredientKnown = true;
+            DiscoveryPopup(ingredient);
+        }
 
+        // Add item to storage inventory
+        TavernStorage.instance.AddItem(ingredient, 1);
+    }
 
+    public void DiscoveryPopup(MenuItem menuItem)
+    {
+        newRecipeHolder.SetActive(true);
+        newRecipeText.text = menuItem.itemName;
+        newRecipeIcon.texture = menuItem.icon;
+
+    }
+
+    public void DiscoveryPopup(InventoryItem ingredient)
+    {
+        newRecipeHolder.SetActive(true);
+        newRecipeText.text = ingredient.inventoryItemName;
+        newRecipeIcon.texture = ingredient.hotbarIcon;
     }
 }

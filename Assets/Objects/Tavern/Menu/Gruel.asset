@@ -18,7 +18,7 @@ MonoBehaviour:
   cost: 1
   tags: []
   starrating: 0
-  preferredByAllSpecies: 1
+  preferredByAllSpecies: 0
   preferredByAllClass: 0
   preferredBySpecies: 
   preferredByClass: 
@@ -31,6 +31,7 @@ MonoBehaviour:
   addToHappiness: 0
   addToRowdyness: 0
   alcoholPercent: 0
+  isNew: 0
   isFavorited: 0
   gridTitle: Gruel
   icon: {fileID: 0}
