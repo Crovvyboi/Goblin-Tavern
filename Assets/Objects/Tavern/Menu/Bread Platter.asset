@@ -31,7 +31,7 @@ MonoBehaviour:
   addToHappiness: 0
   addToRowdyness: 0
   alcoholPercent: 0
-  isNew: 1
+  isNew: 0
   isFavorited: 0
   gridTitle: Bread platter
   icon: {fileID: 0}
