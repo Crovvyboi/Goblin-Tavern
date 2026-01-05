@@ -11,6 +11,7 @@ public class Fader : MonoBehaviour
 
     public CanvasGroup fadingImage;
     public bool isFading;
+    public float fadeSpeed;
 
     [Header("Tooltip")]
     public GameObject tooltipHolder;
@@ -35,12 +36,7 @@ public class Fader : MonoBehaviour
 
     private void Start()
     {
-        tooltipHolder.SetActive(false);
-        enddayHolder.SetActive(false);
-        endnightHolder.SetActive(false);
-
-        fadingImage.alpha = 0f;
-        this.gameObject.SetActive(false);
+        StartCoroutine(FadeOut());
     }
 
     public IEnumerator FadeIn(FaderType faderType)
@@ -69,7 +65,7 @@ public class Fader : MonoBehaviour
 
         while (fadingImage.alpha < 1f) 
         {
-            transparency += 0.01f;
+            transparency += fadeSpeed;
             fadingImage.alpha = transparency;
             yield return new WaitForSeconds(0.005f);
         }
@@ -92,7 +88,7 @@ public class Fader : MonoBehaviour
 
         while (fadingImage.alpha > 0f)
         {
-            transparency -= 0.01f;
+            transparency -= fadeSpeed;
             fadingImage.alpha = transparency;
             yield return new WaitForSeconds(0.005f);
         }

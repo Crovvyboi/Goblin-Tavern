@@ -582,7 +582,11 @@ public class KnownRecipesUI : MonoBehaviour
         bool isFavored = isFavoredToggle.isOn;
         bool isOnMenu = isOnMenuToggle.isOn;
         bool isUndiscovered = isUndiscoveredToggle.isOn;
-        bool isHideUndiscovered = hideUndiscoveredToggle.isOn;
+        bool isHideUndiscovered = false;
+        if (hideUndiscoveredToggle != null)
+        {
+            isHideUndiscovered = hideUndiscoveredToggle.isOn;
+        }
 
         List<GameObject> filteredSpeciesLiked = speciesObjectList.Where(x => x.GetComponent<FilterScrollButton>().state == FilterScrollState.Like).ToList();
         List<GameObject> filteredSpeciesDisliked = speciesObjectList.Where(x => x.GetComponent<FilterScrollButton>().state == FilterScrollState.Dislike).ToList();
