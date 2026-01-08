@@ -35,7 +35,7 @@ MonoBehaviour:
   isFavorited: 0
   gridTitle: Bread platter
   icon: {fileID: 0}
-  recipeKnown: 1
+  recipeKnown: 0
   recipe: {fileID: 11400000, guid: f6e7fad52690847469fc3dfad97fa7cf, type: 2}
   standardInMenu: 0
   inMenu: 0

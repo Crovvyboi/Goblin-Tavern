@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryItemName: Chair
   type: 2
+  cost: 0
   inventoryItemHolder: {fileID: 972190325821420470, guid: deceead644d942542b0100bf79726ee3, type: 3}
   containerItem: 0
   containerType: 0
@@ -21,3 +22,10 @@ MonoBehaviour:
   hotbarIcon: {fileID: 2800000, guid: d4fa2f6c255e023418d05b7ae876c902, type: 3}
   isPlaceable: 1
   prefab: {fileID: 8013345575825281024, guid: 19a8fb77b59a54d43bb0fe6f57e0ffa0, type: 3}
+  recipeKnown: 0
+  inventoryItemRecipe: {fileID: 0}
+  isNew: 0
+  isFavorited: 0
+  gridName: 
+  description: 
+  ingredientType: 0

@@ -293,7 +293,7 @@ public class CurrentMenuUI : MonoBehaviour
         UpdateGridItem(menuItem);
         if (KnownRecipesUI.instance != null)
         {
-            KnownRecipesUI.instance.UpdateGridItem(menuItem);
+            KnownRecipesUI.instance.UpdateGridItem(menuItem.recipe);
         }
        
     }
@@ -339,7 +339,7 @@ public class CurrentMenuUI : MonoBehaviour
         UpdateGridItem(menuItem);
         if (KnownRecipesUI.instance != null)
         {
-            KnownRecipesUI.instance.UpdateGridItem(menuItem);
+            KnownRecipesUI.instance.UpdateGridItem(menuItem.recipe);
         }
     }
 
@@ -358,7 +358,7 @@ public class CurrentMenuUI : MonoBehaviour
             UpdateGridItem(menuItem);
             if (KnownRecipesUI.instance != null)
             {
-                KnownRecipesUI.instance.UpdateGridItem(menuItem);
+                KnownRecipesUI.instance.UpdateGridItem(menuItem.recipe);
             }
         }
     }
@@ -380,7 +380,7 @@ public class CurrentMenuUI : MonoBehaviour
             UpdateGridItem(menuItem);
             if (KnownRecipesUI.instance != null)
             {
-                KnownRecipesUI.instance.UpdateGridItem(menuItem);
+                KnownRecipesUI.instance.UpdateGridItem(menuItem.recipe);
             }
         }
     }
@@ -422,7 +422,7 @@ public class CurrentMenuUI : MonoBehaviour
             UpdateNew(item);
             if (KnownRecipesUI.instance != null)
             {
-                KnownRecipesUI.instance.UpdateNew(item);
+                KnownRecipesUI.instance.UpdateNew(item.recipe);
             }
         }
 

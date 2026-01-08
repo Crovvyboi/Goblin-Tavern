@@ -20,5 +20,23 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e6705a0ed3c52ba43b2fe437c767b8b6, type: 2}
   - {fileID: 11400000, guid: 6880327cf209d214f8d778bc813b095a, type: 2}
   recipeIngredientType: 
+  knowRecipeName: 1
+  menuItemBaseHint: 0
+  menuItemBaseText: 
+  liquidHint: 1
+  liquidText: 'Get a large pot and fill with water. '
+  ingredientHints:
+  - knowHint: 1
+    inventoryItem: {fileID: 11400000, guid: e6705a0ed3c52ba43b2fe437c767b8b6, type: 2}
+    ingredientType: 0
+    ingredientText: 'Add flour '
+  - knowHint: 1
+    inventoryItem: {fileID: 11400000, guid: 6880327cf209d214f8d778bc813b095a, type: 2}
+    ingredientType: 0
+    ingredientText: and yeast.
+  gemHint: 0
+  gemText: 
+  tempHint: 1
+  tempText: Once the mixture has rested, bake at medium temperature.
   resultMenuItem: {fileID: 0}
   resultIngredient: {fileID: 11400000, guid: a9beb20344d4c1d4682b35f393c899ef, type: 2}

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryItemName: Mecilysian cheese
   type: 1
+  cost: 0
   inventoryItemHolder: {fileID: 2334957189676364092, guid: 3db41f39c6bc1b944a5e32169a767c05, type: 3}
   containerItem: 0
   containerType: 0
@@ -21,6 +22,10 @@ MonoBehaviour:
   hotbarIcon: {fileID: 0}
   isPlaceable: 0
   prefab: {fileID: 0}
-  ingredientKnown: 1
-  ingredientRecipe: {fileID: 11400000, guid: 6ef50ed787568da4e91c240c8d389cac, type: 2}
+  recipeKnown: 1
+  inventoryItemRecipe: {fileID: 11400000, guid: 6ef50ed787568da4e91c240c8d389cac, type: 2}
+  isNew: 0
+  isFavorited: 0
+  gridName: Mecilysian Cheese
+  description: Elven cheese of the highest quality
   ingredientType: 1

@@ -724,7 +724,7 @@ public class MenuItemStation : MonoBehaviour
 
                 makeCounterObject.SetActive(false);
             }
-            else if (combinationValid[0].resultIngredient != null && combinationValid[0].resultIngredient.ingredientKnown)
+            else if (combinationValid[0].resultIngredient != null && combinationValid[0].resultIngredient.recipeKnown)
             {
                 makeButton.interactable = true;
                 makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
@@ -809,11 +809,20 @@ public class MenuItemStation : MonoBehaviour
             }
             else if (recipe.resultIngredient != null) 
             {
-                for (int i = 0; i < currentCounter; i++)
+                if (!recipe.resultIngredient.recipeKnown)
                 {
                     ConsumeItems(ingredients);
                     GrantRewards(recipe.resultIngredient);
                 }
+                else
+                {
+                    for (int i = 0; i < currentCounter; i++)
+                    {
+                        ConsumeItems(ingredients);
+                        GrantRewards(recipe.resultIngredient);
+                    }
+                }
+                    
             }
         }
         else
@@ -888,7 +897,7 @@ public class MenuItemStation : MonoBehaviour
             menuItem.isNew = true;
             if (KnownRecipesUI.instance != null)
             {
-                KnownRecipesUI.instance.AddMenuItemToGrid(menuItem);
+                KnownRecipesUI.instance.AddToGrid(menuItem.recipe);
             }
 
             DiscoveryPopup(menuItem);
@@ -897,9 +906,16 @@ public class MenuItemStation : MonoBehaviour
 
     public void GrantRewards(InventoryItem ingredient)
     {
-        if (!ingredient.ingredientKnown)
+        if (!ingredient.recipeKnown)
         {
-            ingredient.ingredientKnown = true;
+            ingredient.recipeKnown = true;
+
+            ingredient.isNew = true;
+            if (KnownRecipesUI.instance != null)
+            {
+                KnownRecipesUI.instance.AddToGrid(ingredient.inventoryItemRecipe);
+            }
+
             DiscoveryPopup(ingredient);
         }
 

@@ -7,6 +7,7 @@ public class InventoryItem : ScriptableObject
 {
     public string inventoryItemName;
     public InventoryItemType type;
+    public int cost;
 
     public GameObject inventoryItemHolder;
 
@@ -22,10 +23,19 @@ public class InventoryItem : ScriptableObject
     public bool isPlaceable;
     public GameObject prefab;
 
+    [Header("Recipe")]
+    public bool recipeKnown;
+    public Recipe inventoryItemRecipe;
+    public bool isNew;
+    public bool isFavorited;
+    public string gridName;
+    public string description;
+
+
     [Header("Ingredient")]
-    public bool ingredientKnown;
-    public Recipe ingredientRecipe;
     public IngredientType ingredientType;
+
+
 }
 
 public enum InventoryItemType

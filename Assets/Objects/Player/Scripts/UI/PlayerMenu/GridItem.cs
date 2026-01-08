@@ -5,4 +5,5 @@ using UnityEngine;
 public class GridItem : MonoBehaviour
 {
     public MenuItem menuItem;
+    public InventoryItem inventoryItem;
 }

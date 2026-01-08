@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Recipe")]
@@ -13,12 +15,40 @@ public class Recipe : ScriptableObject
     public List<IngredientType> recipeIngredientType = new List<IngredientType>();
 
     [Header("Hints")]
+    // When all texts are strung together, they should form a full instruction
     public bool knowRecipeName;
-    public List<RecipeHint> hints = new List<RecipeHint>();
+    public bool menuItemBaseHint;
+    public string menuItemBaseText;
+
+    public bool liquidHint;
+    public string liquidText;
+
+    public List<IngredientHint> ingredientHints = new List<IngredientHint>();
+
+    public bool gemHint;
+    public string gemText;
+
+    public bool tempHint;
+    public string tempText;
 
     [Header("Results")]
     public MenuItem resultMenuItem;
     public InventoryItem resultIngredient;
+
+    public bool CheckHints()
+    {
+        if (knowRecipeName || 
+            menuItemBaseHint ||
+            liquidHint ||
+            tempHint ||
+            gemHint ||
+            ingredientHints.Any(x => x.knowHint)
+            )
+        {
+            return true;
+        }
+        return false;
+    }
 
     public bool CheckIngredients(List<InventoryItem> ingredientsToCheck)
     {
@@ -69,10 +99,14 @@ public class Recipe : ScriptableObject
     }
 }
 
-public class RecipeHint
+[Serializable]
+public class IngredientHint
 {
     public bool knowHint;
-    public string hintText;
+    public InventoryItem inventoryItem;
+    public IngredientType ingredientType;
+
+    public string ingredientText;
 }
 
 public enum LiquidSetting

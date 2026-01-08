@@ -19,5 +19,27 @@ MonoBehaviour:
   recipeIngredients:
   - {fileID: 11400000, guid: 30a84fbc90f5c3b409eda3ea763e330f, type: 2}
   recipeIngredientType: 0200000004000000
+  knowRecipeName: 1
+  menuItemBaseHint: 0
+  menuItemBaseText: 
+  liquidHint: 0
+  liquidText: 
+  ingredientHints:
+  - knowHint: 1
+    inventoryItem: {fileID: 11400000, guid: 30a84fbc90f5c3b409eda3ea763e330f, type: 2}
+    ingredientType: 0
+    ingredientText: 'Smear butter '
+  - knowHint: 0
+    inventoryItem: {fileID: 0}
+    ingredientType: 4
+    ingredientText: 'on any type of bread '
+  - knowHint: 1
+    inventoryItem: {fileID: 0}
+    ingredientType: 2
+    ingredientText: and sprinkle with any herb.
+  gemHint: 0
+  gemText: 
+  tempHint: 0
+  tempText: 
   resultMenuItem: {fileID: 11400000, guid: a7dcc8dcd84152c4293630a552d9911c, type: 2}
   resultIngredient: {fileID: 0}

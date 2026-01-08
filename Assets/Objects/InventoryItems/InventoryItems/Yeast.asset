@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryItemName: Yeast
   type: 1
+  cost: 0
   inventoryItemHolder: {fileID: 2334957189676364092, guid: 3db41f39c6bc1b944a5e32169a767c05, type: 3}
   containerItem: 1
   containerType: 3
@@ -21,6 +22,10 @@ MonoBehaviour:
   hotbarIcon: {fileID: 0}
   isPlaceable: 0
   prefab: {fileID: 0}
-  ingredientKnown: 1
-  ingredientRecipe: {fileID: 0}
+  recipeKnown: 0
+  inventoryItemRecipe: {fileID: 0}
+  isNew: 0
+  isFavorited: 0
+  gridName: 
+  description: 
   ingredientType: 0

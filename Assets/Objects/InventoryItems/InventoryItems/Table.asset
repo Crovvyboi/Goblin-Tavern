@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryItemName: Table
   type: 2
+  cost: 0
   inventoryItemHolder: {fileID: 972190325821420470, guid: deceead644d942542b0100bf79726ee3, type: 3}
   containerItem: 0
   containerType: 0
@@ -21,3 +22,10 @@ MonoBehaviour:
   hotbarIcon: {fileID: 2800000, guid: d4fa2f6c255e023418d05b7ae876c902, type: 3}
   isPlaceable: 1
   prefab: {fileID: 4566276226912040071, guid: bfb3ca73c13c8034c884de38eaac24f0, type: 3}
+  recipeKnown: 0
+  inventoryItemRecipe: {fileID: 0}
+  isNew: 0
+  isFavorited: 0
+  gridName: 
+  description: 
+  ingredientType: 0

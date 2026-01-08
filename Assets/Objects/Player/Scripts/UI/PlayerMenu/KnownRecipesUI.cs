@@ -12,6 +12,7 @@ public class KnownRecipesUI : MonoBehaviour
 {
     public static KnownRecipesUI instance;
     public MenuItem selectedMenuItem;
+    public InventoryItem selectedIngredient;
 
     [Header("Recipe overview")]
     public GameObject recipeOverviewObject;
@@ -23,27 +24,35 @@ public class KnownRecipesUI : MonoBehaviour
     public GameObject recipeDetailsObject;
     public GameObject menuItemDetails;
     public GameObject menuItemLikeDislike;
+    public GameObject ingredientDetails;
 
-    [Header("Known recipe")]
-    public GameObject knownRecipeObject;
-    public GameObject knownRecipeImage;
-    public GameObject knownRecipeTitleText;
-    public GameObject knownRecipeDescriptionText;
-    public GameObject knownRecipeStarRatingObject;
-    public GameObject knownRecipeGoldText;
-    public GameObject knownRecipeLikedSpecies;
-    public GameObject knownRecipeDislikedSpecies;
-    public GameObject knownRecipeLikedClass;
-    public GameObject knownRecipeDislikedClass;
-
+    [Header("Known menuitem")]
+    public GameObject knownMenuItemObject;
+    public GameObject knownMenuItemDescriptionText;
+    public GameObject knownMenuItemStarRatingObject;
+    public GameObject knownMenuItemGoldText;
+    public GameObject knownMenuItemLikedSpecies;
+    public GameObject knownMenuItemDislikedSpecies;
+    public GameObject knownMenuItemLikedClass;
+    public GameObject knownMenuItemDislikedClass;
     public GameObject addRemoveMenuButton;
+
+    [Header("Known ingredient")]
+    public GameObject knownIngredientObject;
+    public GameObject knownIngredientDescriptionText;
+    public GameObject knownIngredientCostText;
+
+    [Header("Known general")]
+    public GameObject knownRecipeTitleText;
     public GameObject favoritedButton;
+    public GameObject knownRecipeImage;
 
     [Header("Unknown recipe")]
     public GameObject unknownRecipeName;
     public GameObject unknownRecipeObject;
     public GameObject favoritedRecipeButton;
     public GameObject unkownRecipeHints;
+    public GameObject missingHintsText;
 
     [Header("Filter")]
     public GameObject filterObject;
@@ -71,26 +80,28 @@ public class KnownRecipesUI : MonoBehaviour
         }
 
         // Load in recipes
-        List<MenuItem> items = TavernManager.instance.menuItems.Where(x => x.recipeKnown || x.recipe.hints.Where(y => y.knowHint).ToList().Count > 0).ToList();
+        List<Recipe> items = TavernManager.instance.recipes.Where(x => x.resultMenuItem && x.resultMenuItem.recipeKnown || x.resultIngredient && x.resultIngredient.type == InventoryItemType.Ingredient && x.resultIngredient.recipeKnown || x.CheckHints()).ToList();
 
         // Make tile in grid for each recipe
-        foreach (MenuItem item in items)
+        foreach (Recipe item in items)
         {
-           AddMenuItemToGrid(item);
+           AddToGrid(item);
 
         }
 
 
         // Select first known recipe
-        if (items.Any(x => x.isFavorited) && items.First(x => x.isFavorited) != null)
+        if (items[0].resultMenuItem)
         {
-            selectedMenuItem = items.First(x => x.isFavorited);
+            selectedIngredient = null;
+            selectedMenuItem = items[0].resultMenuItem;
         }
-        else 
+        else if (items[0].resultIngredient)
         {
-            selectedMenuItem = items[0];
+            selectedMenuItem = null;
+            selectedIngredient = items[0].resultIngredient;
         }
-        OnShow(selectedMenuItem);
+        OnShow(items[0]);
 
 
         // Add known species & classes to filter
@@ -132,81 +143,117 @@ public class KnownRecipesUI : MonoBehaviour
         ResetFilters();
     }
 
-    public void AddMenuItemToGrid(MenuItem item)
+    public void AddToGrid(Recipe item)
     {
-        GameObject newGridItem = GameObject.Instantiate(gridItemPrefab);
-        gridItems.Add(newGridItem);
-        newGridItem.transform.SetParent(contentParent.transform, false);
-
-        newGridItem.GetComponent<GridItem>().menuItem = item;
-        newGridItem.GetComponent<Button>().onClick.AddListener(() => OnShow(item));
-
-        if (item.isNew)
+        // Check if griditem of recipe already exists
+        if (gridItems.Any(x => item == x.GetComponent<GridItem>().menuItem || item == x.GetComponent<GridItem>().inventoryItem))
         {
-            newGridItem.GetComponent<Outline>().enabled = true;
+            // Adjust griditem to revealed recipe
+
+
         }
         else
         {
-            newGridItem.GetComponent<Outline>().enabled = false;
-        }
+            GameObject newGridItem = GameObject.Instantiate(gridItemPrefab);
+            gridItems.Add(newGridItem);
+            newGridItem.transform.SetParent(contentParent.transform, false);
 
-        if (!item.recipeKnown)
-        {
-            // If player does not know recipe, set as unkown tile & decrease opacity
-            if (item.recipeKnown)
+            if (item.resultMenuItem)
             {
-                newGridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.itemName;
+                newGridItem.GetComponent<GridItem>().menuItem = item.resultMenuItem;
+            }
+            else if (item.resultIngredient)
+            {
+                newGridItem.GetComponent<GridItem>().inventoryItem = item.resultIngredient;
+            }
+
+            newGridItem.GetComponent<Button>().onClick.AddListener(() => OnShow(item));
+
+            if (item.resultMenuItem && item.resultMenuItem.isNew || item.resultIngredient && item.resultIngredient.isNew)
+            {
+                newGridItem.GetComponent<Outline>().enabled = true;
             }
             else
             {
+                newGridItem.GetComponent<Outline>().enabled = false;
+            }
+
+            if (item.resultMenuItem && !item.resultMenuItem.recipeKnown || item.resultIngredient && !item.resultIngredient.recipeKnown)
+            {
+                // If player does not know recipe, set as unkown tile & decrease opacity
                 newGridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "? ? ?";
-            }
-            newGridItem.GetComponent<CanvasGroup>().alpha = 0.5f;
+            
+                newGridItem.GetComponent<CanvasGroup>().alpha = 0.5f;
 
-            newGridItem.transform.GetChild(2).gameObject.SetActive(false);
-
-            if (item.isFavorited)
-            {
-                newGridItem.transform.GetChild(3).gameObject.SetActive(true);
-            }
-            else
-            {
-                newGridItem.transform.GetChild(3).gameObject.SetActive(false);
-            }
-        }
-        else
-        {
-            // Set icon & title
-            if (item.icon)
-            {
-                newGridItem.transform.GetChild(0).GetComponent<RawImage>().texture = item.icon;
-            }
-            newGridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.gridTitle;
-            newGridItem.GetComponent<CanvasGroup>().alpha = 1f;
-
-            if (item.inMenu || item.standardInMenu)
-            {
-                newGridItem.transform.GetChild(2).gameObject.SetActive(true);
-            }
-            else
-            {
                 newGridItem.transform.GetChild(2).gameObject.SetActive(false);
-            }
-            if (item.isFavorited)
-            {
-                newGridItem.transform.GetChild(3).gameObject.SetActive(true);
+
+                if (item.resultMenuItem && !item.resultMenuItem.isFavorited || item.resultIngredient && !item.resultIngredient.isFavorited)
+                {
+                    newGridItem.transform.GetChild(3).gameObject.SetActive(true);
+                }
+                else
+                {
+                    newGridItem.transform.GetChild(3).gameObject.SetActive(false);
+                }
             }
             else
             {
-                newGridItem.transform.GetChild(3).gameObject.SetActive(false);
+                // Set icon & title
+                if (item.resultMenuItem)
+                {
+                    newGridItem.transform.GetChild(0).GetComponent<RawImage>().texture = item.resultMenuItem.icon;
+                    newGridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.resultMenuItem.gridTitle;
+
+                    if (item.resultMenuItem.inMenu || item.resultMenuItem.standardInMenu)
+                    {
+                        newGridItem.transform.GetChild(2).gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        newGridItem.transform.GetChild(2).gameObject.SetActive(false);
+                    }
+                    if (item.resultMenuItem.isFavorited)
+                    {
+                        newGridItem.transform.GetChild(3).gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        newGridItem.transform.GetChild(3).gameObject.SetActive(false);
+                    }
+                }
+                else if (item.resultIngredient)
+                {
+                    newGridItem.transform.GetChild(0).GetComponent<RawImage>().texture = item.resultIngredient.hotbarIcon;
+                    newGridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.resultIngredient.gridName;
+
+                    newGridItem.transform.GetChild(2).gameObject.SetActive(false);
+                    if (item.resultIngredient.isFavorited)
+                    {
+                        newGridItem.transform.GetChild(3).gameObject.SetActive(true);
+                    }
+                    else
+                    {
+                        newGridItem.transform.GetChild(3).gameObject.SetActive(false);
+                    }
+                }
+            
+                newGridItem.GetComponent<CanvasGroup>().alpha = 1f;
             }
         }
     }
 
     public void SwitchToDetails()
     {
-        menuItemLikeDislike.SetActive(false);
-        menuItemDetails.SetActive(true);
+        if (selectedMenuItem != null)
+        {
+            menuItemLikeDislike.SetActive(false);
+            menuItemDetails.SetActive(true);
+        }
+        else if (selectedIngredient != null)
+        {
+            ingredientDetails.SetActive(true);
+        }
+        
     }
     public void SwitchToLikedDisliked()
     {
@@ -214,27 +261,51 @@ public class KnownRecipesUI : MonoBehaviour
         menuItemLikeDislike.SetActive(true);
     }
 
-    public void UpdateNew(MenuItem item)
+    public void UpdateNew(Recipe item)
     {
-        gridItems.First(x => x.GetComponent<GridItem>().menuItem == item).GetComponent<Outline>().enabled = false;
+        if (item.resultMenuItem)
+        {
+            gridItems.First(x => x.GetComponent<GridItem>().menuItem == item.resultMenuItem).GetComponent<Outline>().enabled = false;
+        }
+        else if (item.resultIngredient)
+        {
+            gridItems.First(x => x.GetComponent<GridItem>().inventoryItem == item.resultIngredient).GetComponent<Outline>().enabled = false;
+        }
+
     }
 
-    public void OnShow(MenuItem item)
+    public void OnShow(Recipe item)
     {
-        selectedMenuItem = item;
-
-        if (item.isNew)
+        if (item.resultMenuItem)
         {
-            item.isNew = false;
-            UpdateNew(item);
-            if (CurrentMenuUI.instance != null)
+            selectedIngredient = null;
+            selectedMenuItem = item.resultMenuItem;
+
+            if (item.resultMenuItem.isNew)
             {
-                CurrentMenuUI.instance.UpdateNew(item);
+                item.resultMenuItem.isNew = false;
+                UpdateNew(item);
+                if (CurrentMenuUI.instance != null)
+                {
+                    CurrentMenuUI.instance.UpdateNew(item.resultMenuItem);
+                }
+            }           
+        }
+        else if (item.resultIngredient)
+        {
+            selectedMenuItem = null;
+            selectedIngredient = item.resultIngredient;
+
+            if (item.resultIngredient.isNew)
+            {
+                item.resultIngredient.isNew = false;
+                UpdateNew(item);
+
             }
         }
 
         // Show selected recipe
-        if (item.recipeKnown)
+        if (item.resultMenuItem && item.resultMenuItem.recipeKnown || item.resultIngredient && item.resultIngredient.recipeKnown)
         {
             // Show as known
             ShowKnown(item);
@@ -244,42 +315,66 @@ public class KnownRecipesUI : MonoBehaviour
             // Show as unknown
             ShowUnknown(item);
         }
+
     }
 
-    public void ShowKnown(MenuItem item)
+    public void ShowKnown(Recipe item)
     {
         IconHandler iconHandler = new IconHandler();
 
         unknownRecipeObject.SetActive(false);
-        knownRecipeObject.SetActive(true);
+        knownMenuItemObject.SetActive(true);
 
-        // Set Image
+        if (item.resultMenuItem)
+        {
+            // Enable known menuitem interface
+            knownIngredientObject.SetActive(false);
+            knownMenuItemObject.SetActive(true);
 
-        // Set title
-        knownRecipeTitleText.GetComponent<TextMeshProUGUI>().text = item.itemName;
+            // Set Image
 
-        // Set description
-        knownRecipeDescriptionText.GetComponent<TextMeshProUGUI>().text = item.itemDescription;
+            // Set title
+            knownRecipeTitleText.GetComponent<TextMeshProUGUI>().text = item.resultMenuItem.itemName;
 
-        // Set star rating
-        SetStarRating(item);
+            // Set description
+            knownMenuItemDescriptionText.GetComponent<TextMeshProUGUI>().text = item.resultMenuItem.itemDescription;
 
-        // Set gold
-        knownRecipeGoldText.GetComponent<TextMeshProUGUI>().text = item.cost.ToString();
+            // Set star rating
+            SetStarRating(item.resultMenuItem);
 
-        // Set (dis)liked
-        SetLikedDisliked(item);
+            // Set gold
+            knownMenuItemGoldText.GetComponent<TextMeshProUGUI>().text = item.resultMenuItem.cost.ToString();
+
+            // Set (dis)liked
+            SetLikedDisliked(item.resultMenuItem);
 
 
-        // Change addtomenu button according if it's on the menu or not
-        addRemoveMenuButton.GetComponent<Button>().onClick.RemoveAllListeners();
-        addRemoveMenuButton.GetComponent<Button>().onClick.AddListener(() => AddRemoveToMenu(item));
-        UpdateMenuButton(item);
+            // Change addtomenu button according if it's on the menu or not
+            addRemoveMenuButton.GetComponent<Button>().onClick.RemoveAllListeners();
+            addRemoveMenuButton.GetComponent<Button>().onClick.AddListener(() => AddRemoveToMenu(item.resultMenuItem));
+            UpdateMenuButton(item.resultMenuItem);
+        }
+        else if (item.resultIngredient)
+        {
+            // Enable known ingredient interface
+            knownIngredientObject.SetActive(true);
+            knownMenuItemObject.SetActive(false);
+
+            // Set title
+            knownRecipeTitleText.GetComponent<TextMeshProUGUI>().text = item.resultIngredient.inventoryItemName;
+
+            // Set description
+            knownIngredientDescriptionText.GetComponent<TextMeshProUGUI>().text = item.resultIngredient.description;
+
+            // Set cost
+            knownIngredientCostText.GetComponent<TextMeshProUGUI>().text = item.resultIngredient.cost.ToString();
+        }
 
         // Change state of favorited button
         favoritedButton.GetComponent<Button>().onClick.RemoveAllListeners();
         favoritedButton.GetComponent<Button>().onClick.AddListener(() => FavoriteMenuItem(item));
         UpdateFavoriteButton(item);
+
     }
 
     public void SetStarRating(MenuItem item)
@@ -289,12 +384,12 @@ public class KnownRecipesUI : MonoBehaviour
             if (i <= item.starrating - 1)
             {
                 // Full star
-                knownRecipeStarRatingObject.transform.GetChild(i).GetComponent<RawImage>().texture = IconHandler.instance.fullStar;
+                knownMenuItemStarRatingObject.transform.GetChild(i).GetComponent<RawImage>().texture = IconHandler.instance.fullStar;
             }
             else
             {
                 // Empty star
-                knownRecipeStarRatingObject.transform.GetChild(i).GetComponent<RawImage>().texture = IconHandler.instance.emptyStar;
+                knownMenuItemStarRatingObject.transform.GetChild(i).GetComponent<RawImage>().texture = IconHandler.instance.emptyStar;
             }
         }
     }
@@ -302,21 +397,21 @@ public class KnownRecipesUI : MonoBehaviour
     public void SetLikedDisliked(MenuItem item)
     {
         // Clear (dis)liked
-        for (int i = knownRecipeLikedSpecies.transform.childCount - 1; i >= 0; i--)
+        for (int i = knownMenuItemLikedSpecies.transform.childCount - 1; i >= 0; i--)
         {
-            Destroy(knownRecipeLikedSpecies.transform.GetChild(i).gameObject);
+            Destroy(knownMenuItemLikedSpecies.transform.GetChild(i).gameObject);
         }
-        for (int i = knownRecipeDislikedSpecies.transform.childCount - 1; i >= 0; i--)
+        for (int i = knownMenuItemDislikedSpecies.transform.childCount - 1; i >= 0; i--)
         {
-            Destroy(knownRecipeDislikedSpecies.transform.GetChild(i).gameObject);
+            Destroy(knownMenuItemDislikedSpecies.transform.GetChild(i).gameObject);
         }
-        for (int i = knownRecipeLikedClass.transform.childCount - 1; i >= 0; i--)
+        for (int i = knownMenuItemLikedClass.transform.childCount - 1; i >= 0; i--)
         {
-            Destroy(knownRecipeLikedClass.transform.GetChild(i).gameObject);
+            Destroy(knownMenuItemLikedClass.transform.GetChild(i).gameObject);
         }
-        for (int i = knownRecipeDislikedClass.transform.childCount - 1; i >= 0; i--)
+        for (int i = knownMenuItemDislikedClass.transform.childCount - 1; i >= 0; i--)
         {
-            Destroy(knownRecipeDislikedClass.transform.GetChild(i).gameObject);
+            Destroy(knownMenuItemDislikedClass.transform.GetChild(i).gameObject);
         }
 
         // Set (dis)liked
@@ -326,11 +421,11 @@ public class KnownRecipesUI : MonoBehaviour
             Texture2D allIcon = IconHandler.instance.anyIcon;
             if (item.preferredByAllSpecies)
             {
-                IconHandler.instance.MakeIcon(allIcon, knownRecipeLikedSpecies);
+                IconHandler.instance.MakeIcon(allIcon, knownMenuItemLikedSpecies);
             }
             else if (item.dislikedByAllSpecies)
             {
-                IconHandler.instance.MakeIcon(allIcon, knownRecipeDislikedSpecies);
+                IconHandler.instance.MakeIcon(allIcon, knownMenuItemDislikedSpecies);
             }
         }
         else
@@ -338,13 +433,13 @@ public class KnownRecipesUI : MonoBehaviour
             foreach (Species species in item.preferredBySpecies)
             {
                 Texture2D icon = IconHandler.instance.GetIconOnSpecies(species);
-                IconHandler.instance.MakeIcon(icon, knownRecipeLikedSpecies);
+                IconHandler.instance.MakeIcon(icon, knownMenuItemLikedSpecies);
             }
 
             foreach (Species species in item.dislikedBySpecies)
             {
                 Texture2D icon = IconHandler.instance.GetIconOnSpecies(species);
-                IconHandler.instance.MakeIcon(icon, knownRecipeDislikedSpecies);
+                IconHandler.instance.MakeIcon(icon, knownMenuItemDislikedSpecies);
             }
         }
 
@@ -354,11 +449,11 @@ public class KnownRecipesUI : MonoBehaviour
             Texture2D allIcon = IconHandler.instance.anyIcon;
             if (item.preferredByAllClass)
             {
-                IconHandler.instance.MakeIcon(allIcon, knownRecipeLikedClass);
+                IconHandler.instance.MakeIcon(allIcon, knownMenuItemLikedClass);
             }
             else if (item.dislikedByAllSpecies)
             {
-                IconHandler.instance.MakeIcon(allIcon, knownRecipeDislikedClass);
+                IconHandler.instance.MakeIcon(allIcon, knownMenuItemDislikedClass);
             }
         }
         else
@@ -366,47 +461,116 @@ public class KnownRecipesUI : MonoBehaviour
             foreach (Class iconclass in item.preferredByClass)
             {
                 Texture2D icon = IconHandler.instance.GetIconOnClass(iconclass);
-                IconHandler.instance.MakeIcon(icon, knownRecipeLikedClass);
+                IconHandler.instance.MakeIcon(icon, knownMenuItemLikedClass);
             }
 
             foreach (Class iconclass in item.dislikedByClass)
             {
                 Texture2D icon = IconHandler.instance.GetIconOnClass(iconclass);
-                IconHandler.instance.MakeIcon(icon, knownRecipeDislikedClass);
+                IconHandler.instance.MakeIcon(icon, knownMenuItemDislikedClass);
             }
         }
     }
 
-    public void ShowUnknown(MenuItem item)
+    public void ShowUnknown(Recipe item)
     {
-        knownRecipeObject.SetActive(false);
+        knownMenuItemObject.SetActive(false);
         unknownRecipeObject.SetActive(true);
 
         favoritedRecipeButton.GetComponent<Button>().onClick.RemoveAllListeners();
         favoritedRecipeButton.GetComponent<Button>().onClick.AddListener(() => FavoriteMenuItem(item));
         UpdateFavoriteButton(item);
 
-        if (item.recipeKnown)
+        if (item.resultMenuItem && item.resultMenuItem.recipeKnown)
         {
-            unknownRecipeName.GetComponent<TextMeshProUGUI>().text = item.itemName;
+            unknownRecipeName.GetComponent<TextMeshProUGUI>().text = item.resultMenuItem.itemName;
+        }
+        else if (item.resultIngredient && item.resultIngredient.recipeKnown)
+        {
+            unknownRecipeName.GetComponent<TextMeshProUGUI>().text = item.resultIngredient.inventoryItemName;
         }
 
         string hintString = "";
-        if (item.recipe != null)
+        int missingHintCount = 0;
+        if (item != null)
         {
-            
-
-            foreach (RecipeHint hint in item.recipe.hints)
+            if (item.menuItemBase != null)
             {
-                if (hint.knowHint)
+                if (item.menuItemBaseHint)
                 {
-                    hintString += $" - {hint.hintText}\n";
+                    hintString += item.menuItemBaseText;
                 }
                 else
                 {
-                    hintString += $" - ? ? ?\n";
+                    hintString += " ... ";
+                    missingHintCount++;
                 }
             }
+            if (item.recipeLiquid != LiquidSetting.None)
+            {
+                if (item.liquidHint)
+                {
+                    hintString += item.liquidText;
+                }
+                else
+                {
+                    hintString += " ... ";
+                    missingHintCount++;
+                }
+            }
+            if (item.ingredientHints.Any(x => x.knowHint))
+            {
+                foreach (IngredientHint hint in item.ingredientHints)
+                {
+                    if (hint.knowHint)
+                    {
+                        hintString += hint.ingredientText;
+                    }
+                    else
+                    {
+                        hintString += " ... ";
+                        missingHintCount++;
+                    }
+                }
+            }
+            else
+            {
+                missingHintCount += item.ingredientHints.Count;
+            }
+            if (item.recipeTemp != TempSetting.None)
+            {
+                if (item.tempHint)
+                {
+                    hintString += item.tempText;
+                }
+                else
+                {
+                    hintString += " ... ";
+                    missingHintCount++;
+                }
+            }
+            if (item.recipeGem != GemSetting.None)
+            {
+                if (item.gemHint)
+                {
+                    hintString += item.gemText;
+                }
+                else
+                {
+                    hintString += " ... ";
+                    missingHintCount++;
+                }
+            }
+
+        }
+
+        if (missingHintCount != 0)
+        {
+            missingHintsText.GetComponent<TextMeshProUGUI>().text = $"Missing {missingHintCount} hints.";
+        }
+        else
+        {
+            missingHintsText.GetComponent<TextMeshProUGUI>().text = $"All hints gathered. Discover this recipe at the recipe station.";
         }
 
         unkownRecipeHints.GetComponent<TextMeshProUGUI>().text = hintString;
@@ -439,34 +603,53 @@ public class KnownRecipesUI : MonoBehaviour
     public void AddToMenu(MenuItem item)
     {
         TavernManager.instance.AddToMenu(item);
-        UpdateGridItem(item);
+        UpdateGridItem(item.recipe);
     }
     public void RemoveFromMenu(MenuItem item)
     {
         TavernManager.instance.RemoveFromMenu(item);
-        UpdateGridItem(item);
+        UpdateGridItem(item.recipe);
     }
-    public void UpdateGridItem(MenuItem menuItem)
+    public void UpdateGridItem(Recipe item)
     {
-        GameObject gridobject = gridItems.First(x => x.GetComponent<GridItem>().menuItem.itemName == menuItem.itemName);
-        if (gridobject != null)
+        if (item.resultMenuItem)
         {
-            if (menuItem.inMenu || menuItem.standardInMenu)
+            GameObject gridobject = gridItems.First(x => x.GetComponent<GridItem>().menuItem == item.resultMenuItem);
+            if (gridobject != null)
             {
-                gridobject.transform.GetChild(2).gameObject.SetActive(true);
+                if (item.resultMenuItem.inMenu || item.resultMenuItem.standardInMenu)
+                {
+                    gridobject.transform.GetChild(2).gameObject.SetActive(true);
+                }
+                else
+                {
+                    gridobject.transform.GetChild(2).gameObject.SetActive(false);
+                }
+
+                if (item.resultMenuItem.isFavorited)
+                {
+                    gridobject.transform.GetChild(3).gameObject.SetActive(true);
+                }
+                else
+                {
+                    gridobject.transform.GetChild(3).gameObject.SetActive(false);
+                }
             }
-            else
+        }
+        else if (item.resultIngredient)
+        {
+            GameObject gridobject = gridItems.First(x => x.GetComponent<GridItem>().inventoryItem == item.resultIngredient);
+            if (gridobject != null)
             {
                 gridobject.transform.GetChild(2).gameObject.SetActive(false);
-            }
-
-            if (menuItem.isFavorited)
-            {
-                gridobject.transform.GetChild(3).gameObject.SetActive(true);
-            }
-            else
-            {
-                gridobject.transform.GetChild(3).gameObject.SetActive(false);
+                if (item.resultIngredient.isFavorited)
+                {
+                    gridobject.transform.GetChild(3).gameObject.SetActive(true);
+                }
+                else
+                {
+                    gridobject.transform.GetChild(3).gameObject.SetActive(false);
+                }
             }
         }
 
@@ -507,7 +690,7 @@ public class KnownRecipesUI : MonoBehaviour
     }
     public void UpdateAddRemoveButton()
     {
-        if (selectedMenuItem.recipeKnown && !selectedMenuItem.standardInMenu)
+        if (selectedMenuItem != null && selectedMenuItem.recipeKnown && !selectedMenuItem.standardInMenu)
         {
             if (selectedMenuItem.inMenu)
             {
@@ -523,32 +706,51 @@ public class KnownRecipesUI : MonoBehaviour
         
     }
 
-    public void FavoriteMenuItem(MenuItem item)
+    public void FavoriteMenuItem(Recipe item)
     {
-        if (item.isFavorited)
+        if(item.resultMenuItem)
         {
-            item.isFavorited = false;
-        }
-        else
-        {
-            item.isFavorited = true;
-        }
+            if (item.resultMenuItem.isFavorited)
+            {
+                item.resultMenuItem.isFavorited = false;
+            }
+            else
+            {
+                item.resultMenuItem.isFavorited = true;
+            }
 
-        // Update button
-        UpdateFavoriteButton(item);
-        UpdateGridItem(item);
-        if (CurrentMenuUI.instance != null)
-        {
-            CurrentMenuUI.instance.UpdateGridItem(item);
+            // Update button
+            UpdateFavoriteButton(item);
+            UpdateGridItem(item);
+            if (CurrentMenuUI.instance != null)
+            {
+                CurrentMenuUI.instance.UpdateGridItem(item.resultMenuItem);
+            }
         }
+        else if (item.resultIngredient)
+        {
+            if (item.resultIngredient.isFavorited)
+            {
+                item.resultIngredient.isFavorited = false;
+            }
+            else
+            {
+                item.resultIngredient.isFavorited = true;
+            }
+
+            // Update button
+            UpdateFavoriteButton(item);
+            UpdateGridItem(item);
+        }
+        
     }
-    public void UpdateFavoriteButton(MenuItem item)
+    public void UpdateFavoriteButton(Recipe item)
     {
         
-        if (item.isFavorited)
+        if (item.resultMenuItem && item.resultMenuItem.isFavorited || item.resultIngredient && item.resultIngredient.isFavorited)
         {
             Rect rect = new Rect(0,0, IconHandler.instance.fullStar.width, IconHandler.instance.fullStar.height);
-            if (item.recipeKnown)
+            if (item.resultMenuItem && item.resultMenuItem.recipeKnown || item.resultIngredient && item.resultIngredient.recipeKnown)
             {
                 favoritedButton.GetComponent<Image>().sprite = Sprite.Create(IconHandler.instance.fullStar, rect, new Vector2(0,0), 512);
             }
@@ -560,7 +762,7 @@ public class KnownRecipesUI : MonoBehaviour
         else
         {
             Rect rect = new Rect(0, 0, IconHandler.instance.emptyStar.width, IconHandler.instance.emptyStar.height);
-            if (item.recipeKnown)
+            if (item.resultMenuItem && item.resultMenuItem.recipeKnown || item.resultIngredient && item.resultIngredient.recipeKnown)
             {
                 favoritedButton.GetComponent<Image>().sprite = Sprite.Create(IconHandler.instance.emptyStar, rect, new Vector2(0, 0), 512);
             }
@@ -598,28 +800,55 @@ public class KnownRecipesUI : MonoBehaviour
         {
             GridItem gridItem = gridObject.GetComponent<GridItem>();
 
-            if (trimmedString == string.Empty || gridItem.menuItem.itemName.Trim().ToLower().Contains(trimmedString))
+            if (trimmedString == string.Empty || gridItem.menuItem && gridItem.menuItem.itemName.Trim().ToLower().Contains(trimmedString) || gridItem.inventoryItem && gridItem.inventoryItem.inventoryItemName.Trim().ToLower().Contains(trimmedString))
             {
-                if (gridItem.menuItem.recipeKnown && isUndiscovered)
+                if (gridItem.menuItem && gridItem.menuItem.itemName.Trim().ToLower().Contains(trimmedString))
                 {
-                    gridObject.SetActive(false);
+                    if (gridItem.menuItem.recipeKnown && isUndiscovered)
+                    {
+                        gridObject.SetActive(false);
+                    }
+                    else if (!gridItem.menuItem.recipeKnown && isHideUndiscovered)
+                    {
+                        gridObject.SetActive(false);
+                    }
+                    else if (!gridItem.menuItem.isFavorited && isFavored)
+                    {
+                        gridObject.SetActive(false);
+                    }
+                    else if (!gridItem.menuItem.inMenu && isOnMenu && !gridItem.menuItem.standardInMenu)
+                    {
+                        gridObject.SetActive(false);
+                    }
+                    else
+                    {
+                        gridObject.SetActive(true);
+                    }
                 }
-                else if (!gridItem.menuItem.recipeKnown && isHideUndiscovered)
+                else if (gridItem.inventoryItem && gridItem.inventoryItem.inventoryItemName.Trim().ToLower().Contains(trimmedString))
                 {
-                    gridObject.SetActive(false);
+                    if (gridItem.inventoryItem.recipeKnown && isUndiscovered)
+                    {
+                        gridObject.SetActive(false);
+                    }
+                    else if (!gridItem.inventoryItem.recipeKnown && isHideUndiscovered)
+                    {
+                        gridObject.SetActive(false);
+                    }
+                    else if (!gridItem.inventoryItem.isFavorited && isFavored)
+                    {
+                        gridObject.SetActive(false);
+                    }
+                    else if (isOnMenu)
+                    {
+                        gridObject.SetActive(false);
+                    }
+                    else
+                    {
+                        gridObject.SetActive(true);
+                    }
                 }
-                else if ( !gridItem.menuItem.isFavorited && isFavored)
-                {
-                    gridObject.SetActive(false);
-                }
-                else if (!gridItem.menuItem.inMenu && isOnMenu && !gridItem.menuItem.standardInMenu)
-                {
-                    gridObject.SetActive(false);
-                }
-                else
-                {
-                    gridObject.SetActive(true);
-                }
+
             }
             else
             {
@@ -630,30 +859,42 @@ public class KnownRecipesUI : MonoBehaviour
         // Filter species & class
         if (filteredSpeciesLiked.Count > 0 || filteredClassLiked.Count > 0 || filteredSpeciesDisliked.Count > 0 || filteredClassDisliked.Count > 0)
         {
+
             foreach (GameObject gridObject in gridItems.Where(x => x.gameObject.activeSelf == true).ToList())
             {
                 GridItem gridItem = gridObject.GetComponent<GridItem>();
 
-                if (filteredSpeciesLiked.Count > 0 && gridItem.menuItem.preferredBySpecies.Any(x => filteredSpeciesLiked.Any(y => y.GetComponent<FilterScrollButton>().filterSpecies == x)) || filteredSpeciesLiked.Count > 0 && gridItem.menuItem.preferredByAllSpecies)
-                {
-                    gridObject.SetActive(true);
-                }
-                else if (filteredClassLiked.Count > 0 && gridItem.menuItem.preferredByClass.Any(x => filteredClassLiked.Any(y => y.GetComponent<FilterScrollButton>().filterClass == x)) || filteredClassLiked.Count > 0 && gridItem.menuItem.preferredByAllClass)
-                {
-                    gridObject.SetActive(true);
-
-                }
-                else if (filteredSpeciesDisliked.Count > 0 && gridItem.menuItem.dislikedBySpecies.Any(x => filteredSpeciesDisliked.Any(y => y.GetComponent<FilterScrollButton>().filterSpecies == x)) || filteredSpeciesDisliked.Count > 0 && gridItem.menuItem.dislikedByAllSpecies)
-                {
-                    gridObject.SetActive(true);
-                }
-                else if (filteredClassDisliked.Count > 0 && gridItem.menuItem.dislikedByClass.Any(x => filteredClassDisliked.Any(y => y.GetComponent<FilterScrollButton>().filterClass == x)) || filteredClassDisliked.Count > 0 && gridItem.menuItem.dislikedByAllClass)
-                {
-                    gridObject.SetActive(true);
-                }
-                else
+                if (gridItem.inventoryItem)
                 {
                     gridObject.SetActive(false);
+                }
+                else if (gridItem.menuItem)
+                {
+                    if (!gridItem.menuItem.recipeKnown)
+                    {
+                        gridObject.SetActive(false);
+                    }
+                    else if (filteredSpeciesLiked.Count > 0 && gridItem.menuItem.preferredBySpecies.Any(x => filteredSpeciesLiked.Any(y => y.GetComponent<FilterScrollButton>().filterSpecies == x)) || filteredSpeciesLiked.Count > 0 && gridItem.menuItem.preferredByAllSpecies)
+                    {
+                        gridObject.SetActive(true);
+                    }
+                    else if (filteredClassLiked.Count > 0 && gridItem.menuItem.preferredByClass.Any(x => filteredClassLiked.Any(y => y.GetComponent<FilterScrollButton>().filterClass == x)) || filteredClassLiked.Count > 0 && gridItem.menuItem.preferredByAllClass)
+                    {
+                        gridObject.SetActive(true);
+
+                    }
+                    else if (filteredSpeciesDisliked.Count > 0 && gridItem.menuItem.dislikedBySpecies.Any(x => filteredSpeciesDisliked.Any(y => y.GetComponent<FilterScrollButton>().filterSpecies == x)) || filteredSpeciesDisliked.Count > 0 && gridItem.menuItem.dislikedByAllSpecies)
+                    {
+                        gridObject.SetActive(true);
+                    }
+                    else if (filteredClassDisliked.Count > 0 && gridItem.menuItem.dislikedByClass.Any(x => filteredClassDisliked.Any(y => y.GetComponent<FilterScrollButton>().filterClass == x)) || filteredClassDisliked.Count > 0 && gridItem.menuItem.dislikedByAllClass)
+                    {
+                        gridObject.SetActive(true);
+                    }
+                    else
+                    {
+                        gridObject.SetActive(false);
+                    }
                 }
             }
         }

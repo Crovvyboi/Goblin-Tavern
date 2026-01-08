@@ -31,10 +31,11 @@ MonoBehaviour:
   addToHappiness: 10
   addToRowdyness: 0
   alcoholPercent: 0
+  isNew: 0
   isFavorited: 0
   gridTitle: Grilled cheese
   icon: {fileID: 0}
-  recipeKnown: 0
+  recipeKnown: 1
   recipe: {fileID: 11400000, guid: 05ebd718ea99609438d6030a7c17dc94, type: 2}
   standardInMenu: 0
   inMenu: 0

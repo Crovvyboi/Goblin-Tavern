@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryItemName: Bread
   type: 1
+  cost: 0
   inventoryItemHolder: {fileID: 2334957189676364092, guid: 3db41f39c6bc1b944a5e32169a767c05, type: 3}
   containerItem: 0
   containerType: 0
@@ -21,6 +22,10 @@ MonoBehaviour:
   hotbarIcon: {fileID: 0}
   isPlaceable: 0
   prefab: {fileID: 0}
-  ingredientKnown: 1
-  ingredientRecipe: {fileID: 11400000, guid: c2294c33b501fd54b87a61e77256fb0a, type: 2}
+  recipeKnown: 0
+  inventoryItemRecipe: {fileID: 11400000, guid: c2294c33b501fd54b87a61e77256fb0a, type: 2}
+  isNew: 0
+  isFavorited: 0
+  gridName: Bread
+  description: Bready
   ingredientType: 4

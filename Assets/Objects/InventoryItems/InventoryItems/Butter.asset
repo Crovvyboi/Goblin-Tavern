@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inventoryItemName: Butter
   type: 1
+  cost: 0
   inventoryItemHolder: {fileID: 2334957189676364092, guid: 3db41f39c6bc1b944a5e32169a767c05, type: 3}
   containerItem: 0
   containerType: 0
@@ -21,6 +22,10 @@ MonoBehaviour:
   hotbarIcon: {fileID: 0}
   isPlaceable: 0
   prefab: {fileID: 0}
-  ingredientKnown: 1
-  ingredientRecipe: {fileID: 11400000, guid: 16892d4d12ee0614ebce87371ff2d70c, type: 2}
+  recipeKnown: 1
+  inventoryItemRecipe: {fileID: 11400000, guid: 16892d4d12ee0614ebce87371ff2d70c, type: 2}
+  isNew: 0
+  isFavorited: 0
+  gridName: Butter
+  description: Butter me up
   ingredientType: 0
