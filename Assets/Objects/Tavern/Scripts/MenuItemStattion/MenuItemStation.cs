@@ -925,7 +925,7 @@ public class MenuItemStation : MonoBehaviour
 
     public void DiscoveryPopup(MenuItem menuItem)
     {
-        newRecipeHolder.SetActive(true);
+        newRecipeHolder.GetComponent<DiscoveryPopupMenuItemStation>().ShowPopup();
         newRecipeText.text = menuItem.itemName;
         newRecipeIcon.texture = menuItem.icon;
 
@@ -933,7 +933,7 @@ public class MenuItemStation : MonoBehaviour
 
     public void DiscoveryPopup(InventoryItem ingredient)
     {
-        newRecipeHolder.SetActive(true);
+        newRecipeHolder.GetComponent<DiscoveryPopupMenuItemStation>().ShowPopup();
         newRecipeText.text = ingredient.inventoryItemName;
         newRecipeIcon.texture = ingredient.hotbarIcon;
     }

@@ -146,11 +146,69 @@ public class KnownRecipesUI : MonoBehaviour
     public void AddToGrid(Recipe item)
     {
         // Check if griditem of recipe already exists
-        if (gridItems.Any(x => item == x.GetComponent<GridItem>().menuItem || item == x.GetComponent<GridItem>().inventoryItem))
+        if (gridItems.Any(x => x.GetComponent<GridItem>().menuItem && item.resultMenuItem == x.GetComponent<GridItem>().menuItem || x.GetComponent<GridItem>().inventoryItem && item.resultIngredient == x.GetComponent<GridItem>().inventoryItem))
         {
             // Adjust griditem to revealed recipe
+            GameObject gridItem = gridItems.First(x => x.GetComponent<GridItem>().menuItem && item.resultMenuItem == x.GetComponent<GridItem>().menuItem || x.GetComponent<GridItem>().inventoryItem && item.resultIngredient == x.GetComponent<GridItem>().inventoryItem);
 
+            if (item.resultMenuItem && item.resultMenuItem.isNew || item.resultIngredient && item.resultIngredient.isNew)
+            {
+                gridItem.GetComponent<Outline>().enabled = true;
+            }
+            else
+            {
+                gridItem.GetComponent<Outline>().enabled = false;
+            }
 
+            if (item.resultMenuItem)
+            {
+                gridItem.transform.GetChild(0).GetComponent<RawImage>().texture = item.resultMenuItem.icon;
+                gridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.resultMenuItem.gridTitle;
+
+                if (item.resultMenuItem.inMenu || item.resultMenuItem.standardInMenu)
+                {
+                    gridItem.transform.GetChild(2).gameObject.SetActive(true);
+                }
+                else
+                {
+                    gridItem.transform.GetChild(2).gameObject.SetActive(false);
+                }
+                if (item.resultMenuItem.isFavorited)
+                {
+                    gridItem.transform.GetChild(3).gameObject.SetActive(true);
+                }
+                else
+                {
+                    gridItem.transform.GetChild(3).gameObject.SetActive(false);
+                }
+
+                if (selectedMenuItem == item.resultMenuItem)
+                {
+                    OnShow(item);
+                }
+            }
+            else if (item.resultIngredient)
+            {
+                gridItem.transform.GetChild(0).GetComponent<RawImage>().texture = item.resultIngredient.hotbarIcon;
+                gridItem.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = item.resultIngredient.gridName;
+
+                gridItem.transform.GetChild(2).gameObject.SetActive(false);
+                if (item.resultIngredient.isFavorited)
+                {
+                    gridItem.transform.GetChild(3).gameObject.SetActive(true);
+                }
+                else
+                {
+                    gridItem.transform.GetChild(3).gameObject.SetActive(false);
+                }
+
+                if (selectedIngredient == item.resultIngredient)
+                {
+                    OnShow(item);
+                }
+            }
+
+            gridItem.GetComponent<CanvasGroup>().alpha = 1f;
         }
         else
         {
@@ -187,7 +245,7 @@ public class KnownRecipesUI : MonoBehaviour
 
                 newGridItem.transform.GetChild(2).gameObject.SetActive(false);
 
-                if (item.resultMenuItem && !item.resultMenuItem.isFavorited || item.resultIngredient && !item.resultIngredient.isFavorited)
+                if (item.resultMenuItem && item.resultMenuItem.isFavorited || item.resultIngredient && item.resultIngredient.isFavorited)
                 {
                     newGridItem.transform.GetChild(3).gameObject.SetActive(true);
                 }
