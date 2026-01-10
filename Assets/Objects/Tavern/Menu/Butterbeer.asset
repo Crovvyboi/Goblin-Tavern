@@ -35,7 +35,7 @@ MonoBehaviour:
   isFavorited: 0
   gridTitle: Butterbeer
   icon: {fileID: 0}
-  recipeKnown: 0
+  recipeKnown: 1
   recipe: {fileID: 11400000, guid: 85ed735406d92384a907eb414a54521f, type: 2}
   standardInMenu: 0
   inMenu: 0

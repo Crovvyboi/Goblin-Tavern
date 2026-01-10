@@ -77,6 +77,8 @@ public class KnownRecipesUI : MonoBehaviour
     public GameObject classFilter;
     public List<GameObject> classObjectList = new List<GameObject>();
 
+    public TMP_Dropdown recipeTypeDropdown;
+
     public Toggle hideUndiscoveredToggle;
 
     
@@ -329,6 +331,7 @@ public class KnownRecipesUI : MonoBehaviour
     {
         menuItemDetails.SetActive(false);
         menuItemLikeDislike.SetActive(true);
+        menuItemIngredients.SetActive(false);
     }
 
     public void SwitchToIngredients()
@@ -977,48 +980,63 @@ public class KnownRecipesUI : MonoBehaviour
             {
                 if (gridItem.menuItem && gridItem.menuItem.itemName.Trim().ToLower().Contains(trimmedString))
                 {
-                    if (gridItem.menuItem.recipeKnown && isUndiscovered)
+                    if ( recipeTypeDropdown.value == 0 || recipeTypeDropdown.value == 1)
                     {
-                        gridObject.SetActive(false);
-                    }
-                    else if (!gridItem.menuItem.recipeKnown && isHideUndiscovered)
-                    {
-                        gridObject.SetActive(false);
-                    }
-                    else if (!gridItem.menuItem.isFavorited && isFavored)
-                    {
-                        gridObject.SetActive(false);
-                    }
-                    else if (!gridItem.menuItem.inMenu && isOnMenu && !gridItem.menuItem.standardInMenu)
-                    {
-                        gridObject.SetActive(false);
+                        if (gridItem.menuItem.recipeKnown && isUndiscovered)
+                        {
+                            gridObject.SetActive(false);
+                        }
+                        else if (!gridItem.menuItem.recipeKnown && isHideUndiscovered)
+                        {
+                            gridObject.SetActive(false);
+                        }
+                        else if (!gridItem.menuItem.isFavorited && isFavored)
+                        {
+                            gridObject.SetActive(false);
+                        }
+                        else if (!gridItem.menuItem.inMenu && isOnMenu && !gridItem.menuItem.standardInMenu)
+                        {
+                            gridObject.SetActive(false);
+                        }
+                        else
+                        {
+                            gridObject.SetActive(true);
+                        }
                     }
                     else
                     {
-                        gridObject.SetActive(true);
+                        gridObject.SetActive(false);
                     }
+                    
                 }
                 else if (gridItem.inventoryItem && gridItem.inventoryItem.inventoryItemName.Trim().ToLower().Contains(trimmedString))
                 {
-                    if (gridItem.inventoryItem.recipeKnown && isUndiscovered)
+                    if (recipeTypeDropdown.value == 0 || recipeTypeDropdown.value == 2)
                     {
-                        gridObject.SetActive(false);
-                    }
-                    else if (!gridItem.inventoryItem.recipeKnown && isHideUndiscovered)
-                    {
-                        gridObject.SetActive(false);
-                    }
-                    else if (!gridItem.inventoryItem.isFavorited && isFavored)
-                    {
-                        gridObject.SetActive(false);
-                    }
-                    else if (isOnMenu)
-                    {
-                        gridObject.SetActive(false);
+                        if (gridItem.inventoryItem.recipeKnown && isUndiscovered)
+                        {
+                            gridObject.SetActive(false);
+                        }
+                        else if (!gridItem.inventoryItem.recipeKnown && isHideUndiscovered)
+                        {
+                            gridObject.SetActive(false);
+                        }
+                        else if (!gridItem.inventoryItem.isFavorited && isFavored)
+                        {
+                            gridObject.SetActive(false);
+                        }
+                        else if (isOnMenu)
+                        {
+                            gridObject.SetActive(false);
+                        }
+                        else
+                        {
+                            gridObject.SetActive(true);
+                        }
                     }
                     else
                     {
-                        gridObject.SetActive(true);
+                        gridObject.SetActive(false);
                     }
                 }
 
@@ -1079,6 +1097,7 @@ public class KnownRecipesUI : MonoBehaviour
         isFavoredToggle.isOn = false;
         isOnMenuToggle.isOn = false;
         isUndiscoveredToggle.isOn = false;
+        recipeTypeDropdown.value = 0;
 
         foreach (GameObject item in speciesObjectList)
         {
