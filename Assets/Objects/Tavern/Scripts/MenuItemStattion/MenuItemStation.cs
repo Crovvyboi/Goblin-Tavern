@@ -61,6 +61,11 @@ public class MenuItemStation : MonoBehaviour
     public Button makeButton;
     public TextMeshProUGUI knownText;
 
+    [Header("Cost")]
+    public GameObject totalCostObject;
+    public GameObject missingItemsObject;
+    public GameObject totalCostPrefab;
+
     [Header("Discover new")]
     public GameObject newRecipeHolder;
     public TextMeshProUGUI newRecipeText;
@@ -79,7 +84,7 @@ public class MenuItemStation : MonoBehaviour
 
     private void Start()
     {
-        
+
     }
 
     private void Awake()
@@ -465,7 +470,7 @@ public class MenuItemStation : MonoBehaviour
 
         CheckCombination();
     }
-    
+
     public void CounterInteract(int modifier)
     {
         currentCounter += modifier;
@@ -479,8 +484,9 @@ public class MenuItemStation : MonoBehaviour
         }
 
         makeCounterObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = currentCounter.ToString();
+        ApplyCost();
     }
-    
+
     #endregion
 
     #region MenuItemBase
@@ -501,7 +507,7 @@ public class MenuItemStation : MonoBehaviour
             else
             {
                 entries.Add(item.gameObject);
-            }   
+            }
         }
         if (markForDestroy.Count > 0)
         {
@@ -600,19 +606,19 @@ public class MenuItemStation : MonoBehaviour
             }
         }
 
-        
+
     }
 
-    public void SelectLiquid(int liquid)
+    public void SelectLiquid(LiquidSetting liquid)
     {
-        if ((LiquidSetting)liquid != LiquidSetting.None)
+        if (liquid != LiquidSetting.None)
         {
-            LiquidSelector liquidObject = liquidGameObjectList.First(x => x.GetComponent<LiquidSelector>().liquidName == (LiquidSetting)liquid).GetComponent<LiquidSelector>();
+            LiquidSelector liquidObject = liquidGameObjectList.First(x => x.GetComponent<LiquidSelector>().liquidName == liquid).GetComponent<LiquidSelector>();
 
             liquidSlot.GetComponent<RawImage>().texture = liquidObject.icon;
             liquidSlot.GetComponentInChildren<TextMeshProUGUI>().text = liquidObject.liquidName.ToString();
-            
-            selectedLiquid = (LiquidSetting)liquid;
+
+            selectedLiquid = liquid;
         }
         else
         {
@@ -654,16 +660,16 @@ public class MenuItemStation : MonoBehaviour
         }
     }
 
-    public void SelectGem(int gem)
+    public void SelectGem(GemSetting gem)
     {
-        if ((GemSetting)gem != GemSetting.None)
+        if (gem != GemSetting.None)
         {
-            GemSelector gemObject = gemGameObjectList.First(x => x.GetComponent<GemSelector>().gemName == (GemSetting)gem).GetComponent<GemSelector>();
+            GemSelector gemObject = gemGameObjectList.First(x => x.GetComponent<GemSelector>().gemName == gem).GetComponent<GemSelector>();
 
             gemSlot.GetComponent<RawImage>().texture = gemObject.icon;
             gemSlot.GetComponentInChildren<TextMeshProUGUI>().text = gemObject.gemName.ToString();
 
-            selectedGem = (GemSetting)gem;
+            selectedGem = gem;
         }
         else
         {
@@ -698,98 +704,15 @@ public class MenuItemStation : MonoBehaviour
         playerControls.General.PlayerMenu.performed += ExitMenu;
     }
 
-    public void CheckCombination()
+    #region Cost
+    public List<IngredientTotal> GetCostList(List<InventoryItem> ingredients)
     {
-        List<InventoryItem> ingredients = new List<InventoryItem>();
-        ingredients.AddRange(selectedIngredients.Values.ToList());
-
-        List<Recipe> combinationValid = TavernManager.instance.recipes.Where(x =>
-            x.menuItemBase == selectedMenuItemBase &&
-            x.recipeLiquid == selectedLiquid &&
-            x.recipeGem == selectedGem &&
-            x.recipeTemp == selectedTemp &&
-            x.CheckIngredients(ingredients)
-        ).ToList();
-
-        List<Recipe> goodCombinations = CheckCost(combinationValid);
-
-        // Show result if combination is valid && discovered
-        if (goodCombinations.Count == 1)
+        List<IngredientTotal> totalCost = new List<IngredientTotal>();
+        if (selectedMenuItemBase && selectedMenuItemBase.recipe)
         {
-            if (goodCombinations[0].resultMenuItem != null && goodCombinations[0].resultMenuItem.recipeKnown)
-            {
-                makeButton.interactable = false;
-                makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Recipe already known!";
-                knownText.text = goodCombinations[0].resultMenuItem.itemName;
-                knownText.color = Color.green;
+            totalCost.AddRange(selectedMenuItemBase.recipe.GetTotalCost(new List<IngredientTotal>()));
+        }
 
-                makeCounterObject.SetActive(false);
-            }
-            else if (goodCombinations[0].resultIngredient != null && goodCombinations[0].resultIngredient.recipeKnown)
-            {
-                makeButton.interactable = true;
-                makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
-                knownText.text = goodCombinations[0].resultIngredient.inventoryItemName;
-                knownText.color = Color.green;
-
-                // Activate counter
-                makeCounterObject.SetActive(true);
-                currentCounter = 1;
-                maxCounter = CalculateMaxCount(goodCombinations[0]);
-                makeCounterObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = currentCounter.ToString();
-            }
-        }
-        else if (goodCombinations.Count < 1 && combinationValid.Count > 0)
-        {
-            // See what ingredients are missing and let player know
-            makeButton.interactable = false;
-            makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
-            knownText.text = "Insufficient ingredients";
-            knownText.color = Color.red;
-            makeCounterObject.SetActive(false);
-
-        }
-        else if (ingredients.Count == 0 && selectedMenuItemBase == null)
-        {
-            // If nothing is selected
-            makeButton.interactable = false;
-            makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
-            knownText.text = "No input";
-            knownText.color = Color.red;
-            makeCounterObject.SetActive(false);
-        }
-        else if (selectedMenuItemBase && selectedMenuItemBase.recipe)
-        {
-            if (CheckCost(ingredients, selectedMenuItemBase.recipe))
-            {
-                makeButton.interactable = true;
-                makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
-                knownText.text = "???";
-                knownText.color = Color.black;
-                makeCounterObject.SetActive(false);
-            }
-            else
-            {
-                makeButton.interactable = false;
-                makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
-                knownText.text = "Insufficient ingredients";
-                knownText.color = Color.red;
-                makeCounterObject.SetActive(false);
-            }
-        }
-        else
-        {
-            makeButton.interactable = true;
-            makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
-            knownText.text = "???";
-            knownText.color = Color.black;
-            makeCounterObject.SetActive(false);
-        }
-    }
-
-    public bool CheckCost(List<InventoryItem> ingredients, Recipe recipe)
-    {
-        List<IngredientTotal> totalCost = recipe.GetTotalCost(new List<IngredientTotal>());
         foreach (InventoryItem item in ingredients)
         {
             if (totalCost.Any(x => x.inventoryItem == item))
@@ -801,6 +724,14 @@ public class MenuItemStation : MonoBehaviour
                 totalCost.Add(new IngredientTotal(item, IngredientType.None));
             }
         }
+
+        return totalCost;
+    }
+
+    public bool CheckCost(List<InventoryItem> ingredients)
+    {
+        List<IngredientTotal> totalCost = new List<IngredientTotal>();
+        totalCost.AddRange(GetCostList(ingredients));
         foreach (IngredientTotal item in totalCost)
         {
             int amount = 0;
@@ -851,6 +782,240 @@ public class MenuItemStation : MonoBehaviour
         }
 
         return goodRecipes;
+    }
+
+    public void ApplyCost()
+    {
+        // Remove children
+        foreach (Transform child in totalCostObject.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        foreach (Transform child in missingItemsObject.transform)
+        {
+            Destroy(child.gameObject);
+        }
+
+        // Get cost list (combine ingredients with menuitem base)
+        List<InventoryItem> ingredients = new List<InventoryItem>();
+        ingredients.AddRange(selectedIngredients.Values.ToList());
+
+        List<IngredientTotal> ingredientTotals = new List<IngredientTotal>();
+        ingredientTotals.AddRange(GetCostList(ingredients));
+
+        if (ingredientTotals.Count > 0)
+        {
+            totalCostObject.transform.parent.gameObject.SetActive(true);
+        }
+        else totalCostObject.transform.parent.gameObject.SetActive(false);
+
+        // If a known ingredient can be made, multiply by selected count
+        if (currentCounter > 1)
+        {
+            foreach (IngredientTotal item in ingredientTotals)
+            {
+                item.amount *= currentCounter;
+            }
+        }
+
+        // Make new children for each cost
+        foreach (IngredientTotal item in ingredientTotals)
+        {
+            GameObject newObject = GameObject.Instantiate(totalCostPrefab);
+            newObject.transform.SetParent(totalCostObject.transform, false);
+
+            TextMeshProUGUI textObject = newObject.GetComponentInChildren<TextMeshProUGUI>();
+            if (item.inventoryItem)
+            {
+                if (item.amount > 1)
+                {
+                    textObject.text = $"{item.inventoryItem.inventoryItemName} ({item.amount})";
+                }
+                else textObject.text = $"{item.inventoryItem.inventoryItemName}";
+            }
+            else if (item.ingredientType != IngredientType.None)
+            {
+                if (item.amount > 1)
+                {
+                    textObject.text = $"Any {item.ingredientType.ToString()} ({item.amount})";
+                }
+                else textObject.text = $"Any {item.ingredientType.ToString()}";
+            }
+
+        }
+
+        // If any ingredients are missing, highlight them
+        missingItemsObject.transform.parent.gameObject.SetActive(false);
+        List<IngredientTotal> missingIngredients = new List<IngredientTotal>();
+        missingIngredients.AddRange(GetMissingIngredientList(ingredientTotals));
+        if (missingIngredients.Count > 0)
+        {
+            missingItemsObject.transform.parent.gameObject.SetActive(true);
+            // Highlight missing ingredients
+            foreach (IngredientTotal item in missingIngredients)
+            {
+                GameObject newObject = GameObject.Instantiate(totalCostPrefab);
+                newObject.transform.SetParent(missingItemsObject.transform, false);
+
+                TextMeshProUGUI textObject = newObject.GetComponentInChildren<TextMeshProUGUI>();
+                textObject.color = Color.red;
+                if (item.inventoryItem)
+                {
+                    if (item.amount > 1)
+                    {
+                        textObject.text = $"{item.inventoryItem.inventoryItemName} ({item.amount})";
+                    }
+                    else textObject.text = $"{item.inventoryItem.inventoryItemName}";
+                }
+                else if (item.ingredientType != IngredientType.None)
+                {
+                    if (item.amount > 1)
+                    {
+                        textObject.text = $"Any {item.ingredientType.ToString()} ({item.amount})";
+                    }
+                    else textObject.text = $"Any {item.ingredientType.ToString()}";
+                }
+
+            }
+        }
+
+    }
+
+    public List<IngredientTotal> GetMissingIngredientList(List<IngredientTotal> ingredients)
+    {
+        // Remove item amount from ingredients, whats left is missing
+        List<IngredientTotal> ingredientsCopy = new List<IngredientTotal>();
+        ingredientsCopy.AddRange(ingredients);
+
+        foreach (IngredientTotal item in ingredients)
+        {
+            int amount = 0;
+            if (item.inventoryItem)
+            {
+                amount += PlayerInventory.instance.CountItem(item.inventoryItem);
+                amount += TavernStorage.instance.CountItem(item.inventoryItem);
+            }
+            else if (item.ingredientType != IngredientType.None)
+            {
+                amount += PlayerInventory.instance.CountItem(item.ingredientType);
+                amount += TavernStorage.instance.CountItem(item.ingredientType);
+
+                int i = ingredients.Where(x => x.inventoryItem.ingredientType == item.ingredientType).Sum(x => x.amount);
+                if (i > 0)
+                {
+                    amount -= i;
+                }
+            }
+
+            ingredientsCopy.Find(x => x == item).amount -= amount;
+            if (ingredientsCopy.Find(x => x == item).amount <= 0)
+            {
+                ingredientsCopy.Remove(ingredientsCopy.First(x => x.inventoryItem == item.inventoryItem || x.ingredientType == item.ingredientType));
+            }
+        }
+
+
+        return ingredientsCopy;
+    }
+
+    #endregion
+
+    #region Make, Consume, Grant rewards
+    public void CheckCombination()
+    {
+        List<InventoryItem> ingredients = new List<InventoryItem>();
+        ingredients.AddRange(selectedIngredients.Values.ToList());
+
+        currentCounter = 1;
+        ApplyCost();
+
+        List<Recipe> combinationValid = TavernManager.instance.recipes.Where(x =>
+            x.menuItemBase == selectedMenuItemBase &&
+            x.recipeLiquid == selectedLiquid &&
+            x.recipeGem == selectedGem &&
+            x.recipeTemp == selectedTemp &&
+            x.CheckIngredients(ingredients)
+        ).ToList();
+
+        List<Recipe> goodCombinations = CheckCost(combinationValid);
+
+        // Show result if combination is valid && discovered
+        if (goodCombinations.Count == 1)
+        {
+            if (goodCombinations[0].resultMenuItem != null && goodCombinations[0].resultMenuItem.recipeKnown)
+            {
+                makeButton.interactable = false;
+                makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Recipe already known!";
+                knownText.text = goodCombinations[0].resultMenuItem.itemName;
+                knownText.color = Color.green;
+
+                makeCounterObject.SetActive(false);
+
+            }
+            else if (goodCombinations[0].resultIngredient != null && goodCombinations[0].resultIngredient.recipeKnown)
+            {
+                makeButton.interactable = true;
+                makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
+                knownText.text = goodCombinations[0].resultIngredient.inventoryItemName;
+                knownText.color = Color.green;
+
+                // Activate counter
+                makeCounterObject.SetActive(true);
+                maxCounter = CalculateMaxCount(goodCombinations[0]);
+                makeCounterObject.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = currentCounter.ToString();
+            }
+        }
+        else if (goodCombinations.Count < 1 && combinationValid.Count > 0)
+        {
+            // See what ingredients are missing and let player know
+            makeButton.interactable = false;
+            makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
+            knownText.text = "Insufficient ingredients";
+            knownText.color = Color.red;
+
+            makeCounterObject.SetActive(false);
+
+        }
+        else if (ingredients.Count == 0 && selectedMenuItemBase == null)
+        {
+            // If nothing is selected
+            makeButton.interactable = false;
+            makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
+            knownText.text = "No input";
+            knownText.color = Color.red;
+
+            makeCounterObject.SetActive(false);
+        }
+        else if (selectedMenuItemBase && selectedMenuItemBase.recipe)
+        {
+            if (CheckCost(ingredients))
+            {
+                makeButton.interactable = true;
+                makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
+                knownText.text = "???";
+                knownText.color = Color.black;
+
+                makeCounterObject.SetActive(false);
+            }
+            else
+            {
+                makeButton.interactable = false;
+                makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
+                knownText.text = "Insufficient ingredients";
+                knownText.color = Color.red;
+
+                makeCounterObject.SetActive(false);
+            }
+        }
+        else
+        {
+            makeButton.interactable = true;
+            makeButton.gameObject.GetComponentInChildren<TextMeshProUGUI>().text = "Combine";
+            knownText.text = "???";
+            knownText.color = Color.black;
+
+            makeCounterObject.SetActive(false);
+        }
     }
 
     public int CalculateMaxCount(Recipe recipe)
@@ -914,7 +1079,7 @@ public class MenuItemStation : MonoBehaviour
 
             if (selectedMenuItemBase && selectedMenuItemBase.recipe)
             {
-                ConsumeItems(ingredients, selectedMenuItemBase.recipe); 
+                ConsumeItems(ingredients, selectedMenuItemBase.recipe);
             }
             else
             {
@@ -931,7 +1096,7 @@ public class MenuItemStation : MonoBehaviour
                 ConsumeItems(recipe);
                 GrantRewards(recipe.resultMenuItem);
             }
-            else if (recipe.resultIngredient != null) 
+            else if (recipe.resultIngredient != null)
             {
                 if (!recipe.resultIngredient.recipeKnown)
                 {
@@ -946,7 +1111,7 @@ public class MenuItemStation : MonoBehaviour
                         GrantRewards(recipe.resultIngredient);
                     }
                 }
-                    
+
             }
         }
         else
@@ -964,7 +1129,7 @@ public class MenuItemStation : MonoBehaviour
         isShowingFail = true;
         failShowingTimer = 0;
     }
-    
+
     public void ConsumeItems(Recipe recipe)
     {
         // In case a succesful recipe is made
@@ -1038,7 +1203,7 @@ public class MenuItemStation : MonoBehaviour
                     ingredientSlots[key].transform.GetChild(1).gameObject.SetActive(true);
                     ingredientSlots[key].transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = $"{PlayerInventory.instance.CountItem(item.inventoryItem)}x in inventory";
                     ingredientSlots[key].transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = $"{TavernStorage.instance.CountItem(item.inventoryItem)}x in storage";
-                } 
+                }
             }
         }
     }
@@ -1096,13 +1261,13 @@ public class MenuItemStation : MonoBehaviour
         {
 
             // Check inventory first, then storage
-            if (item.containerItem && PlayerInventory.instance.itemsInInventory.Any(x => 
+            if (item.containerItem && PlayerInventory.instance.itemsInInventory.Any(x =>
                     x.GetComponent<InventoryItemContainer>() != null &&
                     x.GetComponent<InventoryItemContainer>().itemsInContainer.Contains(item)
                 ) ||
-                !item.containerItem && PlayerInventory.instance.itemsInInventory.Any(x => 
+                !item.containerItem && PlayerInventory.instance.itemsInInventory.Any(x =>
                     x.GetComponent<InventoryItemHolder>() != null &&
-                    x.GetComponent<InventoryItemHolder>().item == item                    
+                    x.GetComponent<InventoryItemHolder>().item == item
                 )
             )
             {
@@ -1128,7 +1293,7 @@ public class MenuItemStation : MonoBehaviour
 
                     selectedIngredients.Remove(selectedIngredients.First(x => x.Value == item).Key);
                 }
-                
+
             }
             else
             {
@@ -1139,7 +1304,7 @@ public class MenuItemStation : MonoBehaviour
                     ingredientSlots[key].transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = $"{PlayerInventory.instance.CountItem(item)}x in inventory";
                     ingredientSlots[key].transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = $"{TavernStorage.instance.CountItem(item)}x in storage";
                 }
-                
+
             }
         }
     }
@@ -1149,13 +1314,13 @@ public class MenuItemStation : MonoBehaviour
         {
 
             // Check inventory first, then storage
-            if (item.containerItem && PlayerInventory.instance.itemsInInventory.Any(x => 
+            if (item.containerItem && PlayerInventory.instance.itemsInInventory.Any(x =>
                     x.GetComponent<InventoryItemContainer>() != null &&
                     x.GetComponent<InventoryItemContainer>().itemsInContainer.Contains(item)
                 ) ||
-                !item.containerItem && PlayerInventory.instance.itemsInInventory.Any(x => 
+                !item.containerItem && PlayerInventory.instance.itemsInInventory.Any(x =>
                     x.GetComponent<InventoryItemHolder>() != null &&
-                    x.GetComponent<InventoryItemHolder>().item == item                    
+                    x.GetComponent<InventoryItemHolder>().item == item
                 )
             )
             {
@@ -1181,7 +1346,7 @@ public class MenuItemStation : MonoBehaviour
 
                     selectedIngredients.Remove(selectedIngredients.First(x => x.Value == item).Key);
                 }
-                
+
             }
             else
             {
@@ -1192,7 +1357,7 @@ public class MenuItemStation : MonoBehaviour
                     ingredientSlots[key].transform.GetChild(1).GetChild(0).GetComponent<TextMeshProUGUI>().text = $"{PlayerInventory.instance.CountItem(item)}x in inventory";
                     ingredientSlots[key].transform.GetChild(1).GetChild(1).GetComponent<TextMeshProUGUI>().text = $"{TavernStorage.instance.CountItem(item)}x in storage";
                 }
-                
+
             }
         }
     }
@@ -1232,6 +1397,9 @@ public class MenuItemStation : MonoBehaviour
         // Add item to storage inventory
         TavernStorage.instance.AddItem(ingredient, 1);
     }
+
+
+    #endregion
 
     public void DiscoveryPopup(MenuItem menuItem)
     {

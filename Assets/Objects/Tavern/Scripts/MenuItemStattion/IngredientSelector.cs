@@ -31,5 +31,6 @@ public class IngredientSelector : MonoBehaviour
     public void OnSelect()
     {
         MenuItemStation.instance.SelectIngredient(ingredient);
+        MenuItemStation.instance.OnCloseSidebar();
     }
 }

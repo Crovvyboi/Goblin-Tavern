@@ -9,6 +9,7 @@ public class GemSelector : MonoBehaviour
 
     public void OnSelect()
     {
-        MenuItemStation.instance.SelectGem((int)gemName);
+        MenuItemStation.instance.SelectGem(gemName);
+        MenuItemStation.instance.OnCloseSidebar();
     }
 }

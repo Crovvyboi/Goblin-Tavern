@@ -10,6 +10,7 @@ public class LiquidSelector : MonoBehaviour
 
     public void OnSelect()
     {
-        MenuItemStation.instance.SelectLiquid((int)liquidName);
+        MenuItemStation.instance.SelectLiquid(liquidName);
+        MenuItemStation.instance.OnCloseSidebar();
     }
 }

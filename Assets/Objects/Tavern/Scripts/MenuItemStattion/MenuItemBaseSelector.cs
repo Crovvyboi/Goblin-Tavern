@@ -14,5 +14,6 @@ public class MenuItemBaseSelector : MonoBehaviour
     public void OnSelect()
     {
         MenuItemStation.instance.SelectMenuItemBase(baseMenuItem);
+        MenuItemStation.instance.OnCloseSidebar();
     }
 }
