@@ -12,11 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fda09dc6c424a1b4ab1a07f887317453, type: 3}
   m_Name: Butter
   m_EditorClassIdentifier: 
-  menuItemBase: {fileID: 11400000, guid: 2de5fa306d8917c4da8eb695bdc43c2f, type: 2}
+  menuItemBase: {fileID: 0}
   recipeLiquid: 0
   recipeTemp: 1
   recipeGem: 0
-  recipeIngredients: []
+  recipeIngredients:
+  - {fileID: 11400000, guid: 77450503edfec8b47a46d841628beae3, type: 2}
   recipeIngredientType: 
+  knowRecipeName: 0
+  menuItemBaseHint: 0
+  menuItemBaseText: 
+  liquidHint: 0
+  liquidText: 
+  gemHint: 0
+  gemText: 
+  tempHint: 0
+  tempText: 
   resultMenuItem: {fileID: 0}
   resultIngredient: {fileID: 11400000, guid: 30a84fbc90f5c3b409eda3ea763e330f, type: 2}

@@ -31,10 +31,11 @@ MonoBehaviour:
   addToHappiness: 0
   addToRowdyness: 0
   alcoholPercent: 0
+  isNew: 0
   isFavorited: 0
   gridTitle: Beer
   icon: {fileID: 0}
   recipeKnown: 1
-  recipe: {fileID: 0}
+  recipe: {fileID: 11400000, guid: d2dcbc7dafcee404db7dfa10e292c732, type: 2}
   standardInMenu: 0
   inMenu: 0

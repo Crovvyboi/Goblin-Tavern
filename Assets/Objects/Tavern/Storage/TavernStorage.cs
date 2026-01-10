@@ -44,6 +44,18 @@ public class TavernStorage : MonoBehaviour
             }
         }
     }
+    public void TakeItem(IngredientType item)
+    {
+        if (tavernInventory.Any(x => x.item.ingredientType == item))
+        {
+            TavernStorageObject storageobject = tavernInventory.First(x => x.item.ingredientType == item);
+            storageobject.amount--;
+            if (storageobject.amount <= 0)
+            {
+                tavernInventory.Remove(storageobject);
+            }
+        }
+    }
 
     public int CountItem(InventoryItem item)
     {
@@ -52,6 +64,17 @@ public class TavernStorage : MonoBehaviour
         if (tavernInventory.Any(x => x.item == item))
         {
             count += tavernInventory.First(x => x.item == item).amount;
+        }
+
+        return count;
+    }
+    public int CountItem(IngredientType item)
+    {
+        int count = 0;
+
+        if (tavernInventory.Any(x => x.item.ingredientType == item))
+        {
+            count += tavernInventory.First(x => x.item.ingredientType == item).amount;
         }
 
         return count;

@@ -97,16 +97,64 @@ public class Recipe : ScriptableObject
         }
         return false;
     }
+
+    public List<IngredientTotal> GetTotalCost(List<IngredientTotal> totalCost)
+    {
+        foreach (InventoryItem ingredient in recipeIngredients)
+        {
+            if (totalCost.Any(x => x.inventoryItem == ingredient))
+            {
+                totalCost.First(x => x.inventoryItem == ingredient).amount++;
+            }
+            else
+            {
+                totalCost.Add(new IngredientTotal(ingredient, IngredientType.None));
+            }
+        }
+        foreach (IngredientType type in recipeIngredientType)
+        {
+            if (totalCost.Any(x => x.ingredientType == type))
+            {
+                totalCost.First(x => x.ingredientType == type).amount++;
+            }
+            else
+            {
+                totalCost.Add(new IngredientTotal(null, type));
+            }
+        }
+
+        if (menuItemBase && menuItemBase.recipe)
+        {
+            menuItemBase.recipe.GetTotalCost(totalCost);
+        }
+
+        return totalCost;
+    }
 }
 
 [Serializable]
-public class IngredientHint
+
+public class Ingredient
+{
+    public InventoryItem? inventoryItem;
+    public IngredientType ingredientType;
+}
+public class IngredientHint : Ingredient
 {
     public bool knowHint;
-    public InventoryItem inventoryItem;
-    public IngredientType ingredientType;
 
     public string ingredientText;
+}
+
+public class IngredientTotal : Ingredient
+{
+    public int amount;
+    public IngredientTotal(InventoryItem? inventoryItem, IngredientType ingredientType)
+    {
+        this.inventoryItem = inventoryItem;
+        this.ingredientType = ingredientType;
+        this.amount = 1;
+    }
 }
 
 public enum LiquidSetting

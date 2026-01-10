@@ -24,7 +24,9 @@ public class KnownRecipesUI : MonoBehaviour
     public GameObject recipeDetailsObject;
     public GameObject menuItemDetails;
     public GameObject menuItemLikeDislike;
+    public GameObject menuItemIngredients;
     public GameObject ingredientDetails;
+    public GameObject ingredientIngredients;
 
     [Header("Known menuitem")]
     public GameObject knownMenuItemObject;
@@ -35,12 +37,20 @@ public class KnownRecipesUI : MonoBehaviour
     public GameObject knownMenuItemDislikedSpecies;
     public GameObject knownMenuItemLikedClass;
     public GameObject knownMenuItemDislikedClass;
+    public GameObject knownMenuItemIngredients;
     public GameObject addRemoveMenuButton;
 
     [Header("Known ingredient")]
     public GameObject knownIngredientObject;
     public GameObject knownIngredientDescriptionText;
     public GameObject knownIngredientCostText;
+    #region Ingredients
+    public GameObject knownIngredientBase;
+    public GameObject knownIngredientLiquid;
+    public GameObject knownIngredientGem;
+    public GameObject knownIngredientTemp;
+    public GameObject knownIngredientIngredients;
+    #endregion
 
     [Header("Known general")]
     public GameObject knownRecipeTitleText;
@@ -306,10 +316,12 @@ public class KnownRecipesUI : MonoBehaviour
         {
             menuItemLikeDislike.SetActive(false);
             menuItemDetails.SetActive(true);
+            menuItemIngredients.SetActive(false);
         }
         else if (selectedIngredient != null)
         {
             ingredientDetails.SetActive(true);
+            ingredientIngredients.SetActive(false);
         }
         
     }
@@ -317,6 +329,21 @@ public class KnownRecipesUI : MonoBehaviour
     {
         menuItemDetails.SetActive(false);
         menuItemLikeDislike.SetActive(true);
+    }
+
+    public void SwitchToIngredients()
+    {
+        if (selectedMenuItem != null)
+        {
+            menuItemLikeDislike.SetActive(false);
+            menuItemDetails.SetActive(false);
+            menuItemIngredients.SetActive(true);
+        }
+        else if (selectedIngredient != null)
+        {
+            ingredientDetails.SetActive(false);
+            ingredientIngredients.SetActive(true);
+        }
     }
 
     public void UpdateNew(Recipe item)
@@ -428,6 +455,9 @@ public class KnownRecipesUI : MonoBehaviour
             knownIngredientCostText.GetComponent<TextMeshProUGUI>().text = item.resultIngredient.cost.ToString();
         }
 
+        // Set ingredients
+        SetIngredients(item);
+
         // Change state of favorited button
         favoritedButton.GetComponent<Button>().onClick.RemoveAllListeners();
         favoritedButton.GetComponent<Button>().onClick.AddListener(() => FavoriteMenuItem(item));
@@ -527,6 +557,91 @@ public class KnownRecipesUI : MonoBehaviour
                 Texture2D icon = IconHandler.instance.GetIconOnClass(iconclass);
                 IconHandler.instance.MakeIcon(icon, knownMenuItemDislikedClass);
             }
+        }
+    }
+
+    public void SetIngredients(Recipe item)
+    {
+        if (item.resultMenuItem)
+        {
+            string ingredientString = "";
+            List<IngredientTotal> ingredients = item.GetTotalCost(new List<IngredientTotal>());
+            if (ingredients.Count > 0)
+            {
+                foreach (IngredientTotal ingredient in ingredients)
+                {
+                    if (ingredient.inventoryItem)
+                    {
+                        if (ingredient.amount > 1)
+                        {
+                            ingredientString += $" - {ingredient.inventoryItem.inventoryItemName} ({ingredient.amount}) \n";
+                        }
+                        else
+                        {
+                            ingredientString += $" - {ingredient.inventoryItem.inventoryItemName} \n";
+                        }
+
+                    }
+                    else
+                    {
+                        if (ingredient.amount > 1)
+                        {
+                            ingredientString += $" - Any {ingredient.ingredientType.ToString()} ({ingredient.amount}) \n";
+                        }
+                        else
+                        {
+                            ingredientString += $" - Any {ingredient.ingredientType.ToString()} \n";
+                        }
+
+                    }
+                }
+            }
+            knownMenuItemIngredients.GetComponent<TextMeshProUGUI>().text = ingredientString;
+        }
+        else if (item.resultIngredient)
+        {
+            if (item.menuItemBase)
+            {
+                knownIngredientBase.GetComponent<TextMeshProUGUI>().text = item.menuItemBase.itemName;
+            }
+            else knownIngredientBase.GetComponent<TextMeshProUGUI>().text = "/";
+            knownIngredientLiquid.GetComponent<TextMeshProUGUI>().text = item.recipeLiquid.ToString();
+            knownIngredientGem.GetComponent<TextMeshProUGUI>().text = item.recipeGem.ToString();
+            knownIngredientTemp.GetComponent<TextMeshProUGUI>().text = item.recipeTemp.ToString();
+
+            string ingredientString = "";
+            List<IngredientTotal> ingredients = item.GetTotalCost(new List<IngredientTotal>());
+            if (ingredients.Count > 0)
+            {
+                foreach (IngredientTotal ingredient in ingredients)
+                {
+                    if (ingredient.inventoryItem)
+                    {
+                        if (ingredient.amount > 1)
+                        {
+                            ingredientString += $" - {ingredient.inventoryItem.inventoryItemName} ({ingredient.amount}) \n";
+                        }
+                        else
+                        {
+                            ingredientString += $" - {ingredient.inventoryItem.inventoryItemName} \n";
+                        }
+
+                    }
+                    else
+                    {
+                        if (ingredient.amount > 1)
+                        {
+                            ingredientString += $" - Any {ingredient.ingredientType.ToString()} ({ingredient.amount}) \n";
+                        }
+                        else
+                        {
+                            ingredientString += $" - Any {ingredient.ingredientType.ToString()} \n";
+                        }
+
+                    }
+                }
+            }
+            knownIngredientIngredients.GetComponent<TextMeshProUGUI>().text = ingredientString;
         }
     }
 

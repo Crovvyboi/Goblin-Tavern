@@ -12,11 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fda09dc6c424a1b4ab1a07f887317453, type: 3}
   m_Name: Grilled Cheese
   m_EditorClassIdentifier: 
-  menuItemBase: {fileID: 11400000, guid: a7dcc8dcd84152c4293630a552d9911c, type: 2}
+  menuItemBase: {fileID: 0}
   recipeLiquid: 0
   recipeTemp: 3
   recipeGem: 0
   recipeIngredients: []
-  recipeIngredientType: 00000000
+  recipeIngredientType: 0400000001000000
+  knowRecipeName: 0
+  menuItemBaseHint: 0
+  menuItemBaseText: 
+  liquidHint: 0
+  liquidText: 
+  ingredientHints: []
+  gemHint: 0
+  gemText: 
+  tempHint: 0
+  tempText: 
   resultMenuItem: {fileID: 11400000, guid: 4d659ee62e02cd1478d62e924dca5f60, type: 2}
   resultIngredient: {fileID: 0}

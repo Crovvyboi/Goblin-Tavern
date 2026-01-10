@@ -152,6 +152,19 @@ public class PlayerInventory : MonoBehaviour
         }
         return count;
     }
+    public int CountItem(IngredientType item)
+    {
+        int count = 0;
+
+        List<GameObject> containers = itemsInInventory.Where(x => x.GetComponent<InventoryItemContainer>() != null && x.GetComponent<InventoryItemContainer>().itemsInContainer.Any(y => y.ingredientType == item)).ToList();
+        foreach (GameObject container in containers)
+        {
+            count += container.GetComponent<InventoryItemContainer>().itemsInContainer.Where(x => x.ingredientType == item).Count();
+        }
+        count += itemsInInventory.Where(x => x.GetComponent<InventoryItemHolder>() != null && x.GetComponent<InventoryItemHolder>().item.ingredientType == item).Count();
+        
+        return count;
+    }
 
 
     #region Item interaction
@@ -553,6 +566,71 @@ public class PlayerInventory : MonoBehaviour
         {
             // No such item in inventory
 
+        }
+    }
+    public void TakeItem(IngredientType ingredientType)
+    {
+        GameObject item = itemsInInventory.First(x => 
+            x.GetComponent<InventoryItemContainer>() && x.GetComponent<InventoryItemContainer>().itemsInContainer.Any(y => y.ingredientType == ingredientType) ||
+            x.GetComponent<InventoryItemHolder>() && x.GetComponent<InventoryItemHolder>().item.ingredientType == ingredientType);
+        InventoryItem takeItem = null;
+        if (item.GetComponent<InventoryItemContainer>())
+        {
+            takeItem = item.GetComponent<InventoryItemContainer>().itemsInContainer.First(y => y.ingredientType == ingredientType);
+        }
+        else
+        {
+            takeItem = item.GetComponent<InventoryItemHolder>().item;
+        }
+
+        if (takeItem != null)
+        {
+            bool hasContainer = itemsInInventory.Any(x =>
+            x.GetComponent<InventoryItemContainer>() != null &&
+            x.GetComponent<InventoryItemContainer>().containerType == takeItem.containerType &&
+            x.GetComponent<InventoryItemContainer>().ReturnItemCount() > 0 &&
+            x.GetComponent<InventoryItemContainer>().itemsInContainer.Contains(takeItem)
+            );
+
+            if (takeItem.containerItem && hasContainer)
+            {
+                // Take item from container
+                GameObject itemContainer = itemsInInventory.First(x =>
+                    x.GetComponent<InventoryItemContainer>() != null &&
+                    x.GetComponent<InventoryItemContainer>().containerType == takeItem.containerType &&
+                    x.GetComponent<InventoryItemContainer>().ReturnItemCount() > 0 &&
+                    x.GetComponent<InventoryItemContainer>().itemsInContainer.Contains(takeItem)
+                    );
+                itemContainer.GetComponent<InventoryItemContainer>().RemoveItem(takeItem);
+
+                // Check if container is empty and delete if it is
+                if (itemContainer.GetComponent<InventoryItemContainer>().ReturnItemCount() == 0)
+                {
+                    // Decouple inventory cells
+                    List<InventoryCell> occupiedCells = cells.Where(x => x.occupyingObject == itemContainer).ToList();
+                    foreach (InventoryCell cell in occupiedCells)
+                    {
+                        cell.occupyingObject = null;
+                    }
+
+                    // Delete container
+                    itemsInInventory.Remove(itemContainer);
+                    GameObject.Destroy(itemContainer);
+                }
+            }
+            else if (itemsInInventory.Any(x => x.GetComponent<InventoryItemHolder>().item == takeItem))
+            {
+                // Else take singular item
+                GameObject itemFromInventory = itemsInInventory.First(x => x.GetComponent<InventoryItemHolder>().item == takeItem);
+
+                itemsInInventory.Remove(itemFromInventory);
+                GameObject.Destroy(itemFromInventory);
+            }
+            else
+            {
+                // No such item in inventory
+
+            }
         }
     }
     #endregion

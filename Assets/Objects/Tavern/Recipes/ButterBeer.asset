@@ -10,15 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fda09dc6c424a1b4ab1a07f887317453, type: 3}
-  m_Name: Mecilysian Cheese
+  m_Name: ButterBeer
   m_EditorClassIdentifier: 
-  menuItemBase: {fileID: 0}
-  recipeLiquid: 2
-  recipeTemp: 2
-  recipeGem: 1
+  menuItemBase: {fileID: 11400000, guid: 4e89b6d7998789b4787000fffb022712, type: 2}
+  recipeLiquid: 0
+  recipeTemp: 1
+  recipeGem: 0
   recipeIngredients:
-  - {fileID: 11400000, guid: 6880327cf209d214f8d778bc813b095a, type: 2}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 30a84fbc90f5c3b409eda3ea763e330f, type: 2}
   recipeIngredientType: 
   knowRecipeName: 0
   menuItemBaseHint: 0
@@ -29,5 +28,5 @@ MonoBehaviour:
   gemText: 
   tempHint: 0
   tempText: 
-  resultMenuItem: {fileID: 0}
-  resultIngredient: {fileID: 11400000, guid: 7938d95f4182fb74e9ce238880f7169e, type: 2}
+  resultMenuItem: {fileID: 11400000, guid: 12ab1e203fb9da24b99ffb54b9d5fe61, type: 2}
+  resultIngredient: {fileID: 0}

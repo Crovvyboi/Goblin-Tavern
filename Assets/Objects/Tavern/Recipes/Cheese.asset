@@ -12,11 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fda09dc6c424a1b4ab1a07f887317453, type: 3}
   m_Name: Cheese
   m_EditorClassIdentifier: 
-  menuItemBase: {fileID: 11400000, guid: 2de5fa306d8917c4da8eb695bdc43c2f, type: 2}
-  recipeLiquid: 0
+  menuItemBase: {fileID: 0}
+  recipeLiquid: 2
   recipeTemp: 2
   recipeGem: 0
   recipeIngredients:
   - {fileID: 11400000, guid: 6880327cf209d214f8d778bc813b095a, type: 2}
+  recipeIngredientType: 
+  knowRecipeName: 0
+  menuItemBaseHint: 0
+  menuItemBaseText: 
+  liquidHint: 0
+  liquidText: 
+  gemHint: 0
+  gemText: 
+  tempHint: 0
+  tempText: 
   resultMenuItem: {fileID: 0}
   resultIngredient: {fileID: 11400000, guid: b938c626e2961524ea672e35712b331e, type: 2}
