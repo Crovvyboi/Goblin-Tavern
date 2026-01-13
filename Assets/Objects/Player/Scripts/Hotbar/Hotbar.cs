@@ -40,17 +40,12 @@ public class Hotbar : MonoBehaviour
 
             switch (hotbarItem.GetComponent<InventoryItemHolder>().item.type)
             {
-                case InventoryItemType.Quest:
-                    InteractionSender.instance.canInteract = true;
-                    break;
-                case InventoryItemType.Ingredient:
-                    InteractionSender.instance.canInteract = true;
-                    break;
                 case InventoryItemType.Furniture:
                     InteractionSender.instance.canInteract = false;
                     CheckIfFurnitureIsPlaceable(hotbarItem.GetComponent<InventoryItemHolder>().item);
                     break;
                 default:
+                    InteractionSender.instance.canInteract = true;
                     break;
             }
         }
@@ -71,7 +66,7 @@ public class Hotbar : MonoBehaviour
         playerControls.Menu.HotbarSelectSlot.performed += SelectFromScroll;
         playerControls.Menu.HotbarSelectByKey.performed += SelectFromKeyPress;
         playerControls.General.RotateHotbarItem.performed += RotateFurniture;
-        playerControls.General.Interact.performed += PlaceFurniture;
+        playerControls.General.Interact.performed += ActivateHighlightedItem;
         playerControls.General.AlternateInteract.performed += TakeFurniture;
     }
     private void OnDisable()
@@ -231,6 +226,31 @@ public class Hotbar : MonoBehaviour
         hotbarSlotsGameObjects[slot].transform.GetChild(0).GetComponent<RawImage>().enabled = false;
     }
 
+    public void ActivateHighlightedItem(InputAction.CallbackContext input)
+    {
+        if (input.performed && !PlayerUIManager.showingPlayerMenu && !PlayerUIManager.showingPause)
+        {
+            if (hotbarSlotsGameObjects[highlightedPos].GetComponent<HotbarSlot>().assignedInventoryItem != null)
+            {
+                GameObject hotbarItem = hotbarSlotsGameObjects[highlightedPos].GetComponent<HotbarSlot>().assignedInventoryItem;
+
+                switch (hotbarItem.GetComponent<InventoryItemHolder>().item.type)
+                {
+                    case InventoryItemType.RecipeBook:
+                        ReadRecipeBook(hotbarItem.GetComponent<InventoryItemBook>());
+                        break;
+
+                    case InventoryItemType.Furniture:
+                        PlaceFurniture();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+
+    #region Furniture
     public void CheckIfFurnitureIsPlaceable(InventoryItem item)
     {
         if (item.isPlaceable)
@@ -277,7 +297,7 @@ public class Hotbar : MonoBehaviour
                                 child.Find("InteractionField").gameObject.SetActive(false);
                             }
                         }
-                        
+
                     }
                 }
             }
@@ -297,7 +317,7 @@ public class Hotbar : MonoBehaviour
 
                 if (Vector3.Distance(tiled, GameObject.FindGameObjectWithTag("Player").transform.position) < 5.5f)
                 {
-                    if (!CheckIfPlayerIsInTiles(furniturePlacementMold.GetComponent<Furniture>().GetTiles()) && 
+                    if (!CheckIfPlayerIsInTiles(furniturePlacementMold.GetComponent<Furniture>().GetTiles()) &&
                         TavernTilemapManager.instance.CheckIfPositionHasTavernTile(furniturePlacementMold.GetComponent<Furniture>().GetTiles()) &&
                         TavernTilemapManager.instance.CanPlaceFurniture(furniturePlacementMold.GetComponent<Furniture>().GetTiles()))
                     {
@@ -329,7 +349,7 @@ public class Hotbar : MonoBehaviour
             }
 
         }
-        
+
     }
 
     public bool CheckIfPlayerIsInTiles(List<Vector3> tiles)
@@ -354,55 +374,53 @@ public class Hotbar : MonoBehaviour
             {
                 furniturePlacementMold.GetComponent<Furniture>().RotateRight();
             }
-        } 
+        }
     }
 
-    public void PlaceFurniture(InputAction.CallbackContext input)
+    public void PlaceFurniture()
     {
-        if (input.performed && !PlayerUIManager.showingPlayerMenu && !PlayerUIManager.showingPause)
+        if (canPlaceFurniture && furniturePlacementMold != null)
         {
-            if (canPlaceFurniture && furniturePlacementMold != null)
+            // Check if other interactables have priority
+            if (!isInInteractable)
             {
-                // Check if other interactables have priority
-                if (!isInInteractable)
+                // Place furniture
+                furniturePlacementMold.transform.SetParent(TavernManager.instance.furnitureContainer.transform, true);
+                furniturePlacementMold.GetComponentInChildren<Tilemap>().color = Color.white;
+
+                if (furniturePlacementMold.GetComponent<BoxCollider2D>() != null)
                 {
-                    // Place furniture
-                    furniturePlacementMold.transform.SetParent(TavernManager.instance.furnitureContainer.transform, true);
-                    furniturePlacementMold.GetComponentInChildren<Tilemap>().color = Color.white;
-
-                    if (furniturePlacementMold.GetComponent<BoxCollider2D>() != null)
-                    {
-                        furniturePlacementMold.GetComponent<BoxCollider2D>().enabled = true;
-                    }
-                    else if (furniturePlacementMold.GetComponentInChildren<BoxCollider2D>() != null)
-                    {
-                        furniturePlacementMold.GetComponentInChildren<BoxCollider2D>().enabled = true;
-                    }
-
-                    foreach (Transform child in furniturePlacementMold.transform)
-                    {
-                        if (child.Find("InteractionField") != null)
-                        {
-                            child.Find("InteractionField").gameObject.SetActive(true);
-                        }
-
-                    }
-
-                    // Remove from inventory
-                    GameObject go = hotbarSlotsGameObjects[highlightedPos].GetComponent<HotbarSlot>().assignedInventoryItem;
-                    InventoryItem item = go.GetComponent<InventoryItemHolder>().item;
-                    PlayerInventory.instance.TakeItem(item);
-
-                    // Remove from hotbar
-                    RemoveFromHotbar(highlightedPos);
-
-                    // Reload furniture layer
-                    TavernTilemapManager.instance.OnFurnitureAdd(furniturePlacementMold.GetComponent<Furniture>().tiles);
-
-                    furniturePlacementMold = null;
+                    furniturePlacementMold.GetComponent<BoxCollider2D>().enabled = true;
                 }
+                else if (furniturePlacementMold.GetComponentInChildren<BoxCollider2D>() != null)
+                {
+                    furniturePlacementMold.GetComponentInChildren<BoxCollider2D>().enabled = true;
+                }
+
+                foreach (Transform child in furniturePlacementMold.transform)
+                {
+                    if (child.Find("InteractionField") != null)
+                    {
+                        child.Find("InteractionField").gameObject.SetActive(true);
+                    }
+
+                }
+
+                // Remove from inventory
+                GameObject go = hotbarSlotsGameObjects[highlightedPos].GetComponent<HotbarSlot>().assignedInventoryItem;
+                InventoryItem item = go.GetComponent<InventoryItemHolder>().item;
+                PlayerInventory.instance.TakeItem(item);
+
+                // Remove from hotbar
+                RemoveFromHotbar(highlightedPos);
+
+                // Reload furniture layer
+                TavernTilemapManager.instance.OnFurnitureAdd(furniturePlacementMold.GetComponent<Furniture>().tiles);
+
+                furniturePlacementMold = null;
             }
         }
+        
     }
     public void TakeFurniture(InputAction.CallbackContext input)
     {
@@ -449,4 +467,47 @@ public class Hotbar : MonoBehaviour
             }
         }
     }
+    #endregion
+
+    #region Recipe book
+    public void ReadRecipeBook(InventoryItemBook book)
+    {
+        if (book.selectedRecipes.Any(x => x.resultMenuItem && !x.resultMenuItem.recipeKnown || x.resultIngredient && !x.resultIngredient.recipeKnown))
+        {
+            foreach (Recipe recipe in book.selectedRecipes)
+            {
+                if (recipe.resultMenuItem && !recipe.resultMenuItem.recipeKnown)
+                {
+                    recipe.resultMenuItem.recipeKnown = true;
+                    ShowRecipeDiscoverPopup(recipe);
+                }
+                else if (recipe.resultIngredient && !recipe.resultIngredient.recipeKnown)
+                {
+                    recipe.resultIngredient.recipeKnown = true;
+                    ShowRecipeDiscoverPopup(recipe);
+                }
+
+            }
+
+            // Remove from inventory
+            GameObject go = hotbarSlotsGameObjects[highlightedPos].GetComponent<HotbarSlot>().assignedInventoryItem;
+            InventoryItem item = go.GetComponent<InventoryItemHolder>().item;
+            PlayerInventory.instance.TakeItem(item);
+
+            // Remove from hotbar
+            RemoveFromHotbar(highlightedPos);
+        }
+        else
+        {
+            // Popup thoughtbubble with text "I already know all these recipes"
+
+
+        }
+    }
+
+    public void ShowRecipeDiscoverPopup(Recipe recipe)
+    {
+        ItemDiscovery.instance.AddToQueue(recipe);
+    }
+    #endregion
 }

@@ -900,11 +900,14 @@ public class MenuItemStation : MonoBehaviour
                 amount += PlayerInventory.instance.CountItem(item.ingredientType);
                 amount += TavernStorage.instance.CountItem(item.ingredientType);
 
-                int i = ingredients.Where(x => x.inventoryItem.ingredientType == item.ingredientType).Sum(x => x.amount);
-                if (i > 0)
+                if (ingredients.Where(x => x.inventoryItem.ingredientType == item.ingredientType).ToList().Count > 0)
                 {
-                    amount -= i;
-                }
+                    int i = ingredients.Where(x => x.inventoryItem.ingredientType == item.ingredientType).Sum(x => x.amount);
+                    if (i > 0)
+                    {
+                        amount -= i;
+                    }
+                } 
             }
 
             ingredientsCopy.Find(x => x == item).amount -= amount;

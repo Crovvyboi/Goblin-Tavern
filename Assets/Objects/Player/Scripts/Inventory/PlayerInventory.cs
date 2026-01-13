@@ -343,6 +343,10 @@ public class PlayerInventory : MonoBehaviour
             {
                 givenItemObject.GetComponent<InventoryItemContainer>().AddItem(giveItem);
             }
+            if (giveItem.isRecipeBook)
+            {
+                givenItemObject.GetComponent<InventoryItemBook>().SetRecipeBook(giveItem);
+            }
 
             // Add to hotbar
             Hotbar.instance.AssignToHotbar(givenItemObject);

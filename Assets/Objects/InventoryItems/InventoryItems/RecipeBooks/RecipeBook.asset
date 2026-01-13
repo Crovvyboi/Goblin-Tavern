@@ -10,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2add828b3ee624f4ab9785e2f57abf3c, type: 3}
-  m_Name: Hops
+  m_Name: RecipeBook
   m_EditorClassIdentifier: 
-  inventoryItemName: Hops
+  inventoryItemName: Recipe book
   type: 1
-  cost: 3
-  inventoryItemHolder: {fileID: 2334957189676364092, guid: 3db41f39c6bc1b944a5e32169a767c05, type: 3}
+  cost: 0
+  inventoryItemHolder: {fileID: 3902624246329051495, guid: c4c35efb70c86eb4eb7b4d3aefe46209, type: 3}
   containerItem: 0
   containerType: 0
   containerSprite: {fileID: 0}
@@ -29,3 +29,10 @@ MonoBehaviour:
   gridName: 
   description: 
   ingredientType: 0
+  isRecipeBook: 1
+  isRandom: 1
+  recipesToSelect: 2
+  recipePool:
+  - {fileID: 11400000, guid: 6ef50ed787568da4e91c240c8d389cac, type: 2}
+  - {fileID: 11400000, guid: 16892d4d12ee0614ebce87371ff2d70c, type: 2}
+  - {fileID: 11400000, guid: d883ef96ce85ea6419cc4255d78d3527, type: 2}

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Table
   m_EditorClassIdentifier: 
   inventoryItemName: Table
-  type: 2
+  type: 3
   cost: 0
   inventoryItemHolder: {fileID: 972190325821420470, guid: deceead644d942542b0100bf79726ee3, type: 3}
   containerItem: 0

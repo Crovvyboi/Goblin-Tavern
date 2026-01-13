@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2add828b3ee624f4ab9785e2f57abf3c, type: 3}
-  m_Name: Cheese
+  m_Name: Bread
   m_EditorClassIdentifier: 
-  inventoryItemName: Cheese
-  type: 1
+  inventoryItemName: Bread
+  type: 2
   cost: 0
   inventoryItemHolder: {fileID: 2334957189676364092, guid: 3db41f39c6bc1b944a5e32169a767c05, type: 3}
   containerItem: 0
@@ -23,9 +23,13 @@ MonoBehaviour:
   isPlaceable: 0
   prefab: {fileID: 0}
   recipeKnown: 1
-  inventoryItemRecipe: {fileID: 11400000, guid: d883ef96ce85ea6419cc4255d78d3527, type: 2}
-  isNew: 0
-  isFavorited: 0
-  gridName: Cheese
-  description: Cheese from milk
-  ingredientType: 1
+  inventoryItemRecipe: {fileID: 11400000, guid: c2294c33b501fd54b87a61e77256fb0a, type: 2}
+  isNew: 1
+  isFavorited: 1
+  gridName: Bread
+  description: Bready
+  ingredientType: 4
+  isRecipeBook: 0
+  isRandom: 0
+  recipesToSelect: 0
+  recipePool: []

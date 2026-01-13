@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2add828b3ee624f4ab9785e2f57abf3c, type: 3}
-  m_Name: Butter
+  m_Name: Milk
   m_EditorClassIdentifier: 
-  inventoryItemName: Butter
-  type: 1
-  cost: 0
+  inventoryItemName: Milk
+  type: 2
+  cost: 5
   inventoryItemHolder: {fileID: 2334957189676364092, guid: 3db41f39c6bc1b944a5e32169a767c05, type: 3}
   containerItem: 0
   containerType: 0
@@ -23,9 +23,13 @@ MonoBehaviour:
   isPlaceable: 0
   prefab: {fileID: 0}
   recipeKnown: 1
-  inventoryItemRecipe: {fileID: 11400000, guid: 16892d4d12ee0614ebce87371ff2d70c, type: 2}
+  inventoryItemRecipe: {fileID: 0}
   isNew: 0
   isFavorited: 0
-  gridName: Butter
-  description: Butter me up
+  gridName: 
+  description: 
   ingredientType: 0
+  isRecipeBook: 0
+  isRandom: 0
+  recipesToSelect: 0
+  recipePool: []

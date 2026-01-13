@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "InventoryItem")]
@@ -35,12 +36,18 @@ public class InventoryItem : ScriptableObject
     [Header("Ingredient")]
     public IngredientType ingredientType;
 
+    [Header("Recipe book")]
+    public bool isRecipeBook;
+    public bool isRandom;
+    public int recipesToSelect;
+    public List<Recipe> recipePool = new List<Recipe>();
 
 }
 
 public enum InventoryItemType
 {
     Quest,
+    RecipeBook,
     Ingredient,
     Furniture
 }

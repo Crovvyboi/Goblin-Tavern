@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Herb
   m_EditorClassIdentifier: 
   inventoryItemName: Herb
-  type: 1
+  type: 2
   cost: 0
   inventoryItemHolder: {fileID: 329492762772526054, guid: e546e36dda6e7134f928b45dc5d993a8, type: 3}
   containerItem: 1
@@ -22,10 +22,14 @@ MonoBehaviour:
   hotbarIcon: {fileID: 2800000, guid: 0db9d4fa9e305144ba456793a2deb8e5, type: 3}
   isPlaceable: 0
   prefab: {fileID: 0}
-  recipeKnown: 0
+  recipeKnown: 1
   inventoryItemRecipe: {fileID: 0}
   isNew: 0
   isFavorited: 0
   gridName: 
   description: 
   ingredientType: 2
+  isRecipeBook: 0
+  isRandom: 0
+  recipesToSelect: 0
+  recipePool: []
