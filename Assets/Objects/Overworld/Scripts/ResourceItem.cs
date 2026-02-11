@@ -22,6 +22,11 @@ public class ResourceItem : MonoBehaviour
             {
                 itemgiver.GiveItem();
                 giveAmount--;
+
+                if (giveAmount == 0)
+                {
+                    GetComponent<CircleCollider2D>().enabled = false;
+                }
             }
         }
         

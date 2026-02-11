@@ -7,11 +7,12 @@ using UnityEngine.Events;
 public class InteractionReceiver : MonoBehaviour
 {
     public UnityEvent interaction;
-
     public void OnInteract(InteractionSender sender)
     {
         interaction.Invoke();
 
         sender.canInteract = true;
+        
+        
     }
 }

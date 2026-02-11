@@ -10,6 +10,7 @@ TagManager:
   - Bar Standing Spot
   - MealStation
   - DrinkStation
+  - Resource
   layers:
   - Default
   - TransparentFX
