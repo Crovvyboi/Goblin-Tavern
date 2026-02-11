@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class InventoryCell : MonoBehaviour
@@ -26,6 +27,14 @@ public class InventoryCell : MonoBehaviour
     public void AddNeigbor(InventoryCell cell)
     {
         neighborCells.Add(cell);
+    }
+
+    public void FindCoords(List<InventoryCell> cells)
+    {
+        int y = cells.Where(x => x.transform.position.x == this.transform.position.x && x.transform.position.y > this.transform.position.y).ToList().Count;
+        int x = cells.Where(x => x.transform.position.x < this.transform.position.x && x.transform.position.y == this.transform.position.y).ToList().Count;
+
+        coords = new Vector2(x, y);
     }
 
     public Vector2 Get90Orientation()

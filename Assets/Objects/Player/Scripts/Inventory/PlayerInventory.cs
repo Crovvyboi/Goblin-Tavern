@@ -75,6 +75,11 @@ public class PlayerInventory : MonoBehaviour
             cells.Add(cell);
         }
 
+        foreach (InventoryCell cell in cells)
+        {
+            cell.FindCoords(cells);
+        }
+
         // Assign neighbors to all cells
         foreach (InventoryCell cell in cells)
         {
@@ -102,8 +107,10 @@ public class PlayerInventory : MonoBehaviour
                 cell.AddNeigbor(cells.First(x => x.coords.x == cell.coords.x && x.coords.y == cell.coords.y + 1));
             }
 
-            // Get occupied object
-            //Debug.Log($"Cell - x: {cell.gameObject.transform.position.x}, y: {cell.gameObject.transform.position.y}");
+            // Get occupied object 
+            // ! MAKE SURE GRID LAYOUT IS TURNED OFF !
+
+            // Debug.Log($"Cell - x: {cell.gameObject.transform.position.x}, y: {cell.gameObject.transform.position.y}");
             float cellx = cell.gameObject.transform.position.x;
             float celly = cell.gameObject.transform.position.y;
 
@@ -114,7 +121,7 @@ public class PlayerInventory : MonoBehaviour
                 float itemy = item.gameObject.transform.position.y;
 
                 // Center item on cell
-                if (Mathf.Abs(cellx - itemx) < 0.5f && Mathf.Abs(celly - itemy) < 0.5f)
+                if (Mathf.Abs(cellx - itemx) < 1f && Mathf.Abs(celly - itemy) < 1f)
                 {
                     item.transform.position = new Vector3(cellx, celly);
                 }
@@ -316,6 +323,9 @@ public class PlayerInventory : MonoBehaviour
                 x.GetComponent<InventoryItemContainer>().containerType == giveItem.containerType &&
                 x.GetComponent<InventoryItemContainer>().CanAddItem()).GetComponent<InventoryItemContainer>().AddItem(giveItem);
 
+            // Show popup
+            ItemPopupContainer.instance.AddItemPopup(giveItem);
+
             return true;
         }
         else if (FindSpot(giveItem, out InventoryCell selectedStartCell, out List<InventoryCell> cellsToOccupy, out int rotation))
@@ -324,7 +334,7 @@ public class PlayerInventory : MonoBehaviour
             // Instantiate ItemHolder prefab on position & rotation
             GameObject givenItemObject = GameObject.Instantiate(giveItem.inventoryItemHolder);
             givenItemObject.transform.SetParent(instance.itemHolder.transform, false);
-            givenItemObject.transform.position = selectedStartCell.transform.position;
+            givenItemObject.transform.position = selectedStartCell.gameObject.transform.position;
             givenItemObject.transform.Rotate(0, 0, -rotation);
             givenItemObject.GetComponent<InventoryItemHolder>().item = giveItem;
 
@@ -337,6 +347,9 @@ public class PlayerInventory : MonoBehaviour
 
             // Add to inventory items
             itemsInInventory.Add(givenItemObject);
+
+            // Show popup
+            ItemPopupContainer.instance.AddItemPopup(giveItem);
 
             // If container, place item in container
             if (giveItem.containerItem)

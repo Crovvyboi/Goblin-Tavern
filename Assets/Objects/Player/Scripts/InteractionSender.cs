@@ -15,6 +15,8 @@ public class InteractionSender : MonoBehaviour
     private bool isInTrigger = false;
     public Collider2D collisionObject;
 
+    public GameObject interactIcon;
+
     // Start is called before the first frame update
     private void Start()
     {
@@ -40,7 +42,14 @@ public class InteractionSender : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
+        if (isInTrigger && canInteract && !interactIcon.activeSelf)
+        {
+            ShowInteractIcon();
+        }
+        else if (!isInTrigger && interactIcon.activeSelf || isInTrigger && !canInteract && interactIcon.activeSelf)
+        {
+            HideInteractIcon();
+        }
     }
 
     public void OnInteract(InputAction.CallbackContext input)
@@ -50,9 +59,20 @@ public class InteractionSender : MonoBehaviour
             if (collisionObject != null && collisionObject.GetComponent<InteractionReceiver>() != null)
             {
                 canInteract = false;
+                HideInteractIcon();
                 collisionObject.GetComponent<InteractionReceiver>().OnInteract(this);
             }
         }
+    }
+
+    public void ShowInteractIcon()
+    {
+        interactIcon.SetActive(true);
+    }
+
+    public void HideInteractIcon()
+    {
+        interactIcon.SetActive(false);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
