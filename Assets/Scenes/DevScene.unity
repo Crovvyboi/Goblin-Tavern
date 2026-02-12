@@ -7897,7 +7897,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_TargetDisplay: 0
 --- !u!1 &285563884
 GameObject:
@@ -8363,7 +8363,10 @@ MonoBehaviour:
   - I don't know what to say. But thanks for interacting with me!
   - I'm a red, little cube! :3
   speechbubble: {fileID: 1512159555}
+  speechbubbleGroup: {fileID: 0}
   speechtext: {fileID: 1497354501}
+  fadeTimer: 0
+  isFading: 0
 --- !u!114 &301930145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14359,6 +14362,7 @@ GameObject:
   - component: {fileID: 511202204}
   - component: {fileID: 511202203}
   - component: {fileID: 511202202}
+  - component: {fileID: 511202205}
   m_Layer: 5
   m_Name: Speechbubble
   m_TagString: Untagged
@@ -14449,6 +14453,18 @@ Canvas:
   m_SortingLayerID: -2134048011
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!225 &511202205
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 511202200}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &511567556
 GameObject:
   m_ObjectHideFlags: 0
@@ -16243,7 +16259,10 @@ MonoBehaviour:
   - I don't know what to say. But thanks for interacting with me!
   - I'm a red, little cube! :3
   speechbubble: {fileID: 511202200}
+  speechbubbleGroup: {fileID: 0}
   speechtext: {fileID: 2040274694}
+  fadeTimer: 0
+  isFading: 0
 --- !u!1 &564795427
 GameObject:
   m_ObjectHideFlags: 0
@@ -23008,6 +23027,7 @@ GameObject:
   - component: {fileID: 808954936}
   - component: {fileID: 808954935}
   - component: {fileID: 808954934}
+  - component: {fileID: 808954938}
   m_Layer: 5
   m_Name: Speechbubble
   m_TagString: Untagged
@@ -23098,6 +23118,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 2.1}
   m_SizeDelta: {x: 5, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &808954938
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 808954933}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &813147910
 GameObject:
   m_ObjectHideFlags: 0
@@ -25941,6 +25973,7 @@ GameObject:
   - component: {fileID: 891312276}
   - component: {fileID: 891312275}
   - component: {fileID: 891312274}
+  - component: {fileID: 891312278}
   m_Layer: 5
   m_Name: Speechbubble
   m_TagString: Untagged
@@ -26031,6 +26064,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 2.1}
   m_SizeDelta: {x: 5, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &891312278
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 891312273}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &891611796
 GameObject:
   m_ObjectHideFlags: 0
@@ -34353,7 +34398,10 @@ MonoBehaviour:
   - I don't know what to say. But thanks for interacting with me!
   - I'm a red, little cube! :3
   speechbubble: {fileID: 808954933}
+  speechbubbleGroup: {fileID: 0}
   speechtext: {fileID: 315018302}
+  fadeTimer: 0
+  isFading: 0
 --- !u!114 &1168735954
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36456,7 +36504,10 @@ MonoBehaviour:
   - I don't know what to say. But thanks for interacting with me!
   - I'm a red, little cube! :3
   speechbubble: {fileID: 1669429212}
+  speechbubbleGroup: {fileID: 0}
   speechtext: {fileID: 141524791}
+  fadeTimer: 0
+  isFading: 0
 --- !u!114 &1204569392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50092,6 +50143,7 @@ GameObject:
   - component: {fileID: 1512159558}
   - component: {fileID: 1512159557}
   - component: {fileID: 1512159556}
+  - component: {fileID: 1512159560}
   m_Layer: 5
   m_Name: Speechbubble
   m_TagString: Untagged
@@ -50182,6 +50234,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 2.1}
   m_SizeDelta: {x: 5, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &1512159560
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1512159555}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1519619766
 GameObject:
   m_ObjectHideFlags: 0
@@ -54112,7 +54176,10 @@ MonoBehaviour:
   - I don't know what to say. But thanks for interacting with me!
   - I'm a red, little cube! :3
   speechbubble: {fileID: 891312273}
+  speechbubbleGroup: {fileID: 0}
   speechtext: {fileID: 980465468}
+  fadeTimer: 0
+  isFading: 0
 --- !u!114 &1666004651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -54226,6 +54293,7 @@ GameObject:
   - component: {fileID: 1669429215}
   - component: {fileID: 1669429214}
   - component: {fileID: 1669429213}
+  - component: {fileID: 1669429217}
   m_Layer: 5
   m_Name: Speechbubble
   m_TagString: Untagged
@@ -54316,6 +54384,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 2.1}
   m_SizeDelta: {x: 5, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!225 &1669429217
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1669429212}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1672666144
 GameObject:
   m_ObjectHideFlags: 0
@@ -55090,6 +55170,7 @@ GameObject:
   - component: {fileID: 1690717027}
   - component: {fileID: 1690717026}
   - component: {fileID: 1690717025}
+  - component: {fileID: 1690717028}
   m_Layer: 5
   m_Name: Speechbubble
   m_TagString: Untagged
@@ -55180,6 +55261,18 @@ Canvas:
   m_SortingLayerID: -2134048011
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!225 &1690717028
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1690717023}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 0
+  m_BlocksRaycasts: 0
+  m_IgnoreParentGroups: 0
 --- !u!1 &1690852826
 GameObject:
   m_ObjectHideFlags: 0
@@ -56508,7 +56601,10 @@ MonoBehaviour:
   - I don't know what to say. But thanks for interacting with me!
   - I'm a red, little cube! :3
   speechbubble: {fileID: 1690717023}
+  speechbubbleGroup: {fileID: 0}
   speechtext: {fileID: 2146248000}
+  fadeTimer: 0
+  isFading: 0
 --- !u!114 &1757996947
 MonoBehaviour:
   m_ObjectHideFlags: 0

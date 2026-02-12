@@ -11,24 +11,52 @@ public class SaySomething : MonoBehaviour
         "I'm a red, little cube! :3"
     };
     public GameObject speechbubble;
+    public CanvasGroup speechbubbleGroup;
     public TextMeshProUGUI speechtext;
+
+    public float fadeTimer;
+    public bool isFading;
 
     private void Awake()
     {
-        speechbubble.SetActive(false);
+        speechbubble.SetActive(true);
+        speechbubbleGroup = speechbubble.GetComponent<CanvasGroup>();
+        speechbubbleGroup.alpha = 0f;
+    }
+
+    private void FixedUpdate()
+    {
+        if (speechbubbleGroup.alpha == 1f && fadeTimer < 2f)
+        {
+            fadeTimer += Time.deltaTime;
+            if (fadeTimer >= 2f)
+            {
+                isFading = true;
+            }
+        }
+        if (isFading)
+        {
+            speechbubbleGroup.alpha -= 0.2f;
+            if (speechbubbleGroup.alpha <= 0)
+            {
+                isFading = false;
+            }
+        }
     }
 
     public void SaySomethingWithBubble()
     {
         int random = Random.Range(0, speechLines.Count);
-        speechbubble.SetActive(true);
+        speechbubbleGroup.alpha = 1f;
+        fadeTimer = 0f;
         speechtext.text = speechLines[random];
 
     }
 
     public void SaySomethingWithBubble(string speechline)
     {
-        speechbubble.SetActive(true);
+        speechbubbleGroup.alpha = 1f;
+        fadeTimer = 0f;
         speechtext.text = speechline;
 
     }
