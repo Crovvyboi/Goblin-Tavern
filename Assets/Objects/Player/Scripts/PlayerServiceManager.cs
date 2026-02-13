@@ -93,6 +93,15 @@ public class PlayerServiceManager : MonoBehaviour
 
 
     #region Orders
+    public bool HasOpenOrders()
+    {
+        if (takenOrders.Count > 0)
+        {
+            return true;
+        }
+        return false;
+    }
+
     public bool CanTakeNewOrder()
     {
         if (takenOrders.Count +1 <= 3)

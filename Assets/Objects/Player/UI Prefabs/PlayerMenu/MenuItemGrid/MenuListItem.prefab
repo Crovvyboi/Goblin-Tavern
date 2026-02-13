@@ -161,6 +161,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   menuItem: {fileID: 0}
+  inventoryItem: {fileID: 0}
 --- !u!1 &3489215737495876732
 GameObject:
   m_ObjectHideFlags: 0

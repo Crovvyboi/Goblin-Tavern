@@ -245,9 +245,7 @@ public class CurrentMenuUI : MonoBehaviour
     public void LoadCurrentMenu()
     {
         List<MenuItem> mealMenuItems = TavernManager.instance.tavernMenu.Where(x => x.menuItemType == MenuItemType.Meal && !x.standardInMenu).ToList();
-        mealMenuItems.AddRange(TavernManager.instance.menuItems.Where(x => x.menuItemType == MenuItemType.Meal && !x.standardInMenu && x.inMenu));
         List<MenuItem> drinkMenuItems = TavernManager.instance.tavernMenu.Where(x => x.menuItemType == MenuItemType.Drink && !x.standardInMenu).ToList();
-        drinkMenuItems.AddRange(TavernManager.instance.menuItems.Where(x => x.menuItemType == MenuItemType.Drink && !x.standardInMenu && x.inMenu));
         List<MenuItem> alwaysOnMenu = TavernManager.instance.menuItems.Where(x => x.standardInMenu).ToList();
 
         // Add meal menu items

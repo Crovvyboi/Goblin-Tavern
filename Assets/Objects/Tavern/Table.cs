@@ -77,6 +77,10 @@ public class Table : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            ThoughtBubble.instance.Think("This table is ready for use!");
+        }
     }
 
     public void UpdateChairSpotArrow(ChairSpot spot, bool add)

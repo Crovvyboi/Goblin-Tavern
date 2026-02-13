@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class InventoryItemDragger : MonoBehaviour
+public class InventoryItemDragger : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public int itemSizeTiles;
     public GameObject anchorPointHolder;
@@ -21,6 +21,8 @@ public class InventoryItemDragger : MonoBehaviour
     {
         
     }
+
+    
 
     public void InitAnchorPoints()
     {
@@ -53,7 +55,16 @@ public class InventoryItemDragger : MonoBehaviour
 
     }
 
-    
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        Debug.Log(gameObject.GetComponent<InventoryItemHolder>().item.inventoryItemName);
+
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        Debug.Log("Exit");
+    }
 }
 
 

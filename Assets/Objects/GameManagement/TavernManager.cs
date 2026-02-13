@@ -54,6 +54,10 @@ public class TavernManager : MonoBehaviour
             {
                 item.inMenu = true;
             }
+            else if (item.inMenu && !item.standardInMenu)
+            {
+                tavernMenu.Add(item);
+            }
             menuItems.Add(item);
         }
 

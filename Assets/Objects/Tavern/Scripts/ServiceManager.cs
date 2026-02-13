@@ -34,15 +34,13 @@ public class ServiceManager : MonoBehaviour
         switch (TavernManager.state)
         {
             case TavernState.OverworldDay:
-                StartService();
+                ServiceStartInteract.instance.ShowStartPopup();
                 break;
             case TavernState.Service:
-                InitiateFinalCall();
+                ServiceStartInteract.instance.ShowFinalPopup();
                 break;
             case TavernState.ServiceFinalCall:
-                // Warn player for reputation penalty if they continue
-
-                ShowOverview();
+                ServiceStartInteract.instance.ShowEndPopup();
                 break;
             default:
                 break;
@@ -66,44 +64,33 @@ public class ServiceManager : MonoBehaviour
 
     public void StartService()
     {
-        // If tavern contains either a meal & drink station or a bar
-        if (GameObject.FindGameObjectsWithTag("MealStation").Length > 0 && GameObject.FindGameObjectsWithTag("DrinkStation").Length > 0 || GameObject.FindGameObjectsWithTag("Bar").Length > 0)
-        {
-            serviceTimer = serviceTimerStart;
+        serviceTimer = serviceTimerStart;
 
-            // Lock in set menu
-            definitiveMenu = TavernManager.instance.tavernMenu;
-            definitiveMenu.AddRange(TavernManager.instance.menuItems.Where(x => x.standardInMenu));
+        // Lock in set menu
+        definitiveMenu = TavernManager.instance.tavernMenu;
+        definitiveMenu.AddRange(TavernManager.instance.menuItems.Where(x => x.standardInMenu));
 
-            // Generate customer pool
-            generatedCustomers = new List<GameObject>();
-            customerGroupPool = new List<List<CustomerStats>>();
-            customerGroupPool = CustomerGenerator.instance.GenerateAllCustomers();
+        // Generate customer pool
+        generatedCustomers = new List<GameObject>();
+        customerGroupPool = new List<List<CustomerStats>>();
+        customerGroupPool = CustomerGenerator.instance.GenerateAllCustomers();
 
-            // Reset stats
-            stats = new ServiceStats();
+        // Reset stats
+        stats = new ServiceStats();
 
-            // Close door
-            TavernManager.instance.tavernDoor.SetActive(false);
+        // Close door
+        TavernManager.instance.tavernDoor.SetActive(false);
 
-            // Activate playerservicemanager
-            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerServiceManager>().enabled = true;
-            GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerServiceManager>().OnServiceStart();
+        // Activate playerservicemanager
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerServiceManager>().enabled = true;
+        GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerServiceManager>().OnServiceStart();
 
-            // Switch tavern state
-            TavernManager.state = TavernState.Service;
+        // Switch tavern state
+        TavernManager.state = TavernState.Service;
 
-            // Switch UI elements
-            PlayerUIManager.instance.StartService();
-            PlayerServiceUI.instance.StartService();
-        }
-        else
-        {
-            // Warn player
-
-
-
-        }
+        // Switch UI elements
+        PlayerUIManager.instance.StartService();
+        PlayerServiceUI.instance.StartService();
         
     }
 
