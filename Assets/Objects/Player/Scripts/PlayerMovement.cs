@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     public PlayerControls playerControls;
 
     [Header("Movement")]
-    private bool canMove = true;
+    public bool canMove = true;
     private float movementSpeed = 5f;
 
     [Header("Sprinting")]

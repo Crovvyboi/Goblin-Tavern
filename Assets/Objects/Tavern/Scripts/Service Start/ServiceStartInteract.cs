@@ -30,11 +30,18 @@ public class ServiceStartInteract : MonoBehaviour
             instance = this;
         }
 
-        ClosePopup();
+        serviceInteractContainer.SetActive(false);
+        serviceStartUI.SetActive(false);
+        serviceFinalCallUI.SetActive(false);
+        serviceStopUI.SetActive(false);
     }
 
     public void ClosePopup()
     {
+        PlayerMovement.instance.canMove = true;
+        InteractionSender.instance.canInteract = true;
+        PlayerUIManager.instance.canInteract = true;
+
         serviceInteractContainer.SetActive(false);
         serviceStartUI.SetActive(false);
         serviceFinalCallUI.SetActive(false);
@@ -48,6 +55,11 @@ public class ServiceStartInteract : MonoBehaviour
         serviceStartUI.SetActive(true);
         serviceFinalCallUI.SetActive(false);
         serviceStopUI.SetActive(false);
+
+        PlayerMovement.instance.canMove = false;
+        InteractionSender.instance.canInteract = false;
+        PlayerUIManager.instance.canInteract = false;
+        
 
         // Find active objects with tag
         List<GameObject> barObjects = GameObject.FindGameObjectsWithTag("Bar").Where(x => x.activeInHierarchy == true).ToList();
@@ -133,8 +145,6 @@ public class ServiceStartInteract : MonoBehaviour
 
     }
 
-    
-
     public void OnStartConfirm()
     {
         ClosePopup();
@@ -155,6 +165,10 @@ public class ServiceStartInteract : MonoBehaviour
         serviceFinalCallUI.SetActive(true);
         serviceStartUI.SetActive(false);
         serviceStopUI.SetActive(false);
+
+        PlayerMovement.instance.canMove = false;
+        InteractionSender.instance.canInteract = false;
+        PlayerUIManager.instance.canInteract = false;
     }
 
 
@@ -187,6 +201,10 @@ public class ServiceStartInteract : MonoBehaviour
         serviceFinalCallUI.SetActive(false);
         serviceStartUI.SetActive(false);
         serviceStopUI.SetActive(true);
+
+        PlayerMovement.instance.canMove = false;
+        InteractionSender.instance.canInteract = false;
+        PlayerUIManager.instance.canInteract = false;
     }
 
     public void OnEndConfirm()
