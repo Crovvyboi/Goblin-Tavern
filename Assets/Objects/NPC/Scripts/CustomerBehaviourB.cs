@@ -91,10 +91,10 @@ public class CustomerBehaviourB : CustomerBase
             int thirstDiff = 100 - customerStats.thirst;
             inRange.Add(CustomerGoal.Thirst, thirstDiff);
 
-            if (previousState == CustomerState.Idling)
-            {
-                inRange.Add(CustomerGoal.Meet, 15);
-            }
+            //if (previousState == CustomerState.Idling)
+            //{
+            //    inRange.Add(CustomerGoal.Meet, 15);
+            //}
             
             inRange.Add(CustomerGoal.Idle, 15);
 
