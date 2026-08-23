@@ -150,7 +150,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemSizeTiles: 2
   anchorPointHolder: {fileID: 4687496252892674223}
-  anchorPoints: []
+  anchorPoints:
+  - {fileID: 8241954127990398393}
+  - {fileID: 2674742307741900965}
 --- !u!114 &8216673388637470073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -166,6 +168,7 @@ MonoBehaviour:
   containerType: 0
   maxItemsInContainer: 3
   itemsInContainer: []
+  itemPositions: []
 --- !u!114 &3683811687211455439
 MonoBehaviour:
   m_ObjectHideFlags: 0

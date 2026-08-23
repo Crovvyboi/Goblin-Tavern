@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static UnityEditor.Progress;
@@ -35,8 +36,9 @@ public class PlayerInventory : MonoBehaviour
 
         playerControls = new PlayerControls();
 
-        InitAllInventoryItems();
         InitAllInventoryCells();
+        InitAllInventoryItems();
+        
     }
     private void OnEnable()
     {
@@ -64,6 +66,7 @@ public class PlayerInventory : MonoBehaviour
         for (int i = 0; i < itemHolder.transform.childCount; i++)
         {
             itemsInInventory.Add(itemHolder.transform.GetChild(i).gameObject);
+            PlaceItem(itemHolder.transform.GetChild(i).gameObject);
         }
     }
 
@@ -187,21 +190,20 @@ public class PlayerInventory : MonoBehaviour
         draggedItemCells = cells.Where(x => x.occupyingObject == draggingItem).ToList();
         foreach (InventoryCell item in draggedItemCells)
         {
-            item.occupyingObject = null;
+            item.RemoveObject();
         }
     }
 
     public void ReleaseItem()
     {
-        bool found = cells.Any(x => Mathf.Abs(x.gameObject.transform.position.x - draggingItem.transform.position.x) < 1f && Mathf.Abs(x.gameObject.transform.position.y - draggingItem.transform.position.y) < 1f);
+        bool found = cells.Any(x => Mathf.Abs(x.gameObject.transform.position.x - draggingItem.transform.position.x) < placementMargin && Mathf.Abs(x.gameObject.transform.position.y - draggingItem.transform.position.y) < placementMargin);
         if (found)
         {
-            bool checkCell = cells.Any(x => Mathf.Abs(x.gameObject.transform.position.x - draggingItem.transform.position.x) < 1f && Mathf.Abs(x.gameObject.transform.position.y - draggingItem.transform.position.y) < 1f && x.occupyingObject == null);
+            bool checkCell = cells.Any(x => Mathf.Abs(x.gameObject.transform.position.x - draggingItem.transform.position.x) < placementMargin && Mathf.Abs(x.gameObject.transform.position.y - draggingItem.transform.position.y) < placementMargin && x.occupyingObject == null);
             if (checkCell)
             {
                 PlaceItem();
             }
-
         }
         else
         {
@@ -214,6 +216,8 @@ public class PlayerInventory : MonoBehaviour
         if (cells.Any(x => Mathf.Abs(x.gameObject.transform.position.x - draggingItem.transform.position.x) < placementMargin && Mathf.Abs(x.gameObject.transform.position.y - draggingItem.transform.position.y) < placementMargin && x.occupyingObject == null))
         {
             GameObject foundCell = cells.First(x => Mathf.Abs(x.gameObject.transform.position.x - draggingItem.transform.position.x) < placementMargin && Mathf.Abs(x.gameObject.transform.position.y - draggingItem.transform.position.y) < placementMargin && x.occupyingObject == null).gameObject;
+            InventoryItemDragger dragger = draggingItem.GetComponent<InventoryItemDragger>();
+            dragger.PlaceItem(foundCell.GetComponent<InventoryCell>());
 
             // Check if anchor points aren't obstructed
             int count = 0;
@@ -243,7 +247,7 @@ public class PlayerInventory : MonoBehaviour
                     if (foundCellCheck)
                     {
                         InventoryCell foundCellAnchorPoint = cells.First(x => Mathf.Abs(x.gameObject.transform.position.x - anchorx) < placementMargin && Mathf.Abs(x.gameObject.transform.position.y - anchory) < placementMargin && x.occupyingObject == null);
-                        foundCellAnchorPoint.occupyingObject = draggingItem;
+                        foundCellAnchorPoint.PlaceObject(draggingItem);
                     }
 
                 }
@@ -254,6 +258,52 @@ public class PlayerInventory : MonoBehaviour
             }
         }
     }
+    public void PlaceItem(GameObject objectToPlace)
+    {
+        InventoryItemDragger itemToPlace = objectToPlace.GetComponent<InventoryItemDragger>();
+        InventoryCell foundCell = cells.First(x => x.coords == objectToPlace.GetComponent<InventoryItemDragger>().inventorySpotOrigin);
+        objectToPlace.transform.position = foundCell.transform.position;
+        itemToPlace.PlaceItem(foundCell);
+        if (itemToPlace.anchorPoints.Count > 1)
+        {
+            int count = 0;
+            foreach (GameObject anchor in itemToPlace.anchorPoints)
+            {
+                float anchorx = anchor.transform.position.x;
+                float anchory = anchor.transform.position.y;
+
+                bool foundCellAnchorPoint = cells.Any(x => Mathf.Abs(x.gameObject.transform.position.x - anchorx) < placementMargin && Mathf.Abs(x.gameObject.transform.position.y - anchory) < placementMargin && x.occupyingObject == null);
+
+                if (foundCellAnchorPoint)
+                {
+                    count++;
+                }
+            }
+
+            if (count == itemToPlace.anchorPoints.Count)
+            {
+                // Couple to cells
+                foreach (GameObject anchor in itemToPlace.anchorPoints)
+                {
+                    float anchorx = anchor.transform.position.x;
+                    float anchory = anchor.transform.position.y;
+
+                    bool foundCellCheck = cells.Any(x => Mathf.Abs(x.gameObject.transform.position.x - anchorx) < placementMargin && Mathf.Abs(x.gameObject.transform.position.y - anchory) < placementMargin && x.occupyingObject == null);
+                    if (foundCellCheck)
+                    {
+                        InventoryCell foundCellAnchorPoint = cells.First(x => Mathf.Abs(x.gameObject.transform.position.x - anchorx) < placementMargin && Mathf.Abs(x.gameObject.transform.position.y - anchory) < placementMargin && x.occupyingObject == null);
+                        foundCellAnchorPoint.PlaceObject(itemToPlace.gameObject);
+                    }
+
+                }
+            }
+        }
+        else
+        {
+            foundCell.PlaceObject(objectToPlace);
+        }
+        
+    }
 
     public void ResetItem()
     {
@@ -262,7 +312,7 @@ public class PlayerInventory : MonoBehaviour
         // Couple to cells
         foreach (InventoryCell item in draggedItemCells)
         {
-            item.occupyingObject = draggingItem;
+            item.PlaceObject(draggingItem);
         }
 
         isDraggingItem = false;
@@ -328,7 +378,7 @@ public class PlayerInventory : MonoBehaviour
 
             return true;
         }
-        else if (FindSpot(giveItem, out InventoryCell selectedStartCell, out List<InventoryCell> cellsToOccupy, out int rotation))
+        else if (FindSpot(giveItem, out InventoryCell selectedStartCell, out List<InventoryCell> cellsToOccupy, out int rotation, out ItemOrientation orientation))
         {
             // Item either needs a container of is loose item, has space to be placed
             // Instantiate ItemHolder prefab on position & rotation
@@ -337,6 +387,8 @@ public class PlayerInventory : MonoBehaviour
             givenItemObject.transform.position = selectedStartCell.gameObject.transform.position;
             givenItemObject.transform.Rotate(0, 0, -rotation);
             givenItemObject.GetComponent<InventoryItemHolder>().item = giveItem;
+            InventoryItemDragger dragger = givenItemObject.GetComponent<InventoryItemDragger>();
+            dragger.PlaceItem(selectedStartCell);
 
             // Set occupied cells
             GameObject itemAnchorPoints = giveItem.inventoryItemHolder.transform.GetChild(0).gameObject;
@@ -372,14 +424,14 @@ public class PlayerInventory : MonoBehaviour
         
     }
 
-    public bool FindSpot(InventoryItem giveItem, out InventoryCell selected, out List<InventoryCell> cellsToOccupyNext, out int rotation)
+    public bool FindSpot(InventoryItem giveItem, out InventoryCell selected, out List<InventoryCell> cellsToOccupyNext, out int rotation, out ItemOrientation orientation)
     {
         GameObject itemAnchorPoints = giveItem.inventoryItemHolder.GetComponent<InventoryItemDragger>().anchorPointHolder.gameObject;
         List<InventoryCell> anchorPointCells = itemAnchorPoints.GetComponentsInChildren<InventoryCell>().ToList();
 
         List<InventoryCell> inventoryCells = cells.Where(x => x.occupyingObject == null).ToList();
 
-        if (anchorPointCells.Count > 0)
+        if (anchorPointCells.Count > 1)
         {
             foreach (InventoryCell cell in inventoryCells)
             {
@@ -388,6 +440,7 @@ public class PlayerInventory : MonoBehaviour
                     selected = cell;
                     cellsToOccupyNext = cellsToOccupyNorth;
                     rotation = 0;
+                    orientation = ItemOrientation.South;
                     return true;
                 }
                 else if (FindSpotThroughPattern90(anchorPointCells, cell, inventoryCells, out List<InventoryCell> cellsToOccupyEast))
@@ -395,6 +448,7 @@ public class PlayerInventory : MonoBehaviour
                     selected = cell;
                     cellsToOccupyNext = cellsToOccupyEast;
                     rotation = 90;
+                    orientation = ItemOrientation.East;
                     return true;
                 }
                 else if (FindSpotThroughPattern180(anchorPointCells, cell, inventoryCells, out List<InventoryCell> cellsToOccupySouth))
@@ -402,6 +456,7 @@ public class PlayerInventory : MonoBehaviour
                     selected = cell;
                     cellsToOccupyNext = cellsToOccupySouth;
                     rotation = 180;
+                    orientation = ItemOrientation.North;
                     return true;
                 }
                 else if (FindSpotThroughPattern270(anchorPointCells, cell, inventoryCells, out List<InventoryCell> cellsToOccupyWest))
@@ -409,6 +464,21 @@ public class PlayerInventory : MonoBehaviour
                     selected = cell;
                     cellsToOccupyNext = cellsToOccupyWest;
                     rotation = 270;
+                    orientation = ItemOrientation.West;
+                    return true;
+                }
+            }
+        }
+        else
+        {
+            foreach (InventoryCell cell in inventoryCells)
+            {
+                if (FindSpotThroughPattern0(anchorPointCells, cell, inventoryCells, out List<InventoryCell> cellsToOccupyNorth))
+                {
+                    selected = cell;
+                    cellsToOccupyNext = cellsToOccupyNorth;
+                    rotation = 0;
+                    orientation = ItemOrientation.South;
                     return true;
                 }
             }
@@ -416,6 +486,7 @@ public class PlayerInventory : MonoBehaviour
         selected = null;
         cellsToOccupyNext = null;
         rotation = 0;
+        orientation = ItemOrientation.South;
         return false;
     }
 
@@ -530,7 +601,8 @@ public class PlayerInventory : MonoBehaviour
     {
         foreach (InventoryCell cell in cellsToOccupy)
         {
-            cell.occupyingObject = givenItemObject;
+            // cell.occupyingObject = givenItemObject;
+            cell.PlaceObject(givenItemObject);
         }
     }
     #endregion
@@ -548,12 +620,7 @@ public class PlayerInventory : MonoBehaviour
         if (takeItem.containerItem && hasContainer)
         {
             // Take item from container
-            GameObject itemContainer = itemsInInventory.First(x =>
-                x.GetComponent<InventoryItemContainer>() != null &&
-                x.GetComponent<InventoryItemContainer>().containerType == takeItem.containerType &&
-                x.GetComponent<InventoryItemContainer>().ReturnItemCount() > 0 &&
-                x.GetComponent<InventoryItemContainer>().itemsInContainer.Contains(takeItem)
-                );
+            GameObject itemContainer = FindTakeContainer(takeItem);
             itemContainer.GetComponent<InventoryItemContainer>().RemoveItem(takeItem);
 
             // Check if container is empty and delete if it is
@@ -563,12 +630,12 @@ public class PlayerInventory : MonoBehaviour
                 List<InventoryCell> occupiedCells = cells.Where(x => x.occupyingObject == itemContainer).ToList();
                 foreach (InventoryCell cell in occupiedCells)
                 {
-                    cell.occupyingObject = null;
+                    // cell.occupyingObject = null;
+                    cell.RemoveObject();
                 }
 
                 // Delete container
-                itemsInInventory.Remove(itemContainer);
-                GameObject.Destroy(itemContainer);
+                RemoveItem(itemContainer);
             }
         }
         else if (itemsInInventory.Any(x => x.GetComponent<InventoryItemHolder>().item == takeItem))
@@ -576,8 +643,7 @@ public class PlayerInventory : MonoBehaviour
             // Else take singular item
             GameObject itemFromInventory = itemsInInventory.First(x => x.GetComponent<InventoryItemHolder>().item == takeItem);
 
-            itemsInInventory.Remove(itemFromInventory);
-            GameObject.Destroy(itemFromInventory);
+            RemoveItem(itemFromInventory);
         }
         else
         {
@@ -627,7 +693,8 @@ public class PlayerInventory : MonoBehaviour
                     List<InventoryCell> occupiedCells = cells.Where(x => x.occupyingObject == itemContainer).ToList();
                     foreach (InventoryCell cell in occupiedCells)
                     {
-                        cell.occupyingObject = null;
+                        //cell.occupyingObject = null;
+                        cell.RemoveObject();
                     }
 
                     // Delete container
@@ -649,6 +716,41 @@ public class PlayerInventory : MonoBehaviour
 
             }
         }
+    }
+
+    public GameObject FindTakeContainer(InventoryItem takeItem)
+    {
+        List<GameObject> containersWithItem = itemsInInventory.Where(x =>
+            x.GetComponent<InventoryItemContainer>() != null &&
+            x.GetComponent<InventoryItemContainer>().containerType == takeItem.containerType &&
+            x.GetComponent<InventoryItemContainer>().ReturnItemCount() > 0 &&
+            x.GetComponent<InventoryItemContainer>().itemsInContainer.Contains(takeItem)
+            ).ToList();
+
+        if (containersWithItem.Any(x => x.GetComponent<InventoryItemContainer>().ReturnItemCount() == 1))
+        {
+            return containersWithItem.First(x => x.GetComponent<InventoryItemContainer>().ReturnItemCount() == 1);
+        }
+        if (containersWithItem.Any(x => 
+            x.GetComponent<InventoryItemContainer>().ReturnItemCount() <= x.GetComponent<InventoryItemContainer>().maxItemsInContainer &&
+            x.GetComponent<InventoryItemContainer>().ReturnItemCount(takeItem) < x.GetComponent<InventoryItemContainer>().maxItemsInContainer
+            ))
+        {
+            return containersWithItem.Last(x =>
+            x.GetComponent<InventoryItemContainer>().ReturnItemCount() <= x.GetComponent<InventoryItemContainer>().maxItemsInContainer &&
+            x.GetComponent<InventoryItemContainer>().ReturnItemCount(takeItem) < x.GetComponent<InventoryItemContainer>().maxItemsInContainer
+            );
+        }
+
+        return containersWithItem.Last();
+    }
+
+    public void RemoveItem(GameObject gameObject)
+    {
+        Hotbar.instance.RemoveFromHotbar(gameObject);
+
+        itemsInInventory.Remove(gameObject);
+        GameObject.Destroy(gameObject);
     }
     #endregion
 }

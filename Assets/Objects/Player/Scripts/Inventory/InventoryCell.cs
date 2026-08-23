@@ -51,4 +51,13 @@ public class InventoryCell : MonoBehaviour
     {
         return new Vector2(-coords.y, coords.x);
     }
+
+    public void PlaceObject(GameObject gameObject)
+    {
+        occupyingObject = gameObject;
+    }
+    public void RemoveObject()
+    {
+        occupyingObject = null;
+    }
 }

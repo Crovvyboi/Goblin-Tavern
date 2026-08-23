@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2add828b3ee624f4ab9785e2f57abf3c, type: 3}
+  m_Name: Suncrown
+  m_EditorClassIdentifier: 
+  inventoryItemName: Suncrown
+  type: 2
+  cost: 1
+  inventoryItemHolder: {fileID: 2975103613979328046, guid: dd347289e27c64448be63a7470a71e5f, type: 3}
+  containerItem: 1
+  containerType: 0
+  containerSprite: {fileID: 2800000, guid: 59186622a9494b64ca48ff25c3642d22, type: 3}
+  hotbarIcon: {fileID: 0}
+  isPlaceable: 0
+  prefab: {fileID: 0}
+  recipeKnown: 0
+  inventoryItemRecipe: {fileID: 0}
+  isNew: 0
+  isFavorited: 0
+  gridName: 
+  description: 
+  ingredientType: 2
+  isRecipeBook: 0
+  isRandom: 0
+  recipesToSelect: 0
+  recipePool: []

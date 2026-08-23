@@ -26,6 +26,10 @@ public class InventoryItemContainer : MonoBehaviour
     {
         return itemsInContainer.Count;
     }
+    public int ReturnItemCount(InventoryItem item)
+    {
+        return itemPositions.Count(x => x == item);
+    }
 
     public void AddItem(InventoryItem addItem)
     {
@@ -48,8 +52,8 @@ public class InventoryItemContainer : MonoBehaviour
         itemsInContainer.Remove(removeItem);
 
         // Set sprite to previous stage
-        RawImage image = itemPositions.First(x => x.GetComponent<RawImage>().texture == removeItem.containerSprite).GetComponent<RawImage>();
-        image.texture = removeItem.containerSprite;
+        RawImage image = itemPositions.Last(x => x.GetComponent<RawImage>().texture == removeItem.containerSprite).GetComponent<RawImage>();
+        image.texture = null;
         image.enabled = false;
     }
 }

@@ -146,7 +146,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemSizeTiles: 2
   anchorPointHolder: {fileID: 8884120259421557778}
-  anchorPoints: []
+  anchorPoints:
+  - {fileID: 7609871943020156200}
+  - {fileID: 4098924285069231396}
+  isPlaced: 0
+  orientation: 0
+  inventorySpotOrigin: {x: 0, y: 0}
 --- !u!114 &3865346847479454408
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -219,6 +219,15 @@ public class Hotbar : MonoBehaviour
         }
     }
 
+    public void RemoveFromHotbar(GameObject assignedItem)
+    {
+        if (hotbarSlotsGameObjects.Any(x => x.GetComponent<HotbarSlot>().assignedInventoryItem == assignedItem))
+        {
+            GameObject hotbarSlot = hotbarSlotsGameObjects.Last(x => x.GetComponent<HotbarSlot>().assignedInventoryItem == assignedItem);
+            int index = hotbarSlotsGameObjects.IndexOf(hotbarSlot);
+            RemoveFromHotbar(index);
+        }
+    }
     public void RemoveFromHotbar(int slot)
     {
         hotbarSlotsGameObjects[slot].GetComponent<HotbarSlot>().assignedInventoryItem = null;

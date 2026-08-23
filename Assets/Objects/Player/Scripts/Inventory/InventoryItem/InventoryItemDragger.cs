@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -9,7 +10,11 @@ public class InventoryItemDragger : MonoBehaviour, IPointerEnterHandler, IPointe
     public int itemSizeTiles;
     public GameObject anchorPointHolder;
     public List<GameObject> anchorPoints = new List<GameObject>();
-    
+
+    public bool isPlaced;
+    public ItemOrientation orientation;
+    public Vector2 inventorySpotOrigin;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -65,6 +70,49 @@ public class InventoryItemDragger : MonoBehaviour, IPointerEnterHandler, IPointe
     {
         Debug.Log("Exit");
     }
+
+    public void PlaceItem(InventoryCell inventoryCell)
+    {
+        isPlaced = true;
+        inventorySpotOrigin = inventoryCell.coords;
+
+        SetOrientation();
+    }
+    public void SetOrientation()
+    {
+        switch (this.transform.rotation.z)
+        {
+            case 0:
+                orientation = ItemOrientation.South;
+                break;
+            case 90:
+                orientation = ItemOrientation.East;
+                break;
+            case 180:
+                orientation = ItemOrientation.North;
+                break;
+            case 270:
+                orientation = ItemOrientation.West;
+                break;
+            default:
+                orientation = ItemOrientation.South;
+                break;
+        }
+    }
+
+    public void RemoveItem()
+    {
+        isPlaced = false;
+        inventorySpotOrigin = Vector2.zero;
+    }
+}
+
+public enum ItemOrientation
+{
+    North,  // 180
+    East,   // 90
+    South,  // 0, default
+    West    // 270
 }
 
 
