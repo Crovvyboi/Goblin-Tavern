@@ -15,10 +15,10 @@ MonoBehaviour:
   inventoryItemName: Herb
   type: 2
   cost: 0
-  inventoryItemHolder: {fileID: 329492762772526054, guid: e546e36dda6e7134f928b45dc5d993a8, type: 3}
+  inventoryItemHolder: {fileID: 2975103613979328046, guid: dd347289e27c64448be63a7470a71e5f, type: 3}
   containerItem: 1
   containerType: 0
-  containerSprite: {fileID: 0}
+  containerSprite: {fileID: 2800000, guid: 59186622a9494b64ca48ff25c3642d22, type: 3}
   hotbarIcon: {fileID: 2800000, guid: 0db9d4fa9e305144ba456793a2deb8e5, type: 3}
   isPlaceable: 0
   prefab: {fileID: 0}

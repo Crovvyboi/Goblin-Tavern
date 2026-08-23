@@ -13,21 +13,4 @@ MonoBehaviour:
   m_Name: A Choice
   m_EditorClassIdentifier: Assembly-CSharp::DialoguePart
   isOpening: 0
-  lines:
-  - text: It certainly is!
-    isChoice: 0
-    choices: []
-  - text: Many choices will have different outcomes.
-    isChoice: 0
-    choices: []
-  - text: But some will have the same result.
-    isChoice: 0
-    choices:
-    - text: Huh?
-      nextPart: {fileID: 11400000, guid: 973ce93e3e26bdd43b2d097c6d682eb8, type: 2}
-    - text: What?
-      nextPart: {fileID: 11400000, guid: 973ce93e3e26bdd43b2d097c6d682eb8, type: 2}
-    - text: Waddaya mean?
-      nextPart: {fileID: 11400000, guid: 973ce93e3e26bdd43b2d097c6d682eb8, type: 2}
-    - text: Cheese
-      nextPart: {fileID: 11400000, guid: 973ce93e3e26bdd43b2d097c6d682eb8, type: 2}
+  lines: []

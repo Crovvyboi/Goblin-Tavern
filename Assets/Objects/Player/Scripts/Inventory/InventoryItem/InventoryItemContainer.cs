@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
+using static UnityEditor.Timeline.Actions.MenuPriority;
 
 public class InventoryItemContainer : MonoBehaviour
 {
@@ -8,6 +11,7 @@ public class InventoryItemContainer : MonoBehaviour
 
     public int maxItemsInContainer;
     public List<InventoryItem> itemsInContainer = new List<InventoryItem>();
+    public List<GameObject> itemPositions = new List<GameObject>();
 
     public bool CanAddItem()
     {
@@ -25,18 +29,28 @@ public class InventoryItemContainer : MonoBehaviour
 
     public void AddItem(InventoryItem addItem)
     {
-        itemsInContainer.Add(addItem);
+        
+        if (itemPositions.Any(x => x.GetComponent<RawImage>().texture == null))
+        {
+            itemsInContainer.Add(addItem);
 
-        // Set sprite to next stage
-
+            // Set sprite to next stage
+            RawImage image = itemPositions.First(x => x.GetComponent<RawImage>().texture == null).GetComponent<RawImage>();
+            image.enabled = true;
+            image.texture = addItem.containerSprite;
+        }
+        
     }
 
     public void RemoveItem(InventoryItem removeItem)
     {
+
         itemsInContainer.Remove(removeItem);
 
         // Set sprite to previous stage
-
+        RawImage image = itemPositions.First(x => x.GetComponent<RawImage>().texture == removeItem.containerSprite).GetComponent<RawImage>();
+        image.texture = removeItem.containerSprite;
+        image.enabled = false;
     }
 }
 

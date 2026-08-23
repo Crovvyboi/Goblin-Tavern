@@ -374,7 +374,7 @@ public class PlayerInventory : MonoBehaviour
 
     public bool FindSpot(InventoryItem giveItem, out InventoryCell selected, out List<InventoryCell> cellsToOccupyNext, out int rotation)
     {
-        GameObject itemAnchorPoints = giveItem.inventoryItemHolder.transform.GetChild(0).gameObject;
+        GameObject itemAnchorPoints = giveItem.inventoryItemHolder.GetComponent<InventoryItemDragger>().anchorPointHolder.gameObject;
         List<InventoryCell> anchorPointCells = itemAnchorPoints.GetComponentsInChildren<InventoryCell>().ToList();
 
         List<InventoryCell> inventoryCells = cells.Where(x => x.occupyingObject == null).ToList();
