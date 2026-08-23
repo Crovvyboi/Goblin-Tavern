@@ -8,9 +8,9 @@ public class Door : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (teleportToDropoff != null)
+        if (teleportToDropoff != null && collision.gameObject.CompareTag("Player"))
         {
-            collision.gameObject.transform.position = teleportToDropoff.transform.position;
+            collision.gameObject.transform.position = new Vector3(teleportToDropoff.transform.position.x, teleportToDropoff.transform.position.y);
         }
     }
 }
